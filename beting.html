@@ -38,7 +38,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
-  <!-- Navbar kiri -->
+  <!-- Sidebar -->
   <nav class="bg-white w-64 min-h-screen shadow-lg p-6 sticky top-0">
     <h1 class="text-xl font-bold mb-8 text-gray-800">Prediksi 2D ALL PASARAN</h1>
     <ul class="flex flex-col gap-4">
@@ -51,9 +51,15 @@
     </ul>
   </nav>
 
-  <!-- Konten utama -->
+  <!-- Main Content -->
   <main class="flex-1 p-6">
     <h1 class="text-2xl font-bold mb-6 text-center">Prediksi Pasaran</h1>
+
+    <div class="flex justify-between items-center mb-4">
+      <button onclick="refreshData()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+        🔄 Refresh Data
+      </button>
+    </div>
 
     <div id="tabs" class="flex flex-wrap justify-center gap-2 mb-6">Loading pasaran...</div>
 
@@ -70,11 +76,11 @@
   const sheetName = 'DataPrediksi';
 
   let allDataTable = null;
+  let pasaranAktif = null;
 
   function loadData() {
     const queryString = encodeURIComponent('SELECT A, B, C, D, E');
     const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
-
     const query = new google.visualization.Query(url);
     query.send(response => {
       if (response.isError()) {
@@ -85,6 +91,12 @@
       allDataTable = response.getDataTable();
       setupTabsFromData(allDataTable);
     });
+  }
+
+  function refreshData() {
+    document.getElementById('tabs').innerHTML = 'Memuat ulang...';
+    document.getElementById('content').innerHTML = 'Menyegarkan data...';
+    loadData();
   }
 
   function setupTabsFromData(dataTable) {
@@ -104,7 +116,11 @@
       tabsDiv.appendChild(tab);
     });
 
-    if (pasaranList.length > 0) {
+    // Set tab aktif kembali jika sebelumnya sudah ada
+    if (pasaranAktif && pasaranList.includes(pasaranAktif)) {
+      const tabElement = Array.from(tabsDiv.children).find(tab => tab.textContent === pasaranAktif);
+      setActiveTab(pasaranAktif, tabElement);
+    } else if (pasaranList.length > 0) {
       setActiveTab(pasaranList[0], tabsDiv.firstChild);
     } else {
       document.getElementById('content').textContent = 'Data pasaran kosong.';
@@ -112,6 +128,8 @@
   }
 
   function setActiveTab(pasaran, clickedTab) {
+    pasaranAktif = pasaran;
+
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     clickedTab.classList.add('active');
 
