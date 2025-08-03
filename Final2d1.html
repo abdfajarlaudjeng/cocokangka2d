@@ -5,6 +5,7 @@
   <title>2D FINAL - Google Sheets</title>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <style>
+    /* Style tetap sama */
     * {
       box-sizing: border-box;
     }
@@ -78,6 +79,16 @@
         font-size: 14px;
       }
     }
+    /* Style input pencarian */
+    #search-input {
+      margin-bottom: 15px;
+      padding: 8px;
+      width: 300px;
+      max-width: 100%;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
   </style>
 </head>
 <body>
@@ -96,6 +107,7 @@
 
   <div class="content">
     <h1>2D Final</h1>
+    <input type="text" id="search-input" placeholder="Cari data..." />
     <div id="table-container"></div>
   </div>
 
@@ -103,9 +115,12 @@
     google.charts.load('current', {'packages':['table']});
     google.charts.setOnLoadCallback(drawTable);
 
+    let dataGlobal;
+    let table;
+
     function drawTable() {
       const spreadsheetId = '1tX6qfI_0PhrpmGxz4qqaT0_8YHKhPwE3dPHguPvNFmU';
-      const sheetName = '2D FINAL1';
+      const sheetName = '2D FINAL1';  // pastikan nama sheet benar
       const queryString = encodeURIComponent('SELECT A, B, C');
       const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
 
@@ -117,22 +132,62 @@
           return;
         }
 
-        const data = response.getDataTable();
-        const table = new google.visualization.Table(document.getElementById('table-container'));
-        table.draw(data, {
-          showRowNumber: true,
-          width: '100%',
-          allowHtml: true,
-          cssClassNames: {
-            tableCell: 'google-visualization-table-td',
-            headerCell: 'google-visualization-table-th'
-          },
-          columns: [
-            {width: 180},  // Kolom A
-            {width: 180},  // Kolom B
-            {width: 180}   // Kolom C
-          ]
+        dataGlobal = response.getDataTable();
+        table = new google.visualization.Table(document.getElementById('table-container'));
+
+        drawFilteredTable(''); // initial draw with no filter
+
+        // Event listener input pencarian
+        document.getElementById('search-input').addEventListener('input', function() {
+          const searchTerm = this.value.toLowerCase();
+          drawFilteredTable(searchTerm);
         });
+      });
+    }
+
+    function drawFilteredTable(searchTerm) {
+      if (!dataGlobal) return;
+
+      // Buat DataView untuk filter search
+      const view = new google.visualization.DataView(dataGlobal);
+
+      if (searchTerm) {
+        // Filter baris yg mengandung searchTerm di salah satu kolom A/B/C
+        view.setRows(dataGlobal.getFilteredRows([{
+          column: 0, // kolom A
+          test: function(value) {
+            return value.toString().toLowerCase().indexOf(searchTerm) !== -1;
+          }
+        }, {
+          column: 1, // kolom B
+          test: function(value) {
+            return value.toString().toLowerCase().indexOf(searchTerm) !== -1;
+          }
+        }, {
+          column: 2, // kolom C
+          test: function(value) {
+            return value.toString().toLowerCase().indexOf(searchTerm) !== -1;
+          }
+        }]));
+      } else {
+        view.setRows([...Array(dataGlobal.getNumberOfRows()).keys()]);
+      }
+
+      table.draw(view, {
+        showRowNumber: true,
+        width: '100%',
+        allowHtml: true,
+        page: 'enable',      // aktifkan pagination
+        pageSize: 10,        // 10 baris per halaman
+        cssClassNames: {
+          tableCell: 'google-visualization-table-td',
+          headerCell: 'google-visualization-table-th'
+        },
+        columns: [
+          {width: 180},
+          {width: 180},
+          {width: 180}
+        ]
       });
     }
   </script>
