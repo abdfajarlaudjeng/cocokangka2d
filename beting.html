@@ -53,7 +53,7 @@
 
   <!-- Konten utama -->
   <main class="flex-1 p-6">
-    <h1 class="text-2xl font-bold mb-6 text-center">Prediksi All Pasaran</h1>
+    <h1 class="text-2xl font-bold mb-6 text-center">Prediksi Pasaran</h1>
 
     <div id="tabs" class="flex flex-wrap justify-center gap-2 mb-6">Loading pasaran...</div>
 
@@ -72,7 +72,7 @@
   let allDataTable = null;
 
   function loadData() {
-    const queryString = encodeURIComponent('SELECT A, B, C, D'); // kolom A-D
+    const queryString = encodeURIComponent('SELECT A, B, C, D, E');
     const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
 
     const query = new google.visualization.Query(url);
@@ -119,9 +119,10 @@
     for (let i = 0; i < allDataTable.getNumberOfRows(); i++) {
       if (allDataTable.getValue(i, 0) === pasaran) {
         filteredRows.push({
-          nomor: allDataTable.getValue(i, 1),
+          nomor: allDataTable.getValue(i, 1)?.toString().trim(),
           prediksi: allDataTable.getValue(i, 2),
-          angkaMain: allDataTable.getValue(i, 3)
+          angkaMain: allDataTable.getValue(i, 3)?.toString().replace(/\s+/g, ''),
+          bbfs: allDataTable.getValue(i, 4)?.toString().replace(/\s+/g, '')
         });
       }
     }
@@ -130,12 +131,30 @@
     if (filteredRows.length === 0) {
       html += `<p>Tidak ada data prediksi.</p>`;
     } else {
-      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th><th>Angka Main</th></tr></thead><tbody>`;
+      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th><th>Angka Main</th><th>BBFS</th></tr></thead><tbody>`;
       filteredRows.forEach(row => {
-        html += `<tr><td>${row.nomor}</td><td>${row.prediksi}</td><td>${row.angkaMain}</td></tr>`;
+        const nomorDigits = row.nomor.split('');
+        const angkaMainDigits = row.angkaMain.split('');
+        const bbfsDigits = row.bbfs.split('');
+
+        const matchAngkaMain = nomorDigits.some(d => angkaMainDigits.includes(d));
+        const matchBBFS = nomorDigits.some(d => bbfsDigits.includes(d));
+        const highlight = matchAngkaMain || matchBBFS;
+
+        const nomorColored = `<span style="color: ${highlight ? 'red' : 'black'}">${row.nomor}</span>`;
+        const angkaMainFormatted = angkaMainDigits.join(' ');
+        const bbfsFormatted = bbfsDigits.join(' ');
+
+        html += `<tr>
+          <td>${nomorColored}</td>
+          <td>${row.prediksi}</td>
+          <td>${angkaMainFormatted}</td>
+          <td>${bbfsFormatted}</td>
+        </tr>`;
       });
       html += `</tbody></table>`;
     }
+
     document.getElementById('content').innerHTML = html;
   }
 </script>
