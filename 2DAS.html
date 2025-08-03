@@ -5,29 +5,82 @@
   <title>Data AS BBFS 2D</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background-color: #fafafa;
-      padding: 20px;
+      display: flex;
     }
+
+    /* Navbar kiri */
+    nav {
+      width: 240px;
+      background-color: #ffffff;
+      border-right: 1px solid #ddd;
+      padding: 20px;
+      min-height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+
+    nav h1 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    nav ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    nav ul li {
+      margin-bottom: 12px;
+    }
+
+    nav ul li a {
+      display: block;
+      text-decoration: none;
+      padding: 10px;
+      border-radius: 4px;
+      color: #333;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    nav ul li a:hover {
+      background-color: #007bff;
+      color: white;
+    }
+
+    /* Konten utama */
+    .content {
+      flex: 1;
+      padding: 30px;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 40px;
     }
+
     th, td {
       padding: 10px;
       border: 1px solid #ddd;
       vertical-align: top;
     }
+
     th {
       background-color: #333;
       color: #fff;
       text-align: left;
     }
+
     .as-title {
       background-color: #f0f0f0;
       font-weight: bold;
     }
+
     .code {
       font-family: monospace;
       white-space: pre-wrap;
@@ -36,28 +89,29 @@
   </style>
 </head>
 <body>
+
   <!-- Navbar kiri -->
-  <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
-    <h1 class="text-xl font-bold mb-8 text-gray-800">Prediksi 2D ALL PASARAN</h1>
-    <ul class="flex flex-col gap-4">
-      <li><a href="index.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Data 2D</a></li>
-      <li><a href="2DAS.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D BBFS AS</a></li>
-      <li><a href="#" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D KEPALA - EKOR</a></li>
-      <li><a href="2dshio.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D SHIO MAIN</a></li>
-      <li><a href="#" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">REKAP PREDIKSI</a></li>
+  <nav>
+    <h1>Prediksi 2D ALL PASARAN</h1>
+    <ul>
+      <li><a href="index.html">Data 2D</a></li>
+      <li><a href="2DAS.html">2D BBFS AS</a></li>
+      <li><a href="#">2D KEPALA - EKOR</a></li>
+      <li><a href="2dshio.html">2D SHIO MAIN</a></li>
+      <li><a href="#">REKAP PREDIKSI</a></li>
     </ul>
   </nav>
 
+  <!-- Konten utama -->
+  <div class="content">
+    <h1>Data AS, BBFS, dan 2D</h1>
 
-  <h1>Data AS, BBFS, dan 2D</h1>
-
-  <table>
-    <tr>
-      <th>AS</th>
-      <th>BBFS</th>
-      <th>2D</th>
-    </tr>
-
+    <table>
+      <tr>
+        <th>AS</th>
+        <th>BBFS</th>
+        <th>2D</th>
+      </tr>
     <tr>
       <td class="as-title">0</td>
       <td>34056789</td>
