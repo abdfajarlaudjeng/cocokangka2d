@@ -5,38 +5,54 @@
   <title>Kecocokan Angka 2D dengan Format *</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
-  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl">
-    <h2 class="text-2xl font-semibold mb-4 text-gray-800">Deteksi Kecocokan Angka 2D</h2>
-    <p class="text-gray-600 mb-4">
-      Masukkan angka 2 digit, dipisahkan dengan tanda
-      <code class="bg-gray-200 px-1 rounded"> *</code> (contoh: 23*45*58):
-    </p>
+<body class="bg-gray-100 min-h-screen flex">
 
-    <div class="flex flex-col gap-4">
-      <input
-        type="text"
-        id="kolomA"
-        placeholder="Kolom A (mis. 23*45*58)"
-        class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <input
-        type="text"
-        id="kolomB"
-        placeholder="Kolom B (mis. 45*58*99)"
-        class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-      <button
-        onclick="cocokkan2D()"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200"
-      >
-        Cocokkan
-      </button>
+  <!-- Navbar kiri -->
+  <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
+    <h1 class="text-xl font-bold mb-8 text-gray-800">Prediksi 2D ALL PASARAN</h1>
+    <ul class="flex flex-col gap-4">
+      <li><a href="#" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Data 2D</a></li>
+      <li><a href="#" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D BBFS AS</a></li>
+      <li><a href="#" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D KEPALA - EKOR</a></li>
+      <li><a href="#" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D SHIO MAIN</a></li>
+      <li><a href="#" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">REKAP PREDIKSI</a></li>
+    </ul>
+  </nav>
+
+  <!-- Konten utama -->
+  <main class="flex-1 p-6 flex items-center justify-center">
+    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Deteksi Kecocokan Angka 2D</h2>
+      <p class="text-gray-600 mb-4">
+        Masukkan angka 2 digit, dipisahkan dengan tanda
+        <code class="bg-gray-200 px-1 rounded"> *</code> (contoh: 23*45*58):
+      </p>
+
+      <div class="flex flex-col gap-4">
+        <input
+          type="text"
+          id="kolomA"
+          placeholder="Kolom A (mis. 23*45*58)"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <input
+          type="text"
+          id="kolomB"
+          placeholder="Kolom B (mis. 45*58*99)"
+          class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onclick="cocokkan2D()"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200"
+        >
+          Cocokkan
+        </button>
+      </div>
+
+      <div id="hasil" class="mt-6 text-lg font-medium text-gray-800"></div>
+      <div id="tabelHasil" class="mt-2"></div>
     </div>
-
-    <div id="hasil" class="mt-6 text-lg font-medium text-gray-800"></div>
-    <div id="tabelHasil" class="mt-2"></div>
-  </div>
+  </main>
 
   <script>
     function cocokkan2D() {
@@ -78,5 +94,6 @@
       }
     }
   </script>
+
 </body>
 </html>
