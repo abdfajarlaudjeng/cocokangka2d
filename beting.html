@@ -141,13 +141,13 @@
         const matchBBFS = nomorDigits.some(d => bbfsDigits.includes(d));
         const highlight = matchAngkaMain || matchBBFS;
 
-        const nomorColored = `<span style="color: ${highlight ? 'red' : 'black'}">${row.nomor}</span>`;
+        const prediksiColored = `<span style="color: ${highlight ? 'red' : 'black'}">${row.prediksi}</span>`;
         const angkaMainFormatted = angkaMainDigits.join(' ');
         const bbfsFormatted = bbfsDigits.join(' ');
 
         html += `<tr>
-          <td>${nomorColored}</td>
-          <td>${row.prediksi}</td>
+          <td>${row.nomor}</td>
+          <td>${prediksiColored}</td>
           <td>${angkaMainFormatted}</td>
           <td>${bbfsFormatted}</td>
         </tr>`;
