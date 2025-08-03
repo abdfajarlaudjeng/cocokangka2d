@@ -59,7 +59,7 @@
     .content {
       flex-grow: 1;
       padding: 40px;
-      min-width: 0; /* penting supaya flex container tidak overflow */
+      min-width: 0; /* supaya flex container tidak overflow */
     }
 
     h1 {
@@ -140,6 +140,10 @@
           showRowNumber: true,
           width: '100%',
           allowHtml: true,
+          allowPaging: true,      // Aktifkan paging
+          page: 'enable',
+          pageSize: 10,           // 10 baris per halaman
+          allowSearch: true,      // Aktifkan pencarian
           cssClassNames: {
             tableCell: 'google-visualization-table-td',
             headerCell: 'google-visualization-table-th'
