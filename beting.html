@@ -72,7 +72,7 @@
   let allDataTable = null;
 
   function loadData() {
-    const queryString = encodeURIComponent('SELECT A, B, C');
+    const queryString = encodeURIComponent('SELECT A, B, C, D'); // kolom A-D
     const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
 
     const query = new google.visualization.Query(url);
@@ -120,7 +120,8 @@
       if (allDataTable.getValue(i, 0) === pasaran) {
         filteredRows.push({
           nomor: allDataTable.getValue(i, 1),
-          prediksi: allDataTable.getValue(i, 2)
+          prediksi: allDataTable.getValue(i, 2),
+          angkaMain: allDataTable.getValue(i, 3)
         });
       }
     }
@@ -129,9 +130,9 @@
     if (filteredRows.length === 0) {
       html += `<p>Tidak ada data prediksi.</p>`;
     } else {
-      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th></tr></thead><tbody>`;
+      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th><th>Angka Main</th></tr></thead><tbody>`;
       filteredRows.forEach(row => {
-        html += `<tr><td>${row.nomor}</td><td>${row.prediksi}</td></tr>`;
+        html += `<tr><td>${row.nomor}</td><td>${row.prediksi}</td><td>${row.angkaMain}</td></tr>`;
       });
       html += `</tbody></table>`;
     }
