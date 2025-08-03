@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kecocokan Angka 2D </title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+  <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-800">Deteksi Kecocokan Angka 2D</h2>
+    <p class="text-gray-600 mb-4">Masukkan angka 2 digit, dipisahkan dengan tanda <code class="bg-gray-200 px-1 rounded"> *</code> (contoh: 23*45*58):</p>
+
+    <div class="flex flex-col gap-4">
+      <input type="text" id="kolomA" placeholder="Kolom A (mis. 23*45*58)"
+        class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <input type="text" id="kolomB" placeholder="Kolom B (mis. 45*58*99)"
+        class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      <button onclick="cocokkan2D()"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200">
+        Cocokkan
+      </button>
+    </div>
+
+    <div id="hasil" class="mt-6 text-lg font-medium text-gray-800"></div>
+    <div id="tabelHasil" class="mt-2"></div>
+  </div>
+
+  <script>
+    function cocokkan2D() {
+      const kolomA = document.getElementById("kolomA").value.trim();
+      const kolomB = document.getElementById("kolomB").value.trim();
+
+      // Pisahkan dengan '*' dan filter hanya angka 2 digit
+      const listA = kolomA.split('*').map(s => s.trim()).filter(a => /^\d{2}$/.test(a));
+      const listB = kolomB.split('*').map(s => s.trim()).filter(a => /^\d{2}$/.test(a));
+
+      const setB = new Set(listB);
+      const hasilCocok = listA.filter(angka => setB.has(angka));
+
+      const hasilEl = document.getElementById("hasil");
+      const tabelEl = document.getElementById("tabelHasil");
+
+      if (hasilCocok.length > 0) {
+        const hasilGabung = hasilCocok.join("*");
+        hasilEl.textContent = "Angka yang cocok:";
+        tabelEl.innerHTML = `
+          <table class="w-full border mt-2 border-gray-300 rounded overflow-hidden">
+            <thead class="bg-gray-200">
+              <tr><th class="p-2 text-left">Kecocokan</th></tr>
+            </thead>
+            <tbody>
+              <tr><td class="p-2">${hasilGabung}</td></tr>
+            </tbody>
+          </table>
+        `;
+      } else {
+        hasilEl.textContent = "Tidak ada angka yang cocok.";
+        tabelEl.innerHTML = "";
+      }
+    }
+  </script>
+</body>
+</html>
