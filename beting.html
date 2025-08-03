@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Prediksi 20 Pasaran dari Google Sheets</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+    /* Reset & dasar */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Navbar kiri */
+    nav {
+      width: 220px;
+      background: #007BFF;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      box-shadow: 2px 0 6px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+
+    nav h2 {
+      margin: 0 0 20px 0;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex-grow: 1;
+    }
+
+    nav ul li {
+      margin-bottom: 15px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 10px 12px;
+      display: block;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    nav ul li a:hover,
+    nav ul li a.active {
+      background-color: #0056b3;
+    }
+
+    /* Konten utama */
+    .main-content {
+      flex-grow: 1;
+      padding: 30px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+    .tab {
+      padding: 10px 16px;
+      background: #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .tab:hover {
+      background: #bbb;
+    }
+    .tab.active {
+      background: #007BFF;
+      color: white;
+      font-weight: bold;
+    }
+
+    /* Content box */
+    .content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: 0 auto;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+      min-height: 150px;
+    }
+
+    /* Table styling */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      text-align: center;
+    }
+    th {
+      background: #f0f0f0;
+    }
+
+    /* Responsive kecil */
+    @media (max-width: 800px) {
+      body {
+        flex-direction: column;
+      }
+      nav {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      .main-content {
+        max-width: 100%;
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <h2>Menu</h2>
+    <ul>
+      <li><a href="#" class="active">Prediksi Pasaran</a></li>
+      <li><a href="index.html">Data 2D</a></li>
+      <li><a href="2DAS.html">2D BBFS AS</a></li>
+      <li><a href="Final2d1.html">2D Kepala - Ekor</a></li>
+      <li><a href="2dshio.html">2D Shio Main</a></li>
+      <li><a href="final2d.html">Rekap Prediksi</a></li>
+      <li><a href="beting.html">Bet 2D</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-content">
+    <h1>Prediksi Pasaran</h1>
+
+    <div id="tabs" class="tabs">Loading pasaran...</div>
+    <div id="content" class="content">Pilih pasaran untuk melihat prediksi.</div>
+  </div>
+
+<script>
+  google.charts.load('current', {'packages':['table']});
+  google.charts.setOnLoadCallback(loadData);
+
+  const spreadsheetId = '1tX6qfI_0PhrpmGxz4qqaT0_8YHKhPwE3dPHguPvNFmU';
+  const sheetName = 'DataPrediksi';  // Ganti sesuai nama sheetmu
+
+  let allDataTable = null;  // Simpan data lengkap
+
+  function loadData() {
+    const queryString = encodeURIComponent('SELECT A, B, C'); // Pasaran, Nomor, Prediksi
+    const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
+
+    const query = new google.visualization.Query(url);
+    query.send(response => {
+      if (response.isError()) {
+        document.getElementById('tabs').textContent = 'Error loading data: ' + response.getMessage();
+        return;
+      }
+
+      allDataTable = response.getDataTable();
+      setupTabsFromData(allDataTable);
+    });
+  }
+
+  function setupTabsFromData(dataTable) {
+    // Ambil daftar pasaran unik dari kolom 0 (A)
+    const pasaranSet = new Set();
+    for(let i=0; i < dataTable.getNumberOfRows(); i++) {
+      pasaranSet.add(dataTable.getValue(i, 0));
+    }
+    const pasaranList = Array.from(pasaranSet).sort();
+
+    // Buat tab di DOM
+    const tabsDiv = document.getElementById('tabs');
+    tabsDiv.innerHTML = '';
+    pasaranList.forEach((pasaran, i) => {
+      const tab = document.createElement('div');
+      tab.className = 'tab';
+      tab.textContent = pasaran;
+      tab.onclick = () => setActiveTab(pasaran, tab);
+      tabsDiv.appendChild(tab);
+    });
+
+    // Aktifkan tab pertama otomatis
+    if (pasaranList.length > 0) {
+      const firstTab = tabsDiv.firstChild;
+      setActiveTab(pasaranList[0], firstTab);
+    } else {
+      document.getElementById('content').textContent = 'Data pasaran kosong.';
+    }
+  }
+
+  function setActiveTab(pasaran, clickedTab) {
+    // Hapus kelas active semua tab
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    clickedTab.classList.add('active');
+
+    // Filter data berdasarkan pasaran
+    const filteredRows = [];
+    for(let i=0; i < allDataTable.getNumberOfRows(); i++) {
+      if(allDataTable.getValue(i, 0) === pasaran) {
+        filteredRows.push({
+          nomor: allDataTable.getValue(i, 1),
+          prediksi: allDataTable.getValue(i, 2)
+        });
+      }
+    }
+
+    // Buat tabel html hasil filter
+    let html = `<h2>Prediksi Pasaran: ${pasaran}</h2>`;
+    if(filteredRows.length === 0) {
+      html += `<p>Tidak ada data prediksi.</p>`;
+    } else {
+      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th></tr></thead><tbody>`;
+      filteredRows.forEach(row => {
+        html += `<tr><td>${row.nomor}</td><td>${row.prediksi}</td></tr>`;
+      });
+      html += `</tbody></table>`;
+    }
+    document.getElementById('content').innerHTML = html;
+  }
+</script>
+
+</body>
+</html>
