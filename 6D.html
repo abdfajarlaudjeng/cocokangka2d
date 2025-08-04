@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pencocokan Angka 2D–6D</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <main class="p-6 max-w-5xl mx-auto space-y-10">
+
+    <!-- 2D -->
+    <section class="bg-white p-6 rounded-xl shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 2D</h2>
+      <p class="text-gray-600 mb-4">Masukkan angka 2 digit, dipisahkan tanda * (misal: 12*34*56)</p>
+      <div class="flex flex-col gap-4 max-w-xl">
+        <input id="kolomA2D" placeholder="Kolom A (2D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomB2D" placeholder="Kolom B (2D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomC2D" placeholder="Kolom C (2D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+        <button onclick="cocokkan('2D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 2D</button>
+      </div>
+      <div id="hasil2D" class="mt-4"></div>
+    </section>
+
+    <!-- 3D -->
+    <section class="bg-white p-6 rounded-xl shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 3D</h2>
+      <p class="text-gray-600 mb-4">Masukkan angka 3 digit, pisahkan dengan tanda * (misal: 123*234*345)</p>
+      <div class="flex flex-col gap-4 max-w-xl">
+        <input id="kolomA3D" placeholder="Kolom A (3D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomB3D" placeholder="Kolom B (3D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomC3D" placeholder="Kolom C (3D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+        <button onclick="cocokkan('3D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 3D</button>
+      </div>
+      <div id="hasil3D" class="mt-4"></div>
+    </section>
+
+    <!-- 4D -->
+    <section class="bg-white p-6 rounded-xl shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 4D</h2>
+      <p class="text-gray-600 mb-4">Masukkan angka 4 digit, pisahkan dengan tanda * (misal: 1234*4321*5678)</p>
+      <div class="flex flex-col gap-4 max-w-xl">
+        <input id="kolomA4D" placeholder="Kolom A (4D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomB4D" placeholder="Kolom B (4D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomC4D" placeholder="Kolom C (4D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+        <button onclick="cocokkan('4D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 4D</button>
+      </div>
+      <div id="hasil4D" class="mt-4"></div>
+    </section>
+
+    <!-- 5D -->
+    <section class="bg-white p-6 rounded-xl shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 5D</h2>
+      <p class="text-gray-600 mb-4">Masukkan angka 5 digit, pisahkan dengan tanda * (misal: 12345*67890*54321)</p>
+      <div class="flex flex-col gap-4 max-w-xl">
+        <input id="kolomA5D" placeholder="Kolom A (5D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomB5D" placeholder="Kolom B (5D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomC5D" placeholder="Kolom C (5D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+        <button onclick="cocokkan('5D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 5D</button>
+      </div>
+      <div id="hasil5D" class="mt-4"></div>
+    </section>
+
+    <!-- 6D -->
+    <section class="bg-white p-6 rounded-xl shadow-lg">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 6D</h2>
+      <p class="text-gray-600 mb-4">Masukkan angka 6 digit, pisahkan dengan tanda * (misal: 123456*654321*111222)</p>
+      <div class="flex flex-col gap-4 max-w-xl">
+        <input id="kolomA6D" placeholder="Kolom A (6D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomB6D" placeholder="Kolom B (6D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+        <input id="kolomC6D" placeholder="Kolom C (6D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+        <button onclick="cocokkan('6D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 6D</button>
+      </div>
+      <div id="hasil6D" class="mt-4"></div>
+    </section>
+
+  </main>
+
+  <script>
+    function cocokkan(tipe) {
+      const kolomA = document.getElementById('kolomA' + tipe).value.trim().split('*');
+      const kolomB = document.getElementById('kolomB' + tipe).value.trim().split('*');
+      const kolomC = document.getElementById('kolomC' + tipe).value.trim().split('*');
+      const hasilEl = document.getElementById('hasil' + tipe);
+
+      let regex;
+      if (tipe === '2D') regex = /^\d{2}$/;
+      else if (tipe === '3D') regex = /^\d{3}$/;
+      else if (tipe === '4D') regex = /^\d{4}$/;
+      else if (tipe === '5D') regex = /^\d{5}$/;
+      else if (tipe === '6D') regex = /^\d{6}$/;
+      else {
+        hasilEl.innerHTML = '<p class="text-red-500">Tipe tidak dikenal</p>';
+        return;
+      }
+
+      const hasil = kolomA.filter(a => kolomB.includes(a) && kolomC.includes(a) && regex.test(a));
+      if (hasil.length > 0) {
+        hasilEl.innerHTML = `
+          <p class="mb-2 text-green-600">Hasil ${tipe} cocok:</p>
+          <textarea class="w-full border p-2 rounded text-lg font-mono" rows="2" readonly id="textarea${tipe}">${hasil.join('*')}</textarea>
+          <button onclick="salin('${tipe}')" class="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-1 rounded">Salin</button>
+        `;
+      } else {
+        hasilEl.innerHTML = `<p class="text-red-500">Tidak ada hasil yang cocok.</p>`;
+      }
+    }
+
+    function salin(tipe) {
+      const textarea = document.getElementById('textarea' + tipe);
+      textarea.select();
+      document.execCommand('copy');
+      alert(`Hasil ${tipe} berhasil disalin!`);
+    }
+  </script>
+</body>
+</html>
