@@ -2,39 +2,42 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Generator Togel 2D 3D 4D</title>
+  <title>Generator Kombinasi Togel</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
       max-width: 800px;
       margin: auto;
+      padding: 20px;
     }
-    textarea, input, button {
+    input, select, button {
       width: 100%;
       margin: 10px 0;
-      font-size: 16px;
       padding: 10px;
+      font-size: 16px;
     }
     #result {
-      white-space: pre-wrap;
-      font-size: 14px;
       background: #f4f4f4;
       padding: 10px;
       border-radius: 8px;
+      font-size: 14px;
+      white-space: pre-wrap;
       max-height: 400px;
       overflow-y: auto;
       border: 1px solid #ccc;
     }
-    .button-group {
+    .flex-row {
       display: flex;
       gap: 10px;
+    }
+    .flex-row > * {
+      flex: 1;
     }
   </style>
 </head>
 <body>
 
-  <h2>Generator Kombinasi Togel 2D, 3D, 4D</h2>
+  <h2>Generator Togel 2D, 3D, 4D + Filter Ganjil/Genap</h2>
 
   <label>AS:</label>
   <input type="text" id="as" value="1234567890">
@@ -48,15 +51,41 @@
   <label>EKOR:</label>
   <input type="text" id="ekor" value="1234567890">
 
-  <div class="button-group">
-    <button onclick="generateAll()">Generate Kombinasi</button>
-    <button onclick="downloadResult()">Download TXT</button>
+  <label>Filter Ganjil/Genap:</label>
+  <select id="filter">
+    <option value="all">Semua</option>
+    <option value="ganjil">Hanya Ganjil</option>
+    <option value="genap">Hanya Genap</option>
+  </select>
+
+  <div class="flex-row">
+    <button onclick="generateAll()">🔄 Generate</button>
+    <button onclick="downloadByType('2D')">⬇️ Download 2D</button>
+    <button onclick="downloadByType('3D')">⬇️ Download 3D</button>
+    <button onclick="downloadByType('4D')">⬇️ Download 4D</button>
   </div>
 
   <div id="result">Output akan muncul di sini...</div>
 
   <script>
-    let finalOutput = ''; // Untuk menyimpan semua kombinasi
+    let combos = { "2D": [], "3D": [], "4D": [] };
+
+    function isGanjil(str) {
+      const lastDigit = parseInt(str[str.length - 1]);
+      return lastDigit % 2 === 1;
+    }
+
+    function isGenap(str) {
+      const lastDigit = parseInt(str[str.length - 1]);
+      return lastDigit % 2 === 0;
+    }
+
+    function filterCombo(list) {
+      const filter = document.getElementById("filter").value;
+      if (filter === 'ganjil') return list.filter(isGanjil);
+      if (filter === 'genap') return list.filter(isGenap);
+      return list;
+    }
 
     function generateAll() {
       const as = document.getElementById("as").value.trim().split('');
@@ -64,14 +93,14 @@
       const kepala = document.getElementById("kepala").value.trim().split('');
       const ekor = document.getElementById("ekor").value.trim().split('');
 
-      const combo2D = [];
-      const combo3D = [];
-      const combo4D = [];
+      combos["2D"] = [];
+      combos["3D"] = [];
+      combos["4D"] = [];
 
       // 2D
       for (let k of kepala) {
         for (let e of ekor) {
-          combo2D.push(`${k}${e}`);
+          combos["2D"].push(`${k}${e}`);
         }
       }
 
@@ -79,7 +108,7 @@
       for (let ko of kop) {
         for (let k of kepala) {
           for (let e of ekor) {
-            combo3D.push(`${ko}${k}${e}`);
+            combos["3D"].push(`${ko}${k}${e}`);
           }
         }
       }
@@ -89,46 +118,48 @@
         for (let ko of kop) {
           for (let k of kepala) {
             for (let e of ekor) {
-              combo4D.push(`${a}${ko}${k}${e}`);
+              combos["4D"].push(`${a}${ko}${k}${e}`);
             }
           }
         }
       }
 
-      // Gabung dan tampilkan
-      finalOutput =
-`✅ Total Kombinasi:
-2D: ${combo2D.length} kombinasi
-3D: ${combo3D.length} kombinasi
-4D: ${combo4D.length} kombinasi
+      const out2D = filterCombo(combos["2D"]).map(x => x + '*');
+      const out3D = filterCombo(combos["3D"]).map(x => x + '*');
+      const out4D = filterCombo(combos["4D"]).map(x => x + '*');
 
-🎯 Semua Kombinasi 2D:
-${combo2D.map(x => x + '*').join(' ')}
+      document.getElementById("result").innerText =
+`✅ Total Kombinasi (setelah filter):
+2D: ${out2D.length}
+3D: ${out3D.length}
+4D: ${out4D.length}
 
-🎯 Semua Kombinasi 3D:
-${combo3D.map(x => x + '*').join(' ')}
+🎯 2D:
+${out2D.join(' ')}
 
-🎯 Semua Kombinasi 4D:
-${combo4D.map(x => x + '*').join(' ')}
+🎯 3D:
+${out3D.join(' ')}
+
+🎯 4D:
+${out4D.join(' ')}
 `;
-
-      document.getElementById("result").innerText = finalOutput;
     }
 
-    function downloadResult() {
-      if (!finalOutput) {
-        alert("Silakan generate dulu sebelum mendownload.");
+    function downloadByType(type) {
+      if (!combos[type] || combos[type].length === 0) {
+        alert("Silakan generate dulu.");
         return;
       }
 
-      const blob = new Blob([finalOutput], { type: 'text/plain' });
-      const url = URL.createObjectURL(blob);
+      const filtered = filterCombo(combos[type]);
+      const text = filtered.map(x => x + '*').join(' ');
 
+      const blob = new Blob([`Kombinasi ${type} (${filtered.length} angka):\n${text}`], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'kombinasi_togel.txt';
+      link.download = `kombinasi_${type.toLowerCase()}.txt`;
       link.click();
-
       URL.revokeObjectURL(url);
     }
   </script>
