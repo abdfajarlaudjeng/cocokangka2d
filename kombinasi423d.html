@@ -1,20 +1,82 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Generator Kombinasi Togel</title>
+  <meta charset="UTF-8" />
+  <title>Generator Kombinasi Togel dengan Navbar</title>
   <style>
-    body {
+    /* Reset dan basic styling */
+    body, html {
+      margin: 0; padding: 0; height: 100%;
       font-family: Arial, sans-serif;
+      background: #f9fafb;
+    }
+
+    /* Container utama pakai flex */
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Navbar kiri */
+    nav {
+      background: white;
+      width: 16rem; /* 64 x 0.25rem = 16rem */
+      min-height: 100vh;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      position: sticky;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+    }
+    nav h1 {
+      font-weight: bold;
+      font-size: 1.25rem;
+      color: #2d3748; /* gray-800 */
+      margin-bottom: 2rem;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      flex-grow: 1;
+    }
+    nav ul li a {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      color: #1a202c; /* gray-900 */
+      text-decoration: none;
+      transition: background-color 0.3s, color 0.3s;
+    }
+    nav ul li a:hover {
+      background-color: #2563eb; /* blue-600 */
+      color: white;
+    }
+
+    /* Konten utama di samping navbar */
+    main {
+      flex-grow: 1;
+      padding: 2rem;
       max-width: 800px;
       margin: auto;
-      padding: 20px;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 0 12px rgba(0,0,0,0.05);
+      min-height: 100vh;
+      box-sizing: border-box;
     }
+
+    /* Input dan tombol styling dari kode sebelumnya */
     input, select, button {
       width: 100%;
       margin: 10px 0;
       padding: 10px;
       font-size: 16px;
+      box-sizing: border-box;
     }
     #result {
       background: #f4f4f4;
@@ -37,35 +99,54 @@
 </head>
 <body>
 
-  <h2>Generator Togel 2D, 3D, 4D + Filter Ganjil/Genap</h2>
+  <div class="container">
+    <!-- Navbar kiri -->
+    <nav>
+      <h1>Prediksi 2D ALL PASARAN</h1>
+      <ul>
+        <li><a href="index.html">GENARATOR ANGKA</a></li>
+        <li><a href="2DAS.html">2D BBFS AS</a></li>
+        <li><a href="Final2d1.html">2D KEPALA - EKOR</a></li>
+        <li><a href="2dshio.html">2D SHIO MAIN</a></li>
+        <li><a href="final2d.html">REKAP PREDIKSI</a></li>
+        <li><a href="beting.html">Beting Pasaran</a></li>
+        <li><a href="kombinasi423d.html">Kombinasi 423D</a></li>
+      </ul>
+    </nav>
 
-  <label>AS:</label>
-  <input type="text" id="as" value="1234567890">
+    <!-- Konten utama -->
+    <main>
+      <h2>Generator Togel 2D, 3D, 4D + Filter Ganjil/Genap</h2>
 
-  <label>KOP:</label>
-  <input type="text" id="kop" value="1234567890">
+      <label>AS:</label>
+      <input type="text" id="as" value="1234567890">
 
-  <label>KEPALA:</label>
-  <input type="text" id="kepala" value="1234567890">
+      <label>KOP:</label>
+      <input type="text" id="kop" value="1234567890">
 
-  <label>EKOR:</label>
-  <input type="text" id="ekor" value="1234567890">
+      <label>KEPALA:</label>
+      <input type="text" id="kepala" value="1234567890">
 
-  <label>Filter Ganjil/Genap:</label>
-  <select id="filter">
-    <option value="all">Semua</option>
-    <option value="ganjil">Hanya Ganjil</option>
-    <option value="genap">Hanya Genap</option>
-  </select>
+      <label>EKOR:</label>
+      <input type="text" id="ekor" value="1234567890">
 
-  <div class="flex-row">
-    <button onclick="generateAll()">🔄 Generate</button>
-    <button onclick="downloadByType('2D')">⬇️ Download 2D</button>
-    <button onclick="downloadByType('3D')">⬇️ Download 3D</button>
-    <button onclick="downloadByType('4D')">⬇️ Download 4D</button>
+      <label>Filter Ganjil/Genap:</label>
+      <select id="filter">
+        <option value="all">Semua</option>
+        <option value="ganjil">Hanya Ganjil</option>
+        <option value="genap">Hanya Genap</option>
+      </select>
+
+      <div class="flex-row">
+        <button onclick="generateAll()">🔄 Generate</button>
+        <button onclick="downloadByType('2D')">⬇️ Download 2D</button>
+        <button onclick="downloadByType('3D')">⬇️ Download 3D</button>
+        <button onclick="downloadByType('4D')">⬇️ Download 4D</button>
+      </div>
+
+      <div id="result">Output akan muncul di sini...</div>
+    </main>
   </div>
-
-  <div id="result">Output akan muncul di sini...</div>
 
   <script>
     let combos = { "2D": [], "3D": [], "4D": [] };
