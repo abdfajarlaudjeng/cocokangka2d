@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BBFS Generator 2D, 3D, 4D (Tanpa Filter Shio)</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .tabs button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    .tabcontent {
+      display: none;
+    }
+    .tabcontent.active {
+      display: block;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>🎯 BBFS Generator 2D, 3D, 4D (Tanpa Filter Shio)</h2>
+
+<label>Masukkan BBFS (contoh: 12345678):</label><br>
+<input type="text" id="bbfsInput" maxlength="8"><br><br>
+
+<button onclick="generateAll()">🔄 Generate</button>
+
+<div class="tabs">
+  <button onclick="openTab('tab2D')">2D</button>
+  <button onclick="openTab('tab3D')">3D</button>
+  <button onclick="openTab('tab4D')">4D</button>
+</div>
+
+<div id="tab2D" class="tabcontent">
+  <h3>🎯 Hasil 2D</h3>
+  <button onclick="downloadByType('2D')">⬇️ Download 2D</button>
+  <textarea id="result2D" readonly></textarea>
+</div>
+
+<div id="tab3D" class="tabcontent">
+  <h3>🎯 Hasil 3D</h3>
+  <button onclick="downloadByType('3D')">⬇️ Download 3D</button>
+  <textarea id="result3D" readonly></textarea>
+</div>
+
+<div id="tab4D" class="tabcontent">
+  <h3>🎯 Hasil 4D</h3>
+  <button onclick="downloadByType('4D')">⬇️ Download 4D</button>
+  <textarea id="result4D" readonly></textarea>
+</div>
+
+<script>
+let allCombos = { "2D": [], "3D": [], "4D": [] };
+
+function generateAll() {
+  const bbfs = document.getElementById("bbfsInput").value.replace(/\D/g, '');
+  if (bbfs.length < 2 || bbfs.length > 8) {
+    alert("Masukkan BBFS antara 2–8 digit.");
+    return;
+  }
+
+  const combos2D = getComb(bbfs, 2);
+  const combos3D = getComb(bbfs, 3);
+  const combos4D = getComb(bbfs, 4);
+
+  allCombos["2D"] = combos2D.map(x => x + '*');
+  allCombos["3D"] = combos3D.map(x => x + '*');
+  allCombos["4D"] = combos4D.map(x => x + '*');
+
+  document.getElementById("result2D").value = allCombos["2D"].join('');
+  document.getElementById("result3D").value = allCombos["3D"].join('');
+  document.getElementById("result4D").value = allCombos["4D"].join('');
+}
+
+// Fungsi kombinasi unik
+function getComb(str, len) {
+  const results = [];
+  const permute = (prefix, chars) => {
+    if (prefix.length === len) {
+      results.push(prefix);
+      return;
+    }
+    for (let i = 0; i < chars.length; i++) {
+      permute(prefix + chars[i], chars.slice(0, i) + chars.slice(i + 1));
+    }
+  };
+  permute('', str);
+  return [...new Set(results)];
+}
+
+// Tab navigasi
+function openTab(id) {
+  document.querySelectorAll(".tabcontent").forEach(el => el.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+// Download hasil
+function downloadByType(type) {
+  const data = allCombos[type] || [];
+  const text = data.join('');
+  const blob = new Blob([text], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.download = `hasil_${type}.txt`;
+  link.href = URL.createObjectURL(blob);
+  link.click();
+}
+</script>
+
+</body>
+</html>
