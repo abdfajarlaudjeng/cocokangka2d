@@ -2,35 +2,55 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Filter 2D ON - Jumlah Biji</title>
+  <title>BBFS ALL PASARAN</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
-<body class="bg-gray-100 min-h-screen p-6">
-  <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow-lg">
-    <h1 class="text-2xl font-bold mb-4 text-center text-blue-700">Filter 2D ON Berdasarkan Jumlah Biji</h1>
+<body class="bg-gray-100 min-h-screen flex">
 
-    <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-      <label for="jumlahSelect" class="font-semibold">Pilih Jumlah:</label>
-      <select id="jumlahSelect" class="p-2 border rounded w-60">
-        <option value="">-- Semua Jumlah --</option>
-        <option value="0">Jumlah 0</option>
-        <option value="1">Jumlah 1</option>
-        <option value="2">Jumlah 2</option>
-        <option value="3">Jumlah 3</option>
-        <option value="4">Jumlah 4</option>
-        <option value="5">Jumlah 5</option>
-        <option value="6">Jumlah 6</option>
-        <option value="7">Jumlah 7</option>
-        <option value="8">Jumlah 8</option>
-        <option value="9">Jumlah 9</option>
-      </select>
-    </div>
+  <!-- Navbar kiri -->
+  <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
+    <h1 class="text-xl font-bold mb-8 text-gray-800">BBFS ALL PASARAN</h1>
+    <ul class="flex flex-col gap-4">
+      <li><a href="index.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Data 2D</a></li>
+      <li><a href="2DAS.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D BBFS AS</a></li>
+      <li><a href="Final2d1.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D KEPALA - EKOR</a></li>
+      <li><a href="2dshio.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D SHIO MAIN</a></li>
+      <li><a href="final2d.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">REKAP PREDIKSI</a></li>
+      <li><a href="beting.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Beting Pasaran</a></li>
+      <li><a href="kombinasi423d.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Kombinasi 423D</a></li>
+      <li><a href="3D.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Prediksi 3D</a></li>
+      <li><a href="kombinasi34d.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Prediksi 4D</a></li>
+    </ul>
+  </nav>
 
-    <div id="hasil" class="overflow-x-auto">
-      <p>🔄 Memuat data prediksi dari spreadsheet...</p>
+  <!-- Konten utama -->
+  <main class="flex-1 p-6 overflow-auto">
+    <div class="max-w-5xl mx-auto bg-white p-6 rounded shadow-lg">
+      <h1 class="text-2xl font-bold mb-4 text-center text-blue-700">BBFS ALL PASARAN</h1>
+
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+        <label for="jumlahSelect" class="font-semibold">Pilih Jumlah:</label>
+        <select id="jumlahSelect" class="p-2 border rounded w-60">
+          <option value="">-- Semua Jumlah --</option>
+          <option value="0">Jumlah 0</option>
+          <option value="1">Jumlah 1</option>
+          <option value="2">Jumlah 2</option>
+          <option value="3">Jumlah 3</option>
+          <option value="4">Jumlah 4</option>
+          <option value="5">Jumlah 5</option>
+          <option value="6">Jumlah 6</option>
+          <option value="7">Jumlah 7</option>
+          <option value="8">Jumlah 8</option>
+          <option value="9">Jumlah 9</option>
+        </select>
+      </div>
+
+      <div id="hasil" class="overflow-x-auto">
+        <p>🔄 Memuat data prediksi dari spreadsheet...</p>
+      </div>
     </div>
-  </div>
+  </main>
 
 <script>
   const jumlah2DON = {
@@ -112,5 +132,6 @@
     tampilkanData(val === "" ? null : val);
   });
 </script>
+
 </body>
 </html>
