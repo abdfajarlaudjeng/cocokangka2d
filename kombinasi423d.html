@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Generator Togel 2D 3D 4D</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 800px;
+      margin: auto;
+    }
+    textarea, input, button {
+      width: 100%;
+      margin: 10px 0;
+      font-size: 16px;
+      padding: 10px;
+    }
+    #result {
+      white-space: pre-wrap;
+      font-size: 14px;
+      background: #f4f4f4;
+      padding: 10px;
+      border-radius: 8px;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Generator Kombinasi Togel 2D, 3D, 4D</h2>
+
+  <label>AS:</label>
+  <input type="text" id="as" value="1234567890">
+
+  <label>KOP:</label>
+  <input type="text" id="kop" value="1234567890">
+
+  <label>KEPALA:</label>
+  <input type="text" id="kepala" value="1234567890">
+
+  <label>EKOR:</label>
+  <input type="text" id="ekor" value="1234567890">
+
+  <div class="button-group">
+    <button onclick="generateAll()">Generate Kombinasi</button>
+    <button onclick="downloadResult()">Download TXT</button>
+  </div>
+
+  <div id="result">Output akan muncul di sini...</div>
+
+  <script>
+    let finalOutput = ''; // Untuk menyimpan semua kombinasi
+
+    function generateAll() {
+      const as = document.getElementById("as").value.trim().split('');
+      const kop = document.getElementById("kop").value.trim().split('');
+      const kepala = document.getElementById("kepala").value.trim().split('');
+      const ekor = document.getElementById("ekor").value.trim().split('');
+
+      const combo2D = [];
+      const combo3D = [];
+      const combo4D = [];
+
+      // 2D
+      for (let k of kepala) {
+        for (let e of ekor) {
+          combo2D.push(`${k}${e}`);
+        }
+      }
+
+      // 3D
+      for (let ko of kop) {
+        for (let k of kepala) {
+          for (let e of ekor) {
+            combo3D.push(`${ko}${k}${e}`);
+          }
+        }
+      }
+
+      // 4D
+      for (let a of as) {
+        for (let ko of kop) {
+          for (let k of kepala) {
+            for (let e of ekor) {
+              combo4D.push(`${a}${ko}${k}${e}`);
+            }
+          }
+        }
+      }
+
+      // Gabung dan tampilkan
+      finalOutput =
+`✅ Total Kombinasi:
+2D: ${combo2D.length} kombinasi
+3D: ${combo3D.length} kombinasi
+4D: ${combo4D.length} kombinasi
+
+🎯 Semua Kombinasi 2D:
+${combo2D.map(x => x + '*').join(' ')}
+
+🎯 Semua Kombinasi 3D:
+${combo3D.map(x => x + '*').join(' ')}
+
+🎯 Semua Kombinasi 4D:
+${combo4D.map(x => x + '*').join(' ')}
+`;
+
+      document.getElementById("result").innerText = finalOutput;
+    }
+
+    function downloadResult() {
+      if (!finalOutput) {
+        alert("Silakan generate dulu sebelum mendownload.");
+        return;
+      }
+
+      const blob = new Blob([finalOutput], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'kombinasi_togel.txt';
+      link.click();
+
+      URL.revokeObjectURL(url);
+    }
+  </script>
+
+</body>
+</html>
