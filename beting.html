@@ -38,7 +38,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
-  <!-- Navbar kiri -->
+   <!-- Navbar kiri -->
   <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
     <h1 class="text-xl font-bold mb-8 text-gray-800">BBFS ALL PASARAN</h1>
     <ul class="flex flex-col gap-4">
@@ -143,10 +143,10 @@
       if (allDataTable.getValue(i, 0) === pasaran) {
         filteredRows.push({
           nomor: allDataTable.getValue(i, 1)?.toString().trim(),
-          prediksi2D: allDataTable.getValue(i, 2),
-          prediksi3D: allDataTable.getValue(i, 3)?.toString().replace(/\s+/g, ''),
-          prediksi4D: allDataTable.getValue(i, 4)?.toString().replace(/\s+/g, ''),
-          bbfs: allDataTable.getValue(i, 5)
+          prediksi: allDataTable.getValue(i, 2),
+          angkaMain: allDataTable.getValue(i, 3)?.toString().replace(/\s+/g, ''),
+          bbfs: allDataTable.getValue(i, 4)?.toString().replace(/\s+/g, ''),
+          tambahanG: allDataTable.getValue(i, 5)
         });
       }
     }
@@ -155,36 +155,28 @@
     if (filteredRows.length === 0) {
       html += `<p>Tidak ada data prediksi.</p>`;
     } else {
-      html += `<table><thead><tr>
-        <th>Nomor</th>
-        <th>Prediksi 2D</th>
-        <th>Prediksi 3D</th>
-        <th>Prediksi 4D</th>
-        <th>BBFS</th>
-      </tr></thead><tbody>`;
-
+      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th><th>Angka Main</th><th>BBFS</th><th>Tambahan G</th></tr></thead><tbody>`;
       filteredRows.forEach(row => {
         const nomorDigits = row.nomor.split('');
-        const prediksi3DDigits = row.prediksi3D.split('');
+        const angkaMainDigits = row.angkaMain.split('');
         const bbfsDigits = row.bbfs.split('');
 
-        const match3D = nomorDigits.some(d => prediksi3DDigits.includes(d));
+        const matchAngkaMain = nomorDigits.some(d => angkaMainDigits.includes(d));
         const matchBBFS = nomorDigits.some(d => bbfsDigits.includes(d));
-        const highlight = match3D || matchBBFS;
+        const highlight = matchAngkaMain || matchBBFS;
 
-        const prediksi2DColored = `<span style="color: ${highlight ? 'red' : 'black'}">${row.prediksi2D}</span>`;
-        const prediksi3DFormatted = prediksi3DDigits.join(' ');
+        const prediksiColored = `<span style="color: ${highlight ? 'red' : 'black'}">${row.prediksi}</span>`;
+        const angkaMainFormatted = angkaMainDigits.join(' ');
         const bbfsFormatted = bbfsDigits.join(' ');
 
         html += `<tr>
           <td>${row.nomor}</td>
-          <td>${prediksi2DColored}</td>
-          <td>${prediksi3DFormatted}</td>
-          <td>${row.prediksi4D}</td>
+          <td>${prediksiColored}</td>
+          <td>${angkaMainFormatted}</td>
           <td>${bbfsFormatted}</td>
+          <td>${row.tambahanG || ''}</td>
         </tr>`;
       });
-
       html += `</tbody></table>`;
     }
 
