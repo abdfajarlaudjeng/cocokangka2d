@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Filter Kombinasi 3D & 4D + Shio</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+
+    select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1e40af;
+    }
+
+    #result {
+      background: white;
+      padding: 1rem;
+      border-radius: 6px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      max-height: 400px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Filter Kombinasi 3D & 4D Berdasarkan Ekor dan Shio</h1>
+
+<label for="mode">Pilih Mode:</label>
+<select id="mode">
+  <option value="3">3D</option>
+  <option value="4">4D</option>
+</select>
+
+<label for="dataKombinasi">Masukkan Kombinasi Angka (pisahkan spasi, koma, atau *):</label>
+<textarea id="dataKombinasi" placeholder="Contoh: 123*456,789 0123,1234*5678"></textarea>
+
+<label for="angkaMain">Masukkan Angka Main (maks 6 digit per baris):</label>
+<textarea id="angkaMain" placeholder="Contoh:\n123\n45\n7"></textarea>
+
+<label for="shioMain">Pilih Shio:</label>
+<select id="shioMain">
+  <option value="semua">-- Semua Shio --</option>
+</select>
+
+<button onclick="filterKombinasi()">Filter Kombinasi</button>
+
+<div id="result">Hasil filter akan muncul di sini...</div>
+
+<script>
+// Shio map dari 00–99
+const shioMap = {
+  "Ular": ["00","02","04","05","06","07","08","09","11","14","16","17","18","19","20","21","23","26","28","29","30","31","32","33","35","38","40","41","42","43","44","45","47","50","52","53","54","55","56","57","59","62","64","65","66","67","68","69","71","74","76","77","78","79","80","81","83","86","88","89","90","91","92","93","95","98"],
+  "Naga": ["03","05","06","07","08","09","10","12","15","17","18","19","20","21","22","24","27","29","30","31","32","33","34","36","39","41","42","43","44","45","46","48","51","53","54","55","56","57","58","60","63","65","66","67","68","69","70","72","75","77","78","79","80","81","82","84","87","89","90","91","92","93","94","96","99"],
+  "Kelinci": ["00","01","04","06","07","08","09","10","11","13","16","18","19","20","21","22","23","25","28","30","31","32","33","34","35","37","40","42","43","44","45","46","47","49","52","54","55","56","57","58","59","61","64","66","67","68","69","70","71","73","76","78","79","80","81","82","83","85","88","90","91","92","93","94","95","97"],
+  "Harimau": ["01","02","07","08","09","10","11","12","13","14","19","20","21","22","23","24","25","26","31","32","33","34","35","36","37","38","43","44","45","46","47","48","49","50","55","56","57","58","59","60","61","62","67","68","69","70","71","72","73","74","79","80","81","82","83","84","85","86","91","92","93","94","95","96","97","98"],
+  "Kerbau": ["01","06","07","08","09","10","11","12","13","18","19","20","21","22","23","24","25","30","31","32","33","34","35","36","37","42","43","44","45","46","47","48","49","54","55","56","57","58","59","60","61","66","67","68","69","70","71","72","73","78","79","80","81","82","83","84","85","90","91","92","93","94","95","96","97"],
+  "Tikus": ["00","01","02","04","05","07","10","11","12","13","14","16","17","19","22","23","24","25","26","28","29","31","34","35","36","37","38","40","41","43","46","47","48","49","50","52","53","55","58","59","60","61","62","64","65","67","70","71","72","73","74","76","77","79","82","83","84","85","86","88","89","91","94","95","96","97","98"],
+  "Babi": ["00","01","02","04","05","09","10","11","12","13","14","16","17","21","22","23","24","25","26","28","29","33","34","35","36","37","38","40","41","45","46","47","48","49","50","52","53","57","58","59","60","61","62","64","65","69","70","71","72","73","74","76","77","81","82","83","84","85","86","88","89","93","94","95","96","97","98"],
+  "Anjing": ["00","01","02","03","04","06","09","11","12","13","14","15","16","18","21","23","24","25","26","27","28","30","33","35","36","37","38","39","40","42","45","47","48","49","50","51","52","54","57","59","60","61","62","63","64","66","69","71","72","73","74","75","76","78","81","83","84","85","86","87","88","90","93","95","96","97","98","99"],
+  "Ayam": ["00","01","02","03","04","07","08","10","11","13","14","15","16","19","20","22","23","25","26","27","28","31","32","34","35","37","38","39","40","43","44","46","47","49","50","51","52","55","56","58","59","61","62","63","64","67","68","70","71","73","74","75","76","79","80","82","83","85","86","87","88","91","92","94","95","97","98","99"],
+  "Monyet": ["00","01","02","03","04","05","06","08","11","13","14","15","16","17","18","20","23","25","26","27","28","29","30","32","35","37","38","39","40","41","42","44","47","49","50","51","52","53","54","56","59","61","62","63","64","65","66","68","71","73","74","75","76","77","78","80","83","85","86","87","88","89","90","92","95","97","98","99"],
+  "Kambing": ["00","02","03","04","05","06","07","09","12","14","15","16","17","18","19","21","24","26","27","28","29","30","31","33","36","38","39","40","41","42","43","45","48","50","51","52","53","54","55","57","60","62","63","64","65","66","67","69","72","74","75","76","77","78","79","81","84","86","87","88","89","90","91","93","96","98","99"],
+  "Kuda": ["00","03","04","05","06","07","08","09","10","15","16","17","18","19","20","21","22","27","28","29","30","31","32","33","34","39","40","41","42","43","44","45","46","51","52","53","54","55","56","57","58","63","64","65","66","67","68","69","70","75","76","77","78","79","80","81","82","87","88","89","90","91","92","93","94","99"]
+};
+
+window.onload = function() {
+  const select = document.getElementById("shioMain");
+  for (let shio in shioMap) {
+    const opt = document.createElement("option");
+    opt.value = shio;
+    opt.textContent = shio;
+    select.appendChild(opt);
+  }
+};
+
+function filterKombinasi() {
+  const rawData = document.getElementById("dataKombinasi").value.trim();
+  const angkaMainRaw = document.getElementById("angkaMain").value.trim();
+  const shio = document.getElementById("shioMain").value;
+  const mode = document.getElementById("mode").value;
+  const resultDiv = document.getElementById("result");
+
+  const panjang = parseInt(mode); // 3 atau 4
+  const kombinasi = rawData.split(/[\s,*]+/).filter(k => k.length === panjang);
+  if (kombinasi.length === 0) {
+    resultDiv.textContent = `Tidak ada kombinasi ${panjang} digit yang valid.`;
+    return;
+  }
+
+  const ekorMain = angkaMainRaw.split("\n")
+    .map(l => l.trim())
+    .filter(l => /^\d{1,6}$/.test(l))
+    .map(l => l.slice(-1));
+
+  const hasil = [];
+  kombinasi.forEach(angka => {
+    const cocokEkor = ekorMain.every(e => angka.includes(e));
+    const duaDigit = angka.slice(-2);
+    const cocokShio = shio === "semua" || shioMap[shio].includes(duaDigit);
+    if (cocokEkor && cocokShio) hasil.push(angka + "*");
+  });
+
+  if (hasil.length === 0) {
+    resultDiv.textContent = "Tidak ditemukan kombinasi yang sesuai filter.";
+    return;
+  }
+
+  const baris = [];
+  const kolom = panjang === 3 ? 20 : 10;
+  for (let i = 0; i < hasil.length; i += kolom) {
+    baris.push(hasil.slice(i, i + kolom).join(" "));
+    if (baris.length === 5) break;
+  }
+
+  if (hasil.length > baris.length * kolom) baris.push("...");
+  resultDiv.textContent = `Ditemukan ${hasil.length} kombinasi:\n\n` + baris.join("\n");
+}
+</script>
+
+</body>
+</html>
