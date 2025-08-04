@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
@@ -7,9 +7,7 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
-  <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
-    <h1 class="text-xl font-bold mb-8 text-gray-800">BBFS ALL PASARAN</h1>
-    <!-- Navbar kiri -->
+  <!-- Navbar kiri -->
   <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
     <h1 class="text-xl font-bold mb-8 text-gray-800">BBFS ALL PASARAN</h1>
     <ul class="flex flex-col gap-4">
@@ -81,13 +79,11 @@
 
 <script>
   function cocokkan(tipe) {
-    // Pilih elemen input berdasarkan tipe
     const kolomA = document.getElementById(`kolomA${tipe}`).value.trim();
     const kolomB = document.getElementById(`kolomB${tipe}`).value.trim();
     const kolomC = document.getElementById(`kolomC${tipe}`).value.trim();
     const hasilEl = document.getElementById(`hasil${tipe}`);
 
-    // Tentukan regex digit sesuai tipe
     let regex;
     if (tipe === '2D') regex = /^\d{2}$/;
     else if (tipe === '3D') regex = /^\d{3}$/;
