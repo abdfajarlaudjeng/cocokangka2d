@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Filter Kombinasi 4D & Shio berdasarkan Ekor Main</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+    }
+    nav {
+      background-color: white;
+      width: 250px;
+      min-height: 100vh;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      padding: 2rem 1rem;
+      position: sticky;
+      top: 0;
+    }
+    nav h1 {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #1f2937;
+      margin-bottom: 2rem;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+    }
+    nav ul li {
+      margin-bottom: 1rem;
+    }
+    nav ul li a {
+      display: block;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      border-radius: 4px;
+      color: #1f2937;
+      transition: all 0.3s ease;
+    }
+    nav ul li a:hover {
+      background-color: #2563eb;
+      color: white;
+    }
+
+    .content {
+      flex: 1;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    label {
+      font-weight: bold;
+    }
+    input, select, button, textarea {
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 1rem;
+      width: 100%;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button {
+      cursor: pointer;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    button:hover {
+      background-color: #1e40af;
+    }
+    #result {
+      background: white;
+      border-radius: 5px;
+      padding: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      font-family: monospace;
+    }
+    textarea {
+      height: 100px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar kiri -->
+  <nav>
+    <h1>Prediksi 4D ALL PASARAN</h1>
+    <ul>
+      <li><a href="index.html">Data 2D</a></li>
+      <li><a href="2DAS.html">2D BBFS AS</a></li>
+      <li><a href="Final2d1.html">2D KEPALA - EKOR</a></li>
+      <li><a href="2dshio.html">2D SHIO MAIN</a></li>
+      <li><a href="final2d.html">REKAP PREDIKSI</a></li>
+      <li><a href="beting.html">Beting Pasaran</a></li>
+      <li><a href="kombinasi423d.html">Kombinasi 423D</a></li>
+      <li><a href="3D.html">Prediksi 3D</a></li>
+      <li><a href="4dshio.html">Prediksi 4D</a></li>
+    </ul>
+  </nav>
+
+  <!-- Konten utama -->
+  <div class="content">
+    <h1>Filter Kombinasi 4D dan Shio berdasarkan Ekor Main</h1>
+
+    <label for="dataKombinasi">Masukkan Kombinasi 4D (pisahkan dengan spasi, koma, atau *):</label>
+    <textarea id="dataKombinasi" placeholder="Contoh: 1234*1235 1236,1237"></textarea>
+
+    <label for="angkaMain">Masukkan Angka Main (maks 6 digit per baris, satu baris satu grup):</label>
+    <textarea id="angkaMain" placeholder="Contoh:\n123\n45\n7"></textarea>
+
+    <label for="shioMain">Pilih Shio Main:</label>
+    <select id="shioMain">
+      <option value="semua">-- Semua Shio --</option>
+      <!-- Sisipkan semua <option> Shio dari versi 3D di sini -->
+    </select>
+
+    <button onclick="filterAngka()">Filter Kombinasi</button>
+
+    <div id="result">Hasil filter akan muncul di sini...</div>
+  </div>
+
+<script>
+const shioMap = {
+  // Gunakan shioMap dari versi sebelumnya
+  // (karena sudah lengkap dan valid, tidak perlu diulang di sini)
+};
+
+function filterAngka() {
+  const rawData = document.getElementById("dataKombinasi").value.trim();
+  const angkaMainRaw = document.getElementById("angkaMain").value.trim();
+  const shioMain = document.getElementById("shioMain").value;
+  const resultDiv = document.getElementById("result");
+
+  if (!rawData) {
+    alert("Masukkan data kombinasi terlebih dahulu.");
+    return;
+  }
+
+  if (!angkaMainRaw) {
+    alert("Masukkan angka main terlebih dahulu.");
+    return;
+  }
+
+  let kombinasi4D = rawData.split(/[\s,*]+/).filter(k => k.length === 4);
+
+  if (kombinasi4D.length === 0) {
+    resultDiv.textContent = "Data kombinasi tidak valid atau tidak ada kombinasi 4 digit.";
+    return;
+  }
+
+  let ekorMain = angkaMainRaw.split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0)
+    .map(line => line.slice(-1));
+
+  for (const line of angkaMainRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0)) {
+    if (!line.match(/^\d{1,6}$/)) {
+      alert("Setiap baris angka main harus berupa digit (maks 6 digit). Contoh:\n123\n45");
+      return;
+    }
+  }
+
+  let hasil = [];
+
+  kombinasiLoop:
+  for (const angka of kombinasi4D) {
+    for (const ekor of ekorMain) {
+      if (!angka.includes(ekor)) {
+        continue kombinasiLoop;
+      }
+    }
+
+    let cocokShio = true;
+    if (shioMain !== "semua") {
+      const duaDigitTerakhir = angka.slice(-2);
+      cocokShio = shioMap[shioMain].includes(duaDigitTerakhir);
+    }
+
+    if (cocokShio) {
+      hasil.push(angka + "*");
+    }
+  }
+
+  if (hasil.length === 0) {
+    resultDiv.textContent = "Tidak ditemukan kombinasi yang sesuai filter.";
+    return;
+  }
+
+  const maxBaris = 5;
+  const maxKolom = 10;
+  let outputLines = [];
+  for (let i = 0; i < Math.min(maxBaris, Math.ceil(hasil.length / maxKolom)); i++) {
+    const start = i * maxKolom;
+    const end = start + maxKolom;
+    outputLines.push(hasil.slice(start, end).join(" "));
+  }
+  if (hasil.length > maxBaris * maxKolom) {
+    outputLines.push("...");
+  }
+
+  resultDiv.textContent = `Ditemukan ${hasil.length} kombinasi:\n\n` + outputLines.join("\n");
+}
+</script>
+
+</body>
+</html>
