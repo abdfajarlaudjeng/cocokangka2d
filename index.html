@@ -2,12 +2,14 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Kecocokan Angka 2D dengan Format *</title>
+  <title>Cocokkan Angka 2D, 3D, 4D</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex">
 
-  <!-- Navbar kiri -->
+  <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
+    <h1 class="text-xl font-bold mb-8 text-gray-800">BBFS ALL PASARAN</h1>
+    <!-- Navbar kiri -->
   <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
     <h1 class="text-xl font-bold mb-8 text-gray-800">BBFS ALL PASARAN</h1>
     <ul class="flex flex-col gap-4">
@@ -26,124 +28,123 @@
     </ul>
   </nav>
 
-  <!-- Konten utama -->
-  <main class="flex-1 p-6 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-xl">
-      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 2D</h2>
-      <p class="text-gray-600 mb-4">
-        Masukkan angka 2 digit, dipisahkan dengan tanda
-        <code class="bg-gray-200 px-1 rounded"> *</code> (contoh: 23*45*58):
-      </p>
+  <main class="flex-1 p-6 overflow-auto">
+    <div class="max-w-4xl mx-auto space-y-12">
 
-      <div class="flex flex-col gap-4">
-        <input id="kolomA" placeholder="Kolom A (2D BERDASARKAN SHIO)" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <input id="kolomB" placeholder="Kolom B (2D BERDASARKAN AS)" class="border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-        <input id="kolomC" placeholder="Kolom C - Validasi (2D BERDASARKAN EKOR)" class="border border-yellow-400 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500" />
-        <button onclick="cocokkan2D()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-200">Cocokkan</button>
-      </div>
+      <!-- 2D -->
+      <section class="bg-white p-6 rounded-xl shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 2D</h2>
+        <p class="text-gray-600 mb-4">
+          Masukkan angka 2 digit, dipisahkan tanda <code class="bg-gray-200 px-1 rounded">*</code> (contoh: 12*34*56)
+        </p>
+        <div class="flex flex-col gap-4 max-w-xl">
+          <input id="kolomA2D" placeholder="Kolom A (2D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+          <input id="kolomB2D" placeholder="Kolom B (2D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+          <input id="kolomC2D" placeholder="Kolom C (2D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+          <button onclick="cocokkan('2D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 2D</button>
+        </div>
+        <div id="hasil2D" class="mt-4"></div>
+      </section>
 
-      <div id="hasil" class="mt-6 text-lg font-medium text-gray-800"></div>
-      <div id="tabelHasil" class="mt-2"></div>
-      <div id="tabelValidasi" class="mt-4"></div>
+      <!-- 3D -->
+      <section class="bg-white p-6 rounded-xl shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 3D</h2>
+        <p class="text-gray-600 mb-4">
+          Masukkan angka 3 digit, dipisahkan tanda <code class="bg-gray-200 px-1 rounded">*</code> (contoh: 123*456*789)
+        </p>
+        <div class="flex flex-col gap-4 max-w-xl">
+          <input id="kolomA3D" placeholder="Kolom A (3D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+          <input id="kolomB3D" placeholder="Kolom B (3D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+          <input id="kolomC3D" placeholder="Kolom C (3D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+          <button onclick="cocokkan('3D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 3D</button>
+        </div>
+        <div id="hasil3D" class="mt-4"></div>
+      </section>
 
-      <div id="notifSalin" class="hidden mt-4 text-green-600 text-sm font-medium"></div>
+      <!-- 4D -->
+      <section class="bg-white p-6 rounded-xl shadow-lg">
+        <h2 class="text-2xl font-semibold mb-4 text-gray-800">Kolaborasi Angka 4D</h2>
+        <p class="text-gray-600 mb-4">
+          Masukkan angka 4 digit, dipisahkan tanda <code class="bg-gray-200 px-1 rounded">*</code> (contoh: 1234*5678*9012)
+        </p>
+        <div class="flex flex-col gap-4 max-w-xl">
+          <input id="kolomA4D" placeholder="Kolom A (4D SHIO)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+          <input id="kolomB4D" placeholder="Kolom B (4D AS)" class="border px-4 py-2 rounded focus:ring-blue-500" />
+          <input id="kolomC4D" placeholder="Kolom C (4D EKOR Validasi)" class="border px-4 py-2 rounded border-yellow-400 focus:ring-yellow-500" />
+          <button onclick="cocokkan('4D')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Cocokkan 4D</button>
+        </div>
+        <div id="hasil4D" class="mt-4"></div>
+      </section>
+
     </div>
   </main>
 
-  <script>
-    function cocokkan2D() {
-      const kolomA = document.getElementById("kolomA").value.trim();
-      const kolomB = document.getElementById("kolomB").value.trim();
-      const kolomC = document.getElementById("kolomC").value.trim();
+<script>
+  function cocokkan(tipe) {
+    // Pilih elemen input berdasarkan tipe
+    const kolomA = document.getElementById(`kolomA${tipe}`).value.trim();
+    const kolomB = document.getElementById(`kolomB${tipe}`).value.trim();
+    const kolomC = document.getElementById(`kolomC${tipe}`).value.trim();
+    const hasilEl = document.getElementById(`hasil${tipe}`);
 
-      const listA = kolomA.split('*').map(s => s.trim()).filter(a => /^\d{2}$/.test(a));
-      const listB = kolomB.split('*').map(s => s.trim()).filter(a => /^\d{2}$/.test(a));
-      const listC = kolomC.split('*').map(s => s.trim()).filter(a => /^\d{2}$/.test(a));
+    // Tentukan regex digit sesuai tipe
+    let regex;
+    if (tipe === '2D') regex = /^\d{2}$/;
+    else if (tipe === '3D') regex = /^\d{3}$/;
+    else if (tipe === '4D') regex = /^\d{4}$/;
+    else {
+      hasilEl.innerHTML = '<p class="text-red-500">Tipe tidak dikenal</p>';
+      return;
+    }
 
-      const setB = new Set(listB);
-      const setC = new Set(listC);
+    const listA = kolomA.split('*').map(s => s.trim()).filter(a => regex.test(a));
+    const listB = kolomB.split('*').map(s => s.trim()).filter(a => regex.test(a));
+    const listC = kolomC.split('*').map(s => s.trim()).filter(a => regex.test(a));
 
-      const hasilCocok = listA.filter(angka => setB.has(angka));
-      const hasilValidasi = hasilCocok.filter(angka => setC.has(angka));
+    const setB = new Set(listB);
+    const setC = new Set(listC);
 
-      const hasilEl = document.getElementById("hasil");
-      const tabelEl = document.getElementById("tabelHasil");
-      const tabelValidasi = document.getElementById("tabelValidasi");
-      const notifEl = document.getElementById("notifSalin");
+    const hasilCocok = listA.filter(angka => setB.has(angka));
+    const hasilValidasi = hasilCocok.filter(angka => setC.has(angka));
 
-      if (hasilCocok.length > 0) {
-        const hasilGabung = hasilCocok.join("*");
-        const totalCocok = hasilCocok.length;
+    if (hasilCocok.length > 0) {
+      const gabung = hasilCocok.join('*');
+      let validasiHtml = '';
 
-        hasilEl.innerHTML = `
-          <p>Angka yang cocok antara Kolom A & B:</p>
-          <p class="text-blue-600 font-semibold">Total: ${totalCocok} angka</p>
+      if (hasilValidasi.length > 0) {
+        validasiHtml = `
+          <p class="mt-2 font-semibold text-yellow-700">Validasi (Kolom C) ditemukan:</p>
+          <p class="text-yellow-800">${hasilValidasi.join('*')}</p>
         `;
-        tabelEl.innerHTML = `
-          <div class="overflow-x-auto">
-            <table class="min-w-full border border-gray-300 rounded overflow-hidden">
-              <thead class="bg-gray-200">
-                <tr><th class="p-2 text-left text-sm">Kecocokan</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="p-2 text-sm" id="hasilGabung">${hasilGabung}</td>
-                </tr>
-              </tbody>
-            </table>
-            <button onclick="salinHasil()" class="mt-3 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">Salin Hasil</button>
-          </div>
-        `;
-
-        // Tampilkan validasi C jika ada
-        if (hasilValidasi.length > 0) {
-          const hasilValidasiGabung = hasilValidasi.join("*");
-          tabelValidasi.innerHTML = `
-            <p class="mt-4 font-medium text-yellow-700">Angka cocok yang juga ada di Kolom C (validasi):</p>
-            <div class="overflow-x-auto mt-2">
-              <table class="min-w-full border border-yellow-400 rounded overflow-hidden">
-                <thead class="bg-yellow-200">
-                  <tr><th class="p-2 text-left text-sm">Validasi Kolom C</th></tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="p-2 text-sm text-yellow-800">${hasilValidasiGabung}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          `;
-        } else {
-          tabelValidasi.innerHTML = `
-            <p class="mt-4 text-red-500 text-sm">Tidak ada angka cocok yang tervalidasi di Kolom C.</p>
-          `;
-        }
-
-        notifEl.classList.add("hidden");
-
       } else {
-        hasilEl.textContent = "Tidak ada angka yang cocok antara Kolom A & B.";
-        tabelEl.innerHTML = "";
-        tabelValidasi.innerHTML = "";
-        notifEl.classList.add("hidden");
+        validasiHtml = `<p class="mt-2 text-red-500">Tidak ada angka cocok yang tervalidasi di Kolom C.</p>`;
       }
-    }
 
-    function salinHasil() {
-      const teks = document.getElementById("hasilGabung").textContent;
-      navigator.clipboard.writeText(teks).then(() => {
-        const notifEl = document.getElementById("notifSalin");
-        notifEl.textContent = "Hasil telah disalin ke clipboard!";
-        notifEl.classList.remove("hidden");
-
-        setTimeout(() => {
-          notifEl.classList.add("hidden");
-        }, 2500);
-      }).catch(err => {
-        alert("Gagal menyalin teks: " + err);
-      });
+      hasilEl.innerHTML = `
+        <p>Angka cocok antara Kolom A & B (Total: ${hasilCocok.length}):</p>
+        <p class="font-semibold text-blue-600">${gabung}</p>
+        ${validasiHtml}
+        <button onclick="salinHasil('${tipe}')" class="mt-3 bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">Salin Hasil</button>
+      `;
+    } else {
+      hasilEl.innerHTML = `<p class="text-red-500">Tidak ada angka yang cocok antara Kolom A & B.</p>`;
     }
-  </script>
+  }
+
+  function salinHasil(tipe) {
+    const hasilEl = document.getElementById(`hasil${tipe}`);
+    const teks = hasilEl.querySelector('p.font-semibold')?.textContent || '';
+    if (!teks) {
+      alert('Tidak ada hasil untuk disalin.');
+      return;
+    }
+    navigator.clipboard.writeText(teks).then(() => {
+      alert('Hasil telah disalin ke clipboard!');
+    }).catch(() => {
+      alert('Gagal menyalin hasil.');
+    });
+  }
+</script>
 
 </body>
 </html>
