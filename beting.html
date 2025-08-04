@@ -85,7 +85,7 @@
   let pasaranAktif = null;
 
   function loadData() {
-    const queryString = encodeURIComponent('SELECT A, B, C, D, E');
+    const queryString = encodeURIComponent('SELECT A, B, C, D, E, G');
     const url = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?sheet=${sheetName}&tq=${queryString}`;
     const query = new google.visualization.Query(url);
     query.send(response => {
@@ -122,7 +122,6 @@
       tabsDiv.appendChild(tab);
     });
 
-    // Set tab aktif kembali jika sebelumnya sudah ada
     if (pasaranAktif && pasaranList.includes(pasaranAktif)) {
       const tabElement = Array.from(tabsDiv.children).find(tab => tab.textContent === pasaranAktif);
       setActiveTab(pasaranAktif, tabElement);
@@ -146,7 +145,8 @@
           nomor: allDataTable.getValue(i, 1)?.toString().trim(),
           prediksi: allDataTable.getValue(i, 2),
           angkaMain: allDataTable.getValue(i, 3)?.toString().replace(/\s+/g, ''),
-          bbfs: allDataTable.getValue(i, 4)?.toString().replace(/\s+/g, '')
+          bbfs: allDataTable.getValue(i, 4)?.toString().replace(/\s+/g, ''),
+          tambahanG: allDataTable.getValue(i, 5)
         });
       }
     }
@@ -155,7 +155,7 @@
     if (filteredRows.length === 0) {
       html += `<p>Tidak ada data prediksi.</p>`;
     } else {
-      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th><th>Angka Main</th><th>BBFS</th></tr></thead><tbody>`;
+      html += `<table><thead><tr><th>Nomor</th><th>Prediksi</th><th>Angka Main</th><th>BBFS</th><th>Tambahan G</th></tr></thead><tbody>`;
       filteredRows.forEach(row => {
         const nomorDigits = row.nomor.split('');
         const angkaMainDigits = row.angkaMain.split('');
@@ -174,6 +174,7 @@
           <td>${prediksiColored}</td>
           <td>${angkaMainFormatted}</td>
           <td>${bbfsFormatted}</td>
+          <td>${row.tambahanG || ''}</td>
         </tr>`;
       });
       html += `</tbody></table>`;
