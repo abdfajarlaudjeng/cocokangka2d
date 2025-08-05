@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Putar Nomor 2D & Angka Ikut</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e0f7fa;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #00796b;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #d32f2f;
+    }
+    button, input {
+      padding: 10px 20px;
+      font-size: 1.1em;
+      margin: 10px;
+      border-radius: 6px;
+    }
+    button {
+      background: #00796b;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #004d40;
+    }
+    input {
+      border: 1px solid #ccc;
+      width: 200px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Putar Nomor 2D & Angka Ikut</h1>
+
+  <input type="text" id="angkaInput" placeholder="Masukkan 2-5 digit angka" maxlength="5" oninput="cekAngka()" />
+  <button onclick="putarNomor()">Putar Nomor</button>
+
+  <div id="result"></div>
+
+  <script>
+    const data2D = {
+      "01": "2450", "02": "1247", "03": "2450", "04": "3894", "05": "6701",
+      "06": "1247", "07": "3894", "08": "3894", "09": "1269", "10": "1269",
+      "11": "1269", "12": "4579", "13": "2450", "14": "4579", "15": "2567",
+      "16": "2567", "17": "2567", "18": "1269", "19": "1269", "20": "1269",
+      "21": "4579", "22": "3894", "23": "3890", "24": "1247", "25": "3807",
+      "26": "3894", "27": "6701", "28": "3894", "29": "4579", "30": "6701",
+      "31": "1247", "32": "3894", "33": "1269", "34": "6701", "35": "1269",
+      "36": "3894", "37": "3807", "38": "6701", "39": "6701", "40": "2450",
+      "41": "4579", "42": "3469", "43": "4579", "44": "3891", "45": "1269",
+      "46": "1247", "47": "4579", "48": "6701", "49": "4579", "50": "1247",
+      "51": "2567", "52": "3469", "53": "3469", "54": "3891", "55": "1247",
+      "56": "1247", "57": "1269", "58": "1247", "59": "3896", "60": "1247",
+      "61": "2567", "62": "3469", "63": "3891", "64": "2450", "65": "1247",
+      "66": "3896", "67": "1269", "68": "1247", "69": "3896", "70": "1247",
+      "71": "3891", "72": "3896", "73": "4579", "74": "3896", "75": "3896",
+      "76": "2567", "77": "1269", "78": "4579", "79": "4579", "80": "1247"
+    };
+
+    function pad2D(num) {
+      return num.padStart(2, '0');
+    }
+
+    function cekAngka() {
+      const input = document.getElementById("angkaInput").value;
+      const cleanInput = input.replace(/\D/g, ''); // hanya angka
+
+      if (cleanInput.length >= 2) {
+        const last2 = cleanInput.slice(-2);
+        const key = pad2D(last2);
+        const ikut = data2D[key];
+
+        if (ikut) {
+          document.getElementById("result").innerHTML = 
+            `<strong>2D:</strong> ${key}<br><strong>Angka Ikut:</strong> ${ikut}`;
+        } else {
+          document.getElementById("result").innerHTML = `2D ${key} tidak ditemukan dalam data.`;
+        }
+      } else {
+        document.getElementById("result").innerHTML = "Masukkan minimal 2 digit angka.";
+      }
+    }
+
+    function putarNomor() {
+      const keys = Object.keys(data2D);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      const ikut = data2D[randomKey];
+      document.getElementById("result").innerHTML = 
+        `<strong>2D (Acak):</strong> ${randomKey} <br><strong>Angka Ikut:</strong> ${ikut}`;
+    }
+  </script>
+
+</body>
+</html>
