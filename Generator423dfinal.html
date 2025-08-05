@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -13,10 +14,9 @@
       min-height: 100vh;
       background: #f3f4f6;
     }
-    /* Navbar */
     nav {
       background: white;
-      width: 256px; /* w-64 = 16rem = 256px */
+      width: 256px;
       min-height: 100vh;
       box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
       padding: 1.5rem;
@@ -29,7 +29,7 @@
       font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 2rem;
-      color: #374151; /* gray-800 */
+      color: #374151;
     }
     nav ul {
       list-style: none;
@@ -48,11 +48,9 @@
       transition: background-color 0.3s, color 0.3s;
     }
     nav a:hover {
-      background-color: #2563eb; /* blue-600 */
+      background-color: #2563eb;
       color: white;
     }
-
-    /* Konten utama */
     main {
       flex-grow: 1;
       padding-left: 2rem;
@@ -64,7 +62,6 @@
       padding: 2rem;
       margin: 20px 0;
     }
-
     .tabs {
       display: flex;
       gap: 10px;
@@ -73,7 +70,7 @@
     .tabs button {
       padding: 10px 20px;
       cursor: pointer;
-      background: #e5e7eb; /* gray-200 */
+      background: #e5e7eb;
       border: none;
       border-radius: 0.375rem;
       font-weight: 600;
@@ -87,7 +84,6 @@
       background: #2563eb;
       color: white;
     }
-
     .tabcontent {
       display: none;
     }
@@ -121,61 +117,49 @@
   </style>
 </head>
 <body>
-
- <!-- Navbar kiri -->
   <nav class="bg-white w-64 min-h-screen shadow-lg p-6 flex flex-col sticky top-0">
     <h1 class="text-xl font-bold mb-8 text-gray-800">BBFS ALL PASARAN</h1>
     <ul class="flex flex-col gap-4">
-      <li><a href="index.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Data 2D</a></li>
-      <li><a href="2DAS.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D BBFS AS</a></li>
-      <li><a href="Final2d1.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D KEPALA - EKOR</a></li>
-      <li><a href="2dshio.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">2D SHIO MAIN</a></li>
-      <li><a href="final2d.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">REKAP PREDIKSI</a></li>
-      <li><a href="beting.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Beting Pasaran</a></li>
-      <li><a href="kombinasi423d.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Kombinasi 423D</a></li>
-      <li><a href="3D.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Prediksi 3D</a></li>
-      <li><a href="4D.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Prediksi 4D</a></li>
-      <li><a href="kombinasi34d.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Prediksi 4D</a></li>
-      <li><a href="jumlah.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">BBFS ALL PASARAN</a></li>
-      <li><a href="Generator423dfinal.html" class="block px-3 py-2 rounded hover:bg-blue-600 hover:text-white transition">Generator 423D</a></li>
+      <li><a href="#">Data 2D</a></li>
+      <li><a href="#">2D BBFS AS</a></li>
+      <li><a href="#">2D KEPALA - EKOR</a></li>
+      <li><a href="#">2D SHIO MAIN</a></li>
+      <li><a href="#">REKAP PREDIKSI</a></li>
+      <li><a href="#">Beting Pasaran</a></li>
+      <li><a href="#">Kombinasi 423D</a></li>
+      <li><a href="#">Prediksi 3D</a></li>
+      <li><a href="#">Prediksi 4D</a></li>
+      <li><a href="#">Prediksi 4D</a></li>
+      <li><a href="#">BBFS ALL PASARAN</a></li>
+      <li><a href="#">Generator 423D</a></li>
     </ul>
   </nav>
-
-
-  <!-- Konten utama -->
   <main>
     <h2>🎯 BBFS Generator 2D, 3D, 4D (Tanpa Filter Shio)</h2>
-
     <label for="bbfsInput">Masukkan BBFS (contoh: 12345678):</label><br>
     <input type="text" id="bbfsInput" maxlength="8" style="padding:8px; width: 100%; max-width: 300px; margin-top: 5px;"><br><br>
-
     <button onclick="generateAll()" style="padding: 10px 20px; font-weight: 600; cursor: pointer;">🔄 Generate</button>
-
     <div class="tabs" style="margin-top: 20px;">
       <button id="btn2D" onclick="openTab('tab2D')" class="active">2D</button>
       <button id="btn3D" onclick="openTab('tab3D')">3D</button>
       <button id="btn4D" onclick="openTab('tab4D')">4D</button>
     </div>
-
     <div id="tab2D" class="tabcontent active">
       <h3>🎯 Hasil 2D</h3>
       <button class="download-btn" onclick="downloadByType('2D')">⬇️ Download 2D</button>
       <textarea id="result2D" readonly></textarea>
     </div>
-
     <div id="tab3D" class="tabcontent">
       <h3>🎯 Hasil 3D</h3>
       <button class="download-btn" onclick="downloadByType('3D')">⬇️ Download 3D</button>
       <textarea id="result3D" readonly></textarea>
     </div>
-
     <div id="tab4D" class="tabcontent">
       <h3>🎯 Hasil 4D</h3>
       <button class="download-btn" onclick="downloadByType('4D')">⬇️ Download 4D</button>
       <textarea id="result4D" readonly></textarea>
     </div>
   </main>
-
 <script>
   let allCombos = { "2D": [], "3D": [], "4D": [] };
 
@@ -185,21 +169,17 @@
       alert("Masukkan BBFS antara 2–8 digit.");
       return;
     }
-
     const combos2D = getComb(bbfs, 2);
     const combos3D = getComb(bbfs, 3);
     const combos4D = getComb(bbfs, 4);
-
     allCombos["2D"] = combos2D.map(x => x + '*');
     allCombos["3D"] = combos3D.map(x => x + '*');
     allCombos["4D"] = combos4D.map(x => x + '*');
-
     document.getElementById("result2D").value = allCombos["2D"].join('');
-    document.getElementById("result3D").value = allCombos["3D"].join('');
-    document.getElementById("result4D").value = allCombos["4D"].join('');
+    document.getElementById("result3D").value = formatColumnOutput(allCombos["3D"], 7);
+    document.getElementById("result4D").value = formatColumnOutput(allCombos["4D"], 6);
   }
 
-  // Fungsi kombinasi unik
   function getComb(str, len) {
     const results = [];
     const permute = (prefix, chars) => {
@@ -215,32 +195,39 @@
     return [...new Set(results)];
   }
 
-  // Tab navigasi dengan highlight button aktif
   function openTab(id) {
     document.querySelectorAll(".tabcontent").forEach(el => el.classList.remove("active"));
     document.getElementById(id).classList.add("active");
-
     document.querySelectorAll(".tabs button").forEach(btn => btn.classList.remove("active"));
     if (id === "tab2D") document.getElementById("btn2D").classList.add("active");
     else if (id === "tab3D") document.getElementById("btn3D").classList.add("active");
     else if (id === "tab4D") document.getElementById("btn4D").classList.add("active");
   }
 
-  // Download hasil
   function downloadByType(type) {
     const data = allCombos[type] || [];
     if (data.length === 0) {
       alert("Generate terlebih dahulu hasil " + type);
       return;
     }
-    const text = data.join('');
+    const text = type === "3D" ? formatColumnOutput(data, 7) :
+                 type === "4D" ? formatColumnOutput(data, 6) :
+                 data.join('');
     const blob = new Blob([text], { type: 'text/plain' });
     const link = document.createElement('a');
     link.download = `hasil_${type}.txt`;
     link.href = URL.createObjectURL(blob);
     link.click();
   }
-</script>
 
+  function formatColumnOutput(arr, perRow) {
+    let output = '';
+    for (let i = 0; i < arr.length; i++) {
+      output += arr[i] + '\t';
+      if ((i + 1) % perRow === 0) output += '\n';
+    }
+    return output;
+  }
+</script>
 </body>
 </html>
