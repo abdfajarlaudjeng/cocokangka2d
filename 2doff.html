@@ -17,6 +17,17 @@
       word-break: break-word;
       white-space: normal;
     }
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #1c1c1c; /* agar tetap kontras saat scroll */
+      color: #fff;
+      z-index: 10;
+    }
+    .table-wrapper {
+      max-height: 400px; /* tinggi tabel scrollable */
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -52,7 +63,7 @@
     <!-- Card Output -->
     <div class="bg-white p-4 rounded shadow card">
       <h2 class="font-semibold mb-2">Tabel JUMLAH 2D & OFF</h2>
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto table-wrapper">
         <table class="min-w-full border text-sm table table-bordered table-striped" id="jumlahTable">
           <thead class="bg-gray-100 table-dark">
             <tr>
