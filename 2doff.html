@@ -98,10 +98,14 @@
         row.innerHTML = `
           <td class="border px-2 py-1 font-medium">${key}</td>
           <td class="border px-2 py-1 text-xs">${sisaSorted.join(" ") || "-"}</td>
-          <td class="border px-2 py-1 text-xs text-red-600">${removedSorted.join(" ") || "-"}</td>
+          <td class="border px-2 py-1 text-xs text-red-600">
+            ${removedSorted.join("*") || "-"}
+            ${removedSorted.length ? `<div class="text-gray-500">Jumlah: ${removedSorted.length}</div>` : ""}
+          </td>
           <td class="border px-2 py-1 text-xs text-green-600">
             ${validSorted.join("*") || "-"}
-            ${validSorted.length ? `<button onclick="copyText('${validSorted.join('*')}')" class="ml-2 px-2 py-1 bg-gray-200 rounded text-xs">Salin</button>` : ""}
+            ${validSorted.length ? `<div class="text-gray-500">Jumlah: ${validSorted.length}</div>` : ""}
+            ${validSorted.length ? `<button onclick="copyText('${validSorted.join('*')}')" class="mt-1 px-2 py-1 bg-gray-200 rounded text-xs">Salin</button>` : ""}
           </td>
         `;
         tbody.appendChild(row);
