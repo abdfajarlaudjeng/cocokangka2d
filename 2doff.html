@@ -98,9 +98,12 @@
       const tbody = document.querySelector("#jumlahTable tbody");
       tbody.innerHTML = "";
       for (const key in lists) {
-        const sisaStr = lists[key].join("*"); // tidak diurutkan, hanya dipisahkan *
+        const sisaStr = lists[key].join("*"); // tidak diurutkan
         const removedSorted = [...removed[key]].sort((a, b) => parseInt(a) - parseInt(b));
-        const validSorted = [...validInputs[key]].sort((a, b) => parseInt(a) - parseInt(b));
+        
+        // Hilangkan duplikat dari validInputs sebelum ditampilkan
+        const uniqueValid = [...new Set(validInputs[key])];
+        const validSorted = [...uniqueValid].sort((a, b) => parseInt(a) - parseInt(b));
 
         const row = document.createElement("tr");
         row.innerHTML = `
