@@ -3,44 +3,56 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>2D ON → OFF berdasarkan JUMLAH</title>
+  <title>JUMLAH 2D → 2D OFF</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 text-slate-800">
-  <div class="max-w-4xl mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-3">2D ON → OFF (Berdasarkan JUMLAH)</h1>
-    <p class="mb-4 text-sm text-slate-600">
-      Masukkan angka 2D dipisahkan dengan tanda <code>*</code>, contoh: <code>23*32*45*</code><br>
-      Jika angka 2D ditemukan di daftar JUMLAH, maka dianggap OFF dan dihapus dari daftar.
-    </p>
+<body class="bg-gray-50 text-gray-800">
+  <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4">JUMLAH 2D → 2D OFF berdasarkan JUMLAH</h1>
 
     <div class="bg-white p-4 rounded shadow mb-6">
       <label class="block mb-2 font-medium">Input 2D ON (pisahkan dengan *):</label>
       <textarea id="inputOn" rows="3" class="w-full border rounded p-2" placeholder="contoh: 23*32*45*"></textarea>
+      
+      <label class="block mt-4 mb-2 font-medium">Pilih JUMLAH untuk OFF:</label>
+      <select id="jumlahSelect" class="border rounded p-2">
+        <option value="">-- Pilih JUMLAH --</option>
+        <option value="JUMLAH 0">JUMLAH 0</option>
+        <option value="JUMLAH 1">JUMLAH 1</option>
+        <option value="JUMLAH 2">JUMLAH 2</option>
+        <option value="JUMLAH 3">JUMLAH 3</option>
+        <option value="JUMLAH 4">JUMLAH 4</option>
+        <option value="JUMLAH 5">JUMLAH 5</option>
+        <option value="JUMLAH 6">JUMLAH 6</option>
+        <option value="JUMLAH 7">JUMLAH 7</option>
+        <option value="JUMLAH 8">JUMLAH 8</option>
+        <option value="JUMLAH 9">JUMLAH 9</option>
+      </select>
+
       <div class="mt-3 flex gap-2">
         <button id="processBtn" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Proses</button>
         <button id="resetBtn" class="px-4 py-2 bg-gray-200 rounded">Reset</button>
-        <button id="copyResultBtn" class="px-4 py-2 bg-green-600 text-white rounded">Salin Hasil</button>
       </div>
     </div>
 
-    <div class="grid md:grid-cols-2 gap-4">
-      <div class="bg-white p-4 rounded shadow">
-        <h2 class="font-semibold mb-2">Hasil</h2>
-        <div id="resultsArea" class="text-sm text-slate-700">
-          <p class="text-slate-500">Belum diproses.</p>
-        </div>
-      </div>
-
-      <div class="bg-white p-4 rounded shadow">
-        <h2 class="font-semibold mb-2">Daftar JUMLAH (ter-update)</h2>
-        <div id="listsArea" class="text-sm text-slate-700 overflow-auto max-h-96"></div>
+    <div class="bg-white p-4 rounded shadow">
+      <h2 class="font-semibold mb-2">Tabel JUMLAH 2D & OFF</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border text-sm" id="jumlahTable">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border px-2 py-1">JUMLAH</th>
+              <th class="border px-2 py-1">Sisa 2D</th>
+              <th class="border px-2 py-1">2D OFF (dihapus)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
     </div>
   </div>
 
   <script>
-    // ====== Data JUMLAH ======
     const ORIGINAL = {
       "JUMLAH 0": "02*06*17*19*20*28*29*33*37*46*48*55*56*59*60*64*65*66*67*71*73*76*77*78*82*84*87*88*91*92*95*99*",
       "JUMLAH 1": "00*02*03*06*13*17*20*28*30*31*39*44*48*57*59*60*66*67*71*75*76*77*78*82*84*87*88*89*93*95*98*99*",
@@ -54,7 +66,7 @@
       "JUMLAH 9": "06*08*17*18*19*22*26*35*37*44*45*48*53*54*55*56*59*60*62*65*66*67*71*73*76*77*80*81*84*88*91*95*"
     };
 
-    let lists = {};
+    let lists = {}, removed = {};
 
     function norm2d(s) {
       const d = (s || "").replace(/\D/g, "");
@@ -64,91 +76,55 @@
 
     function loadOriginal() {
       lists = {};
+      removed = {};
       for (const key in ORIGINAL) {
-        lists[key] = ORIGINAL[key]
-          .split("*")
-          .map(norm2d)
-          .filter(Boolean);
+        lists[key] = ORIGINAL[key].split("*").map(norm2d).filter(Boolean);
+        removed[key] = [];
       }
     }
 
-    function renderLists() {
-      const c = document.getElementById("listsArea");
-      c.innerHTML = "";
+    function renderTable() {
+      const tbody = document.querySelector("#jumlahTable tbody");
+      tbody.innerHTML = "";
       for (const key in lists) {
-        const arr = lists[key];
-        c.innerHTML += `<div class="mb-3">
-          <div class="font-medium">${key} <span class="text-xs text-slate-500">(${arr.length})</span></div>
-          <div class="text-xs mt-1 p-2 bg-slate-50 border rounded"><code>${arr.join(" ") || "-"}</code></div>
-        </div>`;
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td class="border px-2 py-1 font-medium">${key}</td>
+          <td class="border px-2 py-1 text-xs">${lists[key].join(" ") || "-"}</td>
+          <td class="border px-2 py-1 text-xs text-red-600">${removed[key].join(" ") || "-"}</td>
+        `;
+        tbody.appendChild(row);
       }
     }
 
-    function processInput(txt) {
+    function processInput(txt, jumlahKey) {
       const nums = txt.split("*").map(norm2d).filter(Boolean);
-      const off = [], on = [];
-      const seen = new Set();
-
       for (const num of nums) {
-        if (seen.has(num)) continue;
-        seen.add(num);
-        let found = false;
-        for (const key in lists) {
-          const idx = lists[key].indexOf(num);
-          if (idx >= 0) {
-            lists[key].splice(idx, 1);
-            off.push({num, key});
-            found = true;
-          }
+        const idx = lists[jumlahKey].indexOf(num);
+        if (idx >= 0) {
+          removed[jumlahKey].push(lists[jumlahKey][idx]);
+          lists[jumlahKey].splice(idx, 1);
         }
-        if (!found) on.push(num);
       }
-      return {off, on};
-    }
-
-    function renderResults(res) {
-      const a = document.getElementById("resultsArea");
-      if (!res.off.length && !res.on.length) {
-        a.innerHTML = '<p class="text-slate-500">Tidak ada perubahan.</p>';
-        return;
-      }
-      let html = "";
-      if (res.off.length) {
-        html += `<div class="mb-2"><div class="font-medium">Menjadi OFF (${res.off.length})</div><ul class="list-disc pl-5 text-sm">`;
-        res.off.forEach(r => html += `<li>${r.num} → ${r.key}</li>`);
-        html += "</ul></div>";
-      }
-      if (res.on.length) {
-        html += `<div><div class="font-medium">Tetap ON (${res.on.length})</div><ul class="list-disc pl-5 text-sm">`;
-        res.on.forEach(r => html += `<li>${r}</li>`);
-        html += "</ul></div>`;
-      }
-      a.innerHTML = html;
     }
 
     document.getElementById("processBtn").onclick = () => {
       const val = document.getElementById("inputOn").value.trim();
-      if (!val) { alert("Isi angka 2D dulu."); return; }
-      const res = processInput(val);
-      renderResults(res);
-      renderLists();
+      const jumlahKey = document.getElementById("jumlahSelect").value;
+      if (!val) { alert("Isi angka 2D ON dulu."); return; }
+      if (!jumlahKey) { alert("Pilih JUMLAH dulu."); return; }
+      processInput(val, jumlahKey);
+      renderTable();
     };
 
     document.getElementById("resetBtn").onclick = () => {
       loadOriginal();
-      renderLists();
-      document.getElementById("resultsArea").innerHTML = '<p class="text-slate-500">Reset ke kondisi awal.</p>';
+      renderTable();
     };
 
-    };
-
-    // Init
+    // init
     loadOriginal();
-    renderLists();
+    renderTable();
   </script>
 </body>
 </html>
-
-    document.getElementById("copyResultBtn").onclick = () => {
-      const txt = document.getElementById("resultsArea").innerText;
-      navigator.clipboard.writeText(txt).then(() => alert("Hasil disalin!"));
