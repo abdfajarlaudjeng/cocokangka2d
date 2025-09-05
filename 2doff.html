@@ -98,14 +98,14 @@
       const tbody = document.querySelector("#jumlahTable tbody");
       tbody.innerHTML = "";
       for (const key in lists) {
-        const sisaSorted = [...lists[key]].sort((a, b) => parseInt(a) - parseInt(b));
+        const sisaStr = lists[key].join("*"); // tidak diurutkan, hanya dipisahkan *
         const removedSorted = [...removed[key]].sort((a, b) => parseInt(a) - parseInt(b));
         const validSorted = [...validInputs[key]].sort((a, b) => parseInt(a) - parseInt(b));
 
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="border px-2 py-1 font-medium">${key}</td>
-          <td class="border px-2 py-1 text-xs">${sisaSorted.join(" ") || "-"}</td>
+          <td class="border px-2 py-1 text-xs">${sisaStr || "-"}</td>
           <td class="border px-2 py-1 text-xs text-danger">
             ${removedSorted.join("*") || "-"}
             ${removedSorted.length ? `<div class="text-muted">Jumlah: ${removedSorted.length}</div>` : ""}
