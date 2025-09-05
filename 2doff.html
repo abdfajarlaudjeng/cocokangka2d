@@ -43,7 +43,8 @@
             <tr>
               <th class="border px-2 py-1">JUMLAH</th>
               <th class="border px-2 py-1">Sisa 2D</th>
-              <th class="border px-2 py-1">2D OFF (dihapus)</th>
+              <th class="border px-2 py-1 text-red-600">2D OFF (dihapus)</th>
+              <th class="border px-2 py-1 text-green-600">2D INPUT (valid)</th>
             </tr>
           </thead>
           <tbody></tbody>
@@ -66,7 +67,7 @@
       "JUMLAH 9": "06*08*17*18*19*22*26*35*37*44*45*48*53*54*55*56*59*60*62*65*66*67*71*73*76*77*80*81*84*88*91*95*"
     };
 
-    let lists = {}, removed = {};
+    let lists = {}, removed = {}, validInput = {};
 
     function norm2d(s) {
       const d = (s || "").replace(/\D/g, "");
@@ -77,9 +78,11 @@
     function loadOriginal() {
       lists = {};
       removed = {};
+      validInput = {};
       for (const key in ORIGINAL) {
         lists[key] = ORIGINAL[key].split("*").map(norm2d).filter(Boolean);
         removed[key] = [];
+        validInput[key] = [];
       }
     }
 
@@ -87,15 +90,16 @@
       const tbody = document.querySelector("#jumlahTable tbody");
       tbody.innerHTML = "";
       for (const key in lists) {
-        // urutkan numerik
         const sisaSorted = [...lists[key]].sort((a, b) => parseInt(a) - parseInt(b));
         const removedSorted = [...removed[key]].sort((a, b) => parseInt(a) - parseInt(b));
+        const validSorted = [...validInput[key]].sort((a, b) => parseInt(a) - parseInt(b));
 
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="border px-2 py-1 font-medium">${key}</td>
           <td class="border px-2 py-1 text-xs">${sisaSorted.join(" ") || "-"}</td>
           <td class="border px-2 py-1 text-xs text-red-600">${removedSorted.join(" ") || "-"}</td>
+          <td class="border px-2 py-1 text-xs text-green-600">${validSorted.join(" ") || "-"}</td>
         `;
         tbody.appendChild(row);
       }
@@ -108,6 +112,8 @@
         if (idx >= 0) {
           removed[jumlahKey].push(lists[jumlahKey][idx]);
           lists[jumlahKey].splice(idx, 1);
+        } else {
+          validInput[jumlahKey].push(num);
         }
       }
     }
