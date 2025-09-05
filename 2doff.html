@@ -87,11 +87,15 @@
       const tbody = document.querySelector("#jumlahTable tbody");
       tbody.innerHTML = "";
       for (const key in lists) {
+        // urutkan numerik
+        const sisaSorted = [...lists[key]].sort((a, b) => parseInt(a) - parseInt(b));
+        const removedSorted = [...removed[key]].sort((a, b) => parseInt(a) - parseInt(b));
+
         const row = document.createElement("tr");
         row.innerHTML = `
           <td class="border px-2 py-1 font-medium">${key}</td>
-          <td class="border px-2 py-1 text-xs">${lists[key].join(" ") || "-"}</td>
-          <td class="border px-2 py-1 text-xs text-red-600">${removed[key].join(" ") || "-"}</td>
+          <td class="border px-2 py-1 text-xs">${sisaSorted.join(" ") || "-"}</td>
+          <td class="border px-2 py-1 text-xs text-red-600">${removedSorted.join(" ") || "-"}</td>
         `;
         tbody.appendChild(row);
       }
