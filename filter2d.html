@@ -36,40 +36,64 @@
     const sheetUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRZE8Cnns3mBp9NQpBqkbvyGItUV1kXnKYqJ31_bsO27WbmeYW6OCzjClFiSMkHAg/pub?gid=1514278589&single=true&output=csv";
 
     async function fetchData() {
-      const response = await fetch(sheetUrl);
-      const data = await response.text();
-      const rows = data.split("\n").map(r => r.split(","));
-      const headers = rows[0];
+      try {
+        const response = await fetch(sheetUrl);
+        const data = await response.text();
 
-      const ekorIndex = headers.indexOf("EKOR");
-      const dasarIndex = headers.indexOf("2D DASAR");
-      const finalIndex = headers.indexOf("2D FINAL");
-      const aiIndex = headers.indexOf("AI");
+        // Bersihkan baris dan pecah dengan cara aman
+        const rows = data
+          .trim()
+          .split(/\r?\n/) // tangani newline berbeda (\r\n, \n)
+          .map(r => r.split(",").map(x => x.trim()));
 
-      const content = document.getElementById("dataContainer");
+        const headers = rows[0];
+        const ekorIndex = headers.indexOf("EKOR");
+        const dasarIndex = headers.indexOf("2D DASAR");
+        const finalIndex = headers.indexOf("2D FINAL");
+        const aiIndex = headers.indexOf("AI");
 
-      rows.slice(1).forEach(row => {
-        const ekor = row[ekorIndex];
-        const dasar = row[dasarIndex];
-        const final = row[finalIndex];
-        const ai = row[aiIndex];
+        if (ekorIndex === -1 || dasarIndex === -1 || finalIndex === -1 || aiIndex === -1) {
+          document.getElementById("dataContainer").innerHTML = `
+            <div class='text-center text-red-600 font-bold'>❌ Kolom tidak ditemukan! Pastikan kolom bernama: EKOR, 2D DASAR, 2D FINAL, dan AI.</div>`;
+          return;
+        }
 
-        if (!ekor || !dasar || !final || !ai) return;
+        const content = document.getElementById("dataContainer");
+        content.innerHTML = "";
 
-        const card = document.createElement("div");
-        card.className = "card card-custom bg-white rounded-2xl shadow p-3";
-        card.innerHTML = `
-          <div class="card-body text-center">
-            <h5 class="text-lg font-bold text-blue-700 mb-2">
-              EKOR: <span class="badge bg-primary">${ekor}</span>
-            </h5>
-            <p><span class="badge bg-success me-1">2D DASAR</span> ${dasar}</p>
-            <p><span class="badge bg-warning text-dark me-1">2D FINAL</span> ${final}</p>
-            <p><span class="badge bg-info text-dark me-1">AI</span> ${ai}</p>
-          </div>
-        `;
-        content.appendChild(card);
-      });
+        rows.slice(1).forEach(row => {
+          const ekor = row[ekorIndex];
+          const dasar = row[dasarIndex];
+          const final = row[finalIndex];
+          const ai = row[aiIndex];
+
+          if (!ekor || !dasar || !final || !ai) return;
+
+          const card = document.createElement("div");
+          card.className = "card card-custom bg-white rounded-2xl shadow p-3";
+          card.innerHTML = `
+            <div class="card-body text-center">
+              <h5 class="text-lg font-bold text-blue-700 mb-2">
+                EKOR: <span class="badge bg-primary">${ekor}</span>
+              </h5>
+              <p><span class="badge bg-success me-1">2D DASAR</span> ${dasar}</p>
+              <p><span class="badge bg-warning text-dark me-1">2D FINAL</span> ${final}</p>
+              <p><span class="badge bg-info text-dark me-1">AI</span> ${ai}</p>
+            </div>
+          `;
+          content.appendChild(card);
+        });
+
+        if (!content.innerHTML.trim()) {
+          content.innerHTML = "<div class='text-center text-gray-600'>Tidak ada data ditemukan.</div>";
+        }
+      } catch (err) {
+        document.getElementById("dataContainer").innerHTML = `
+          <div class='text-center text-red-600 font-bold'>
+            ⚠️ Gagal memuat data. Periksa koneksi internet atau pastikan sheet diset 'Publik untuk semua'.
+          </div>`;
+        console.error(err);
+      }
     }
 
     fetchData();
