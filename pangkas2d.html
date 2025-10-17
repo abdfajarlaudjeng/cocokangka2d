@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Data Google Sheets - Responsive (Bootstrap + Tailwind)</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Tailwind (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    /* Sedikit styling tambahan untuk tampilan */
+    body { background: #f8fafc; }
+    .card-header { background: linear-gradient(90deg,#4f46e5,#06b6d4); color: white; }
+    .tbl-root { min-height: 160px; }
+    /* agar bootstrap table dan tailwind utility dapat hidup bersama */
+    @media (max-width: 640px) {
+      .desktop-only { display: none !important; }
+    }
+  </style>
+</head>
+<body class="p-4">
+
+  <div class="container-lg mx-auto">
+    <div class="card shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Data dari Google Sheets</h5>
+        <div class="text-end">
+          <small id="last-updated" class="me-2 opacity-75"></small>
+          <button id="reloadBtn" class="btn btn-sm btn-light">Muat ulang</button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <!-- Controls: search + page size -->
+        <div class="row mb-3 g-2">
+          <div class="col-12 col-md-6">
+            <input id="search" type="search" class="form-control" placeholder="Cari (kolom apapun)..." />
+          </div>
+          <div class="col-6 col-md-3">
+            <select id="pageSize" class="form-select">
+              <option value="10">10 baris / halaman</option>
+              <option value="25" selected>25 baris / halaman</option>
+              <option value="50">50 baris / halaman</option>
+              <option value="100">100 baris / halaman</option>
+            </select>
+          </div>
+          <div class="col-6 col-md-3 text-end">
+            <button id="downloadCsv" class="btn btn-outline-primary">Unduh CSV</button>
+          </div>
+        </div>
+
+        <!-- Table wrapper responsive (Bootstrap) + Tailwind utilities -->
+        <div class="tbl-root">
+          <div id="tableContainer" class="table-responsive rounded border bg-white p-2 shadow-sm"></div>
+        </div>
+
+        <!-- Pagination -->
+        <nav class="mt-3" aria-label="Pagination">
+          <ul id="pagination" class="pagination justify-content-center mb-0"></ul>
+        </nav>
+      </div>
+    </div>
+
+    <footer class="text-center text-muted mt-3">
+      <small>Data diambil dari Google Sheets publik — tampil responsif dengan Bootstrap & Tailwind.</small>
+    </footer>
+  </div>
+
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+  // ====== CONFIG ======
+  // Ganti URL ini jika perlu; pastikan output=csv
+  const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRZE8Cnns3mBp9NQpBqkbvyGItUV1kXnKYqJ31_bsO27WbmeYW6OCzjClFiSMkHAg/pub?gid=1514278589&single=true&output=csv';
+
+  // ====== UTILS ======
+  // Simple CSV parser that handles quoted fields
+  function parseCSV(text) {
+    const rows = [];
+    let cur = '';
+    let row = [];
+    let inQuotes = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      const next = text[i+1];
+      if (ch === '"' ) {
+        if (inQuotes && next === '"') { cur += '"'; i++; } // escaped quote
+        else inQuotes = !inQuotes;
+      } else if (ch === ',' && !inQuotes) {
+        row.push(cur); cur = '';
+      } else if ((ch === '\n' || ch === '\r') && !inQuotes) {
+        if (cur !== '' || row.length) { row.push(cur); cur = ''; }
+        if (row.length) { rows.push(row); row = []; }
+        // skip \r\n duo
+        if (ch === '\r' && next === '\n') i++;
+      } else {
+        cur += ch;
+      }
+    }
+    // last
+    if (cur !== '' || row.length) { row.push(cur); }
+    if (row.length) rows.push(row);
+    return rows;
+  }
+
+  // Escape HTML for safe rendering
+  function htmlEscape(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+
+  // ====== RENDER ======
+  let rawData = []; // array of arrays
+  let headers = [];
+  let filtered = [];
+  let currentPage = 1;
+  const tableContainer = document.getElementById('tableContainer');
+  const searchInput = document.getElementById('search');
+  const pageSizeSelect = document.getElementById('pageSize');
+  const paginationEl = document.getElementById('pagination');
+  const lastUpdatedEl = document.getElementById('last-updated');
+
+  function renderTable() {
+    const pageSize = parseInt(pageSizeSelect.value, 10);
+    const totalRows = filtered.length;
+    const totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    // build table
+    let html = '<table class="table table-striped table-hover align-middle mb-0">';
+    html += '<thead class="table-light small"><tr>';
+    headers.forEach(h => html += `<th class="text-start">${htmlEscape(h)}</th>`);
+    html += '</tr></thead><tbody>';
+
+    const start = (currentPage - 1) * pageSize;
+    const end = Math.min(totalRows, start + pageSize);
+    if (totalRows === 0) {
+      html += `<tr><td colspan="${headers.length}" class="text-center py-5 opacity-75">Tidak ada data.</td></tr>`;
+    } else {
+      for (let i = start; i < end; i++) {
+        const row = filtered[i];
+        html += '<tr>';
+        for (let j = 0; j < headers.length; j++) {
+          html += `<td>${htmlEscape(row[j] ?? '')}</td>`;
+        }
+        html += '</tr>';
+      }
+    }
+    html += '</tbody></table>';
+    tableContainer.innerHTML = html;
+
+    // render pagination (Bootstrap style)
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages) {
+    paginationEl.innerHTML = '';
+    const createPageItem = (p, label = null, active=false, disabled=false) => {
+      const li = document.createElement('li');
+      li.className = 'page-item' + (active ? ' active' : '') + (disabled ? ' disabled' : '');
+      const a = document.createElement('a');
+      a.className = 'page-link';
+      a.href = '#';
+      a.textContent = label ?? p;
+      a.addEventListener('click', (e) => { e.preventDefault(); if(!disabled) { currentPage = p; renderTable(); window.scrollTo({top:0, behavior:'smooth'}); }});
+      li.appendChild(a);
+      return li;
+    };
+
+    // prev
+    paginationEl.appendChild(createPageItem(Math.max(1, currentPage-1), '‹', false, currentPage===1));
+    // simple windowing
+    const maxButtons = 7;
+    let start = Math.max(1, currentPage - Math.floor(maxButtons/2));
+    let end = Math.min(totalPages, start + maxButtons - 1);
+    if (end - start + 1 < maxButtons) start = Math.max(1, end - maxButtons + 1);
+    if (start > 1) {
+      paginationEl.appendChild(createPageItem(1, '1'));
+      if (start > 2) {
+        const li = document.createElement('li'); li.className='page-item disabled';
+        li.innerHTML = '<span class="page-link">…</span>';
+        paginationEl.appendChild(li);
+      }
+    }
+    for (let p = start; p <= end; p++) {
+      paginationEl.appendChild(createPageItem(p, null, p===currentPage));
+    }
+    if (end < totalPages) {
+      if (end < totalPages - 1) {
+        const li = document.createElement('li'); li.className='page-item disabled';
+        li.innerHTML = '<span class="page-link">…</span>';
+        paginationEl.appendChild(li);
+      }
+      paginationEl.appendChild(createPageItem(totalPages, String(totalPages)));
+    }
+    // next
+    paginationEl.appendChild(createPageItem(Math.min(totalPages, currentPage+1), '›', false, currentPage===totalPages));
+  }
+
+  // ====== FILTERING ======
+  function applyFilter() {
+    const q = (searchInput.value || '').trim().toLowerCase();
+    if (!q) filtered = rawData.slice();
+    else filtered = rawData.filter(row => row.some(cell => (cell||'').toString().toLowerCase().includes(q)));
+    currentPage = 1;
+    renderTable();
+  }
+
+  // ====== FETCH CSV ======
+  async function loadData() {
+    try {
+      tableContainer.innerHTML = '<div class="text-center p-5"><div class="spinner-border" role="status"></div><div class="mt-2 small text-muted">Memuat data…</div></div>';
+      const res = await fetch(SHEET_CSV_URL);
+      if (!res.ok) throw new Error('Gagal mengambil sheet: ' + res.status);
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (rows.length === 0) {
+        headers = []; rawData = []; filtered = [];
+      } else {
+        headers = rows[0].map(h => h || ''); // header row
+        rawData = rows.slice(1).map(r => {
+          // pad row to headers length
+          const out = [];
+          for (let i = 0; i < headers.length; i++) out.push(r[i] ?? '');
+          return out;
+        });
+        filtered = rawData.slice();
+      }
+      const now = new Date();
+      lastUpdatedEl.textContent = 'Terakhir: ' + now.toLocaleString();
+      currentPage = 1;
+      renderTable();
+    } catch (err) {
+      tableContainer.innerHTML = '<div class="p-4 text-center text-danger">Error: ' + htmlEscape(err.message) + '</div>';
+      console.error(err);
+    }
+  }
+
+  // ====== INIT ======
+  document.getElementById('reloadBtn').addEventListener('click', () => loadData());
+  searchInput.addEventListener('input', () => applyFilter());
+  pageSizeSelect.addEventListener('change', () => { currentPage = 1; renderTable(); });
+  document.getElementById('downloadCsv').addEventListener('click', () => {
+    // download the CSV directly from the sheet
+    window.open(SHEET_CSV_URL, '_blank');
+  });
+
+  // initial load
+  loadData();
+
+  </script>
+</body>
+</html>
