@@ -1,0 +1,1211 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SHIO 2D Predictor</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+            gap: 8px;
+        }
+        .number-item {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease;
+        }
+        .number-item:hover {
+            transform: translateY(-2px);
+        }
+        .shio-card {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px 0;
+            color: white;
+            font-weight: 600;
+        }
+        .generate-btn {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            transition: all 0.3s ease;
+        }
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+        }
+        .highlight-match {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+            font-weight: bold;
+            padding: 2px 4px;
+            border-radius: 4px;
+            border: 2px solid #1d4ed8;
+            box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-full gradient-bg">
+  <main class="container mx-auto px-4 py-8">
+   <div class="max-w-4xl mx-auto"><!-- Header -->
+    <header class="text-center mb-8">
+     <h1 id="app-title" class="text-4xl font-bold text-white mb-2">SHIO 2D Predictor</h1>
+     <p class="text-white/80 text-lg">Prediksi angka 2D berdasarkan sistem SHIO</p>
+    </header><!-- SHIO Data Display -->
+    <section class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 card-shadow">
+     <h2 class="text-2xl font-bold text-white mb-4">Data SHIO Main</h2>
+     <div class="grid gap-3">
+      <div class="shio-card"><span class="font-bold">JUMLAH 1:</span> 1, 3, 7, 2, 6, 8
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 2:</span> 3, 7, 9, 2, 4, 8
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 3:</span> 3, 5, 9, 4, 8, 10
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 4:</span> 5, 9, 11, 4, 6, 10
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 5:</span> 5, 7, 11, 6, 10, 12
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 6:</span> 1, 7, 11, 6, 8, 12
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 7:</span> 1, 7, 9, 2, 8, 12
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 8:</span> 1, 3, 9, 2, 8, 10
+      </div>
+      <div class="shio-card"><span class="font-bold">JUMLAH 9:</span> 3, 9, 11, 2, 4, 10
+      </div>
+     </div>
+    </section><!-- Prediction Generator -->
+    <section class="bg-white rounded-xl p-6 card-shadow mb-8">
+     <h2 id="prediction-label" class="text-2xl font-bold text-gray-800 mb-4">Prediksi 2D ON</h2><!-- Generation Mode Selection -->
+     <div class="bg-gray-50 p-4 rounded-lg mb-6">
+      <h3 class="text-lg font-semibold text-gray-700 mb-3">Mode Generate</h3>
+      <div class="space-y-2 mb-4"><label class="flex items-center"> <input type="radio" name="generation-mode" value="shio" class="mr-2" checked> <span>Generate dari SHIO Random</span> </label> <label class="flex items-center"> <input type="radio" name="generation-mode" value="tarung" class="mr-2"> <span>Generate dari Angka Tarung</span> </label>
+      </div>
+     </div><!-- Angka Tarung Input -->
+     <div id="tarung-section" class="bg-blue-50 p-4 rounded-lg mb-6 hidden">
+      <h3 class="text-lg font-semibold text-blue-700 mb-3">Input Angka Tarung</h3>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+       <div><label for="as-input" class="block text-sm font-medium text-blue-700 mb-2">AS</label> <input type="text" id="as-input" placeholder="0-9" maxlength="10" class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+       </div>
+       <div><label for="kop-input" class="block text-sm font-medium text-blue-700 mb-2">KOP</label> <input type="text" id="kop-input" placeholder="0-9" maxlength="10" class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+       </div>
+       <div><label for="kepala-input" class="block text-sm font-medium text-blue-700 mb-2">KEPALA</label> <input type="text" id="kepala-input" placeholder="0-9" maxlength="10" class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+       </div>
+       <div><label for="ekor-input" class="block text-sm font-medium text-blue-700 mb-2">EKOR</label> <input type="text" id="ekor-input" placeholder="0-9" maxlength="10" class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+       </div>
+      </div>
+      <p class="text-xs text-blue-600">Masukkan angka yang ingin ditarung untuk setiap posisi (bisa lebih dari 1 digit)</p>
+     </div><!-- Filter Controls -->
+     <div id="filter-section" class="bg-gray-50 p-4 rounded-lg mb-6">
+      <h3 class="text-lg font-semibold text-gray-700 mb-3">Filter Angka Main</h3>
+      <div class="grid md:grid-cols-2 gap-4">
+       <div><label for="main-numbers" class="block text-sm font-medium text-gray-700 mb-2"> Angka Main (maksimal 10 baris, 7 digit per baris) </label> <textarea id="main-numbers" placeholder="Contoh Filter Progresif:
+12379 (filter pertama)
+456 (pemangkasan kedua)
+89 (pemangkasan ketiga)
+..." rows="10" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none font-mono text-sm"></textarea>
+        <p class="text-xs text-gray-500 mt-1">Setiap baris akan memangkas hasil sebelumnya secara progresif (maksimal 7 digit per baris)</p>
+       </div>
+       <div><label class="block text-sm font-medium text-gray-700 mb-2"> Filter Berdasarkan </label>
+        <div class="space-y-2"><label class="flex items-center"> <input type="radio" name="filter-type" value="kepala" class="mr-2"> <span>Kepala (digit pertama)</span> </label> <label class="flex items-center"> <input type="radio" name="filter-type" value="ekor" class="mr-2"> <span>Ekor (digit terakhir)</span> </label> <label class="flex items-center"> <input type="radio" name="filter-type" value="semua" class="mr-2" checked> <span>Semua angka</span> </label>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="text-center mb-6"><button id="generate-btn" class="generate-btn text-white px-8 py-3 rounded-lg font-bold text-lg"> Generate Prediksi </button>
+     </div>
+     <div id="prediction-result" class="hidden"><!-- SHIO Mode Results -->
+      <div id="shio-results" class="hidden">
+       <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">SHIO Terpilih:</h3>
+        <div id="selected-shio" class="bg-blue-100 p-3 rounded-lg font-bold text-blue-800"></div>
+       </div>
+       <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Angka Dasar SHIO:</h3>
+        <div id="base-numbers" class="number-grid"></div>
+       </div>
+      </div><!-- Tarung Mode Results -->
+      <div id="tarung-results" class="hidden">
+       <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-700 mb-2">Angka Tarung:</h3>
+        <div id="tarung-display" class="bg-purple-100 p-3 rounded-lg">
+         <div class="grid grid-cols-4 gap-4 text-center">
+          <div><span class="text-xs text-purple-600 block">AS</span> <span id="display-as" class="font-bold text-purple-800"></span>
+          </div>
+          <div><span class="text-xs text-purple-600 block">KOP</span> <span id="display-kop" class="font-bold text-purple-800"></span>
+          </div>
+          <div><span class="text-xs text-purple-600 block">KEPALA</span> <span id="display-kepala" class="font-bold text-purple-800"></span>
+          </div>
+          <div><span class="text-xs text-purple-600 block">EKOR</span> <span id="display-ekor" class="font-bold text-purple-800"></span>
+          </div>
+         </div>
+        </div>
+       </div>
+      </div>
+      <div class="mb-6">
+       <h3 class="text-lg font-semibold text-gray-700 mb-4">Hasil Generate Prediksi:</h3><!-- 4D Results -->
+       <div class="mb-6">
+        <div class="flex justify-between items-center mb-3">
+         <h4 class="text-lg font-semibold text-purple-700">Prediksi 4D</h4><button id="copy-4d-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm transition-colors"> 📋 Salin 4D </button>
+        </div><!-- 4D Input Section -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+         <div class="flex flex-col md:flex-row gap-4 items-start md:items-end">
+          <div class="flex-1"><label for="check-4d-input" class="block text-sm font-medium text-yellow-800 mb-2"> 🔍 Cek Angka 4D (pisahkan dengan koma atau spasi) </label> <input type="text" id="check-4d-input" placeholder="Contoh: 1234, 5678, 9012" class="w-full px-3 py-2 border border-yellow-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+          </div><button id="highlight-4d-btn" class="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap"> 🎯 Highlight </button> <button id="clear-4d-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap"> 🗑️ Clear </button>
+         </div>
+         <div id="match-4d-info" class="text-sm text-yellow-700 mt-2 hidden"></div>
+        </div>
+        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+         <div id="prediction-4d" class="font-mono text-sm leading-relaxed break-all text-purple-800"></div>
+         <div id="count-4d" class="text-xs text-purple-600 mt-2 font-medium"></div>
+        </div>
+       </div><!-- 3D Results -->
+       <div class="mb-6">
+        <div class="flex justify-between items-center mb-3">
+         <h4 class="text-lg font-semibold text-blue-700">Prediksi 3D</h4><button id="copy-3d-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors"> 📋 Salin 3D </button>
+        </div>
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+         <div id="prediction-3d" class="font-mono text-sm leading-relaxed break-all text-blue-800"></div>
+         <div id="count-3d" class="text-xs text-blue-600 mt-2 font-medium"></div>
+        </div>
+       </div><!-- 2D Results -->
+       <div class="mb-6">
+        <div class="flex justify-between items-center mb-3">
+         <h4 class="text-lg font-semibold text-green-700">Prediksi 2D</h4><button id="copy-2d-btn" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors"> 📋 Salin 2D </button>
+        </div>
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+         <div id="prediction-2d" class="font-mono text-sm leading-relaxed break-all text-green-800"></div>
+         <div id="count-2d" class="text-xs text-green-600 mt-2 font-medium"></div>
+        </div>
+       </div>
+      </div><!-- Summary Analysis -->
+      <div id="summary-analysis" class="hidden mb-6">
+       <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <h3 class="text-lg font-semibold text-yellow-800 mb-3">📊 Rangkuman Angka Filter</h3>
+        <div id="summary-info" class="text-sm text-yellow-700 mb-3"></div><!-- 4D Summary -->
+        <div id="summary-4d-section" class="mb-4 hidden">
+         <h4 class="font-semibold text-yellow-800 mb-2">Rangkuman 4D (Angka Terkuat)</h4>
+         <div class="bg-white p-3 rounded border">
+          <div id="summary-4d-content" class="text-sm"></div>
+         </div>
+        </div><!-- 3D Summary -->
+        <div id="summary-3d-section" class="mb-4 hidden">
+         <h4 class="font-semibold text-yellow-800 mb-2">Rangkuman 3D (Angka Terkuat)</h4>
+         <div class="bg-white p-3 rounded border">
+          <div id="summary-3d-content" class="text-sm"></div>
+         </div>
+        </div><!-- 2D Summary -->
+        <div id="summary-2d-section" class="mb-4 hidden">
+         <h4 class="font-semibold text-yellow-800 mb-2">Rangkuman 2D (Angka Terkuat)</h4>
+         <div class="bg-white p-3 rounded border">
+          <div id="summary-2d-content" class="text-sm"></div>
+         </div>
+        </div><!-- Digit Frequency Analysis -->
+        <div id="digit-frequency-section" class="hidden">
+         <h4 class="font-semibold text-yellow-800 mb-2">Analisis Frekuensi Digit</h4>
+         <div class="bg-white p-3 rounded border">
+          <div id="digit-frequency-content" class="text-sm"></div>
+         </div>
+        </div>
+       </div>
+      </div><!-- Filtered Results -->
+      <div id="filtered-result" class="hidden"><!-- Filtered 4D Results -->
+       <div id="filtered-4d-section" class="mb-6">
+        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+         <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-semibold text-purple-800">Hasil Filter 4D</h3><button id="copy-filtered-4d-btn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"> 📋 Salin 4D </button>
+         </div>
+         <div id="filter-4d-info" class="text-sm text-purple-700 mb-3"></div>
+         <div id="filtered-4d-numbers" class="bg-white p-4 rounded border font-mono text-sm leading-relaxed break-all"></div>
+         <div id="filtered-4d-count" class="text-sm text-purple-600 mt-2 font-medium"></div>
+        </div>
+       </div><!-- Filtered 3D Results -->
+       <div id="filtered-3d-section" class="mb-6">
+        <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+         <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-semibold text-blue-800">Hasil Filter 3D</h3><button id="copy-filtered-3d-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"> 📋 Salin 3D </button>
+         </div>
+         <div id="filter-3d-info" class="text-sm text-blue-700 mb-3"></div>
+         <div id="filtered-3d-numbers" class="bg-white p-4 rounded border font-mono text-sm leading-relaxed break-all"></div>
+         <div id="filtered-3d-count" class="text-sm text-blue-600 mt-2 font-medium"></div>
+        </div>
+       </div><!-- Filtered 2D Results -->
+       <div id="filtered-2d-section" class="mb-6">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+         <div class="flex justify-between items-center mb-3">
+          <h3 class="text-lg font-semibold text-green-800">Hasil Filter 2D</h3><button id="copy-filtered-2d-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"> 📋 Salin 2D </button>
+         </div>
+         <div id="filter-2d-info" class="text-sm text-green-700 mb-3"></div>
+         <div id="filtered-2d-numbers" class="bg-white p-4 rounded border font-mono text-lg leading-relaxed break-all"></div>
+         <div id="filtered-2d-count" class="text-sm text-green-600 mt-2 font-medium"></div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </section><!-- Footer -->
+    <footer class="text-center text-white/70">
+     <p>🔮 Prediksi berdasarkan analisis pola SHIO • Gunakan dengan bijak</p>
+    </footer>
+   </div>
+  </main>
+  <script>
+        // SHIO data
+        const shioData = {
+            1: [1, 3, 7, 2, 6, 8],
+            2: [3, 7, 9, 2, 4, 8],
+            3: [3, 5, 9, 4, 8, 10],
+            4: [5, 9, 11, 4, 6, 10],
+            5: [5, 7, 11, 6, 10, 12],
+            6: [1, 7, 11, 6, 8, 12],
+            7: [1, 7, 9, 2, 8, 12],
+            8: [1, 3, 9, 2, 8, 10],
+            9: [3, 9, 11, 2, 4, 10]
+        };
+
+        // Default configuration
+        const defaultConfig = {
+            app_title: "SHIO 2D Predictor",
+            prediction_label: "Prediksi 2D ON",
+            generate_button_text: "Generate Prediksi"
+        };
+
+        // Generate 2D numbers based on SHIO multiples of 12
+        function generate2DNumbers(baseNumbers) {
+            const predictions = new Set();
+            
+            // For each SHIO base number, generate all multiples of 12 up to 97
+            baseNumbers.forEach(shio => {
+                let current = shio;
+                while (current <= 97) {
+                    predictions.add(String(current).padStart(2, '0'));
+                    current += 12;
+                }
+            });
+            
+            return Array.from(predictions).sort((a, b) => parseInt(a) - parseInt(b));
+        }
+
+        // Generate all possible combinations for tarung
+        function generateAllTarungCombinations(asDigits, kopDigits, kepalaDigits, ekorDigits) {
+            const results = {
+                fourD: new Set(),
+                threeD: new Set(),
+                twoD: new Set()
+            };
+            
+            // Generate all possible 4D combinations (AS x KOP x KEPALA x EKOR)
+            if (asDigits.length > 0 && kopDigits.length > 0 && kepalaDigits.length > 0 && ekorDigits.length > 0) {
+                asDigits.forEach(as => {
+                    kopDigits.forEach(kop => {
+                        kepalaDigits.forEach(kepala => {
+                            ekorDigits.forEach(ekor => {
+                                results.fourD.add(as + kop + kepala + ekor);
+                            });
+                        });
+                    });
+                });
+            }
+            
+            // Generate all possible 3D combinations (KOP x KEPALA x EKOR)
+            if (kopDigits.length > 0 && kepalaDigits.length > 0 && ekorDigits.length > 0) {
+                kopDigits.forEach(kop => {
+                    kepalaDigits.forEach(kepala => {
+                        ekorDigits.forEach(ekor => {
+                            results.threeD.add(kop + kepala + ekor);
+                        });
+                    });
+                });
+            }
+            
+            // Generate all possible 2D combinations (KEPALA x EKOR)
+            if (kepalaDigits.length > 0 && ekorDigits.length > 0) {
+                kepalaDigits.forEach(kepala => {
+                    ekorDigits.forEach(ekor => {
+                        results.twoD.add(kepala + ekor);
+                    });
+                });
+            }
+            
+            return {
+                fourD: Array.from(results.fourD).sort((a, b) => parseInt(a) - parseInt(b)),
+                threeD: Array.from(results.threeD).sort((a, b) => parseInt(a) - parseInt(b)),
+                twoD: Array.from(results.twoD).sort((a, b) => parseInt(a) - parseInt(b))
+            };
+        }
+
+        // Generate complete number sets (0000-9999 for 4D, 000-999 for 3D, 00-99 for 2D)
+        function generateCompleteNumberSets() {
+            const results = {
+                fourD: [],
+                threeD: [],
+                twoD: []
+            };
+            
+            // Generate 4D (0000-9999)
+            for (let i = 0; i <= 9999; i++) {
+                results.fourD.push(String(i).padStart(4, '0'));
+            }
+            
+            // Generate 3D (000-999)
+            for (let i = 0; i <= 999; i++) {
+                results.threeD.push(String(i).padStart(3, '0'));
+            }
+            
+            // Generate 2D (00-99)
+            for (let i = 0; i <= 99; i++) {
+                results.twoD.push(String(i).padStart(2, '0'));
+            }
+            
+            return results;
+        }
+
+        // Parse input digits
+        function parseInputDigits(input) {
+            if (!input || input.trim() === '') return [];
+            return input.replace(/\D/g, '').split('').filter(d => d !== '');
+        }
+
+        // Parse multiple lines of main numbers - returns array of digit arrays for progressive filtering
+        function parseMainNumbers(mainNumbers) {
+            if (!mainNumbers || mainNumbers.trim() === '') {
+                return [];
+            }
+
+            const lines = mainNumbers.split('\n').filter(line => line.trim() !== '');
+            const mainNumberSets = [];
+
+            lines.slice(0, 10).forEach(line => { // Maximum 10 lines
+                const digits = line.replace(/\D/g, '').slice(0, 7); // Maximum 7 digits per line
+                if (digits.length > 0) {
+                    mainNumberSets.push(digits.split(''));
+                }
+            });
+
+            return mainNumberSets;
+        }
+
+        // Progressive filter for 2D numbers - each line progressively narrows down results
+        function filterNumbers(predictions, mainNumbers, filterType) {
+            if (!mainNumbers || mainNumbers.trim() === '') {
+                return [];
+            }
+
+            const mainNumberSets = parseMainNumbers(mainNumbers);
+            if (mainNumberSets.length === 0) {
+                return [];
+            }
+
+            let currentResults = [...predictions];
+
+            // Apply each main number set progressively
+            mainNumberSets.forEach((mainDigits, index) => {
+                const filtered = [];
+
+                currentResults.forEach(num => {
+                    const kepala = num[0]; // First digit
+                    const ekor = num[1];   // Second digit
+
+                    let shouldInclude = false;
+
+                    if (filterType === 'kepala') {
+                        shouldInclude = mainDigits.includes(kepala);
+                    } else if (filterType === 'ekor') {
+                        shouldInclude = mainDigits.includes(ekor);
+                    } else if (filterType === 'semua') {
+                        shouldInclude = mainDigits.includes(kepala) || mainDigits.includes(ekor);
+                    }
+
+                    if (shouldInclude) {
+                        filtered.push(num);
+                    }
+                });
+
+                currentResults = filtered;
+            });
+
+            return currentResults;
+        }
+
+        // Progressive filter for 3D numbers - each line progressively narrows down results
+        function filter3DNumbers(predictions, mainNumbers, filterType) {
+            if (!mainNumbers || mainNumbers.trim() === '') {
+                return [];
+            }
+
+            const mainNumberSets = parseMainNumbers(mainNumbers);
+            if (mainNumberSets.length === 0) {
+                return [];
+            }
+
+            let currentResults = [...predictions];
+
+            // Apply each main number set progressively
+            mainNumberSets.forEach((mainDigits, index) => {
+                const filtered = [];
+
+                currentResults.forEach(num => {
+                    const kop = num[0];    // First digit (KOP)
+                    const kepala = num[1]; // Second digit (KEPALA)
+                    const ekor = num[2];   // Third digit (EKOR)
+
+                    let shouldInclude = false;
+
+                    if (filterType === 'kepala') {
+                        shouldInclude = mainDigits.includes(kepala);
+                    } else if (filterType === 'ekor') {
+                        shouldInclude = mainDigits.includes(ekor);
+                    } else if (filterType === 'semua') {
+                        shouldInclude = mainDigits.includes(kop) || mainDigits.includes(kepala) || mainDigits.includes(ekor);
+                    }
+
+                    if (shouldInclude) {
+                        filtered.push(num);
+                    }
+                });
+
+                currentResults = filtered;
+            });
+
+            return currentResults;
+        }
+
+        // Progressive filter for 4D numbers - each line progressively narrows down results
+        function filter4DNumbers(predictions, mainNumbers, filterType) {
+            if (!mainNumbers || mainNumbers.trim() === '') {
+                return [];
+            }
+
+            const mainNumberSets = parseMainNumbers(mainNumbers);
+            if (mainNumberSets.length === 0) {
+                return [];
+            }
+
+            let currentResults = [...predictions];
+
+            // Apply each main number set progressively
+            mainNumberSets.forEach((mainDigits, index) => {
+                const filtered = [];
+
+                currentResults.forEach(num => {
+                    const as = num[0];     // First digit (AS)
+                    const kop = num[1];    // Second digit (KOP)
+                    const kepala = num[2]; // Third digit (KEPALA)
+                    const ekor = num[3];   // Fourth digit (EKOR)
+
+                    let shouldInclude = false;
+
+                    if (filterType === 'kepala') {
+                        shouldInclude = mainDigits.includes(kepala);
+                    } else if (filterType === 'ekor') {
+                        shouldInclude = mainDigits.includes(ekor);
+                    } else if (filterType === 'semua') {
+                        shouldInclude = mainDigits.includes(as) || mainDigits.includes(kop) || mainDigits.includes(kepala) || mainDigits.includes(ekor);
+                    }
+
+                    if (shouldInclude) {
+                        filtered.push(num);
+                    }
+                });
+
+                currentResults = filtered;
+            });
+
+            return currentResults;
+        }
+
+        // Parse check numbers from input
+        function parseCheckNumbers(input) {
+            if (!input || input.trim() === '') return [];
+            
+            // Split by comma or space, clean up, and filter valid 4D numbers
+            return input.split(/[,\s]+/)
+                       .map(num => num.replace(/\D/g, ''))
+                       .filter(num => num.length === 4)
+                       .map(num => num.padStart(4, '0'));
+        }
+
+        // Highlight matching 4D numbers with position tracking
+        function highlight4DNumbers() {
+            const checkInput = document.getElementById('check-4d-input').value;
+            const checkNumbers = parseCheckNumbers(checkInput);
+            
+            if (checkNumbers.length === 0) {
+                // Show inline message if no valid numbers
+                const matchInfo = document.getElementById('match-4d-info');
+                matchInfo.textContent = 'Masukkan angka 4D yang valid (4 digit) untuk highlight';
+                matchInfo.classList.remove('hidden');
+                return;
+            }
+            
+            const prediction4D = document.getElementById('prediction-4d');
+            let originalText = prediction4D.textContent;
+            
+            // Remove existing highlights first
+            clear4DHighlight();
+            
+            // Get fresh text after clearing
+            originalText = prediction4D.textContent;
+            
+            if (!originalText || originalText.trim() === '') return;
+            
+            // Split numbers by asterisk to get individual numbers
+            const allNumbers = originalText.split('*').filter(num => num.trim() !== '');
+            let matchCount = 0;
+            const matchedNumbers = [];
+            const matchPositions = [];
+            
+            // Track matches with positions
+            checkNumbers.forEach(checkNum => {
+                allNumbers.forEach((num, index) => {
+                    if (num.trim() === checkNum) {
+                        matchCount++;
+                        if (!matchedNumbers.includes(checkNum)) {
+                            matchedNumbers.push(checkNum);
+                        }
+                        
+                        // Calculate row and position within row (assuming 10 numbers per row for display)
+                        const numbersPerRow = 10;
+                        const row = Math.floor(index / numbersPerRow) + 1;
+                        const positionInRow = (index % numbersPerRow) + 1;
+                        const sequenceNumber = index + 1;
+                        
+                        matchPositions.push({
+                            number: checkNum,
+                            sequence: sequenceNumber,
+                            row: row,
+                            position: positionInRow
+                        });
+                    }
+                });
+            });
+            
+            // Highlight the numbers in the display
+            let highlightedText = originalText;
+            checkNumbers.forEach(checkNum => {
+                const regex = new RegExp(`\\b${checkNum}\\b`, 'g');
+                highlightedText = highlightedText.replace(regex, `<span class="highlight-match">${checkNum}</span>`);
+            });
+            
+            // Update the display
+            prediction4D.innerHTML = highlightedText;
+            
+            // Show match information with positions
+            const matchInfo = document.getElementById('match-4d-info');
+            if (matchCount > 0) {
+                let positionText = '';
+                
+                // Group positions by number
+                const groupedPositions = {};
+                matchPositions.forEach(pos => {
+                    if (!groupedPositions[pos.number]) {
+                        groupedPositions[pos.number] = [];
+                    }
+                    groupedPositions[pos.number].push(pos);
+                });
+                
+                // Format position information
+                Object.keys(groupedPositions).forEach(number => {
+                    const positions = groupedPositions[number];
+                    positionText += `<div class="mt-1 text-sm">
+                        <span class="font-mono font-bold text-blue-800">${number}</span>: `;
+                    
+                    positions.forEach((pos, idx) => {
+                        positionText += `<span class="text-blue-700">Urutan #${pos.sequence} (Baris ${pos.row}, Posisi ${pos.position})</span>`;
+                        if (idx < positions.length - 1) positionText += ', ';
+                    });
+                    
+                    positionText += `</div>`;
+                });
+                
+                matchInfo.innerHTML = `
+                    <div class="font-medium text-blue-800">🎯 <strong>Ditemukan ${matchCount} kecocokan</strong></div>
+                    ${positionText}
+                `;
+                matchInfo.classList.remove('hidden');
+            } else {
+                matchInfo.innerHTML = `❌ Tidak ada kecocokan ditemukan untuk angka: <span class="font-mono">${checkNumbers.join(', ')}</span>`;
+                matchInfo.classList.remove('hidden');
+            }
+        }
+
+        // Clear 4D highlights
+        function clear4DHighlight() {
+            const prediction4D = document.getElementById('prediction-4d');
+            const matchInfo = document.getElementById('match-4d-info');
+            
+            // Remove HTML tags and restore original text
+            if (prediction4D.innerHTML.includes('highlight-match')) {
+                prediction4D.innerHTML = prediction4D.textContent;
+            }
+            
+            // Hide match info
+            matchInfo.classList.add('hidden');
+            
+            // Clear input
+            document.getElementById('check-4d-input').value = '';
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(elementId, buttonId) {
+            const text = document.getElementById(elementId).textContent;
+            const copyBtn = document.getElementById(buttonId);
+            const originalText = copyBtn.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                copyBtn.textContent = '✅ Tersalin!';
+                copyBtn.classList.add('opacity-75');
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.classList.remove('opacity-75');
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                copyBtn.textContent = '✅ Tersalin!';
+                
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        }
+
+        // Copy filtered numbers to clipboard
+        function copyFilteredNumbers() {
+            copyToClipboard('filtered-2d-numbers', 'copy-filtered-2d-btn');
+        }
+
+        // Copy filtered 4D numbers to clipboard
+        function copyFiltered4DNumbers() {
+            copyToClipboard('filtered-4d-numbers', 'copy-filtered-4d-btn');
+        }
+
+        // Copy filtered 3D numbers to clipboard
+        function copyFiltered3DNumbers() {
+            copyToClipboard('filtered-3d-numbers', 'copy-filtered-3d-btn');
+        }
+
+        // Analyze and summarize filtered numbers
+        function analyzeSummary(filtered4D, filtered3D, filtered2D, mainNumbers) {
+            const mainNumberSets = parseMainNumbers(mainNumbers);
+            if (mainNumberSets.length === 0) return;
+
+            const mainNumbersDisplay = mainNumberSets.map((digits, index) => 
+                `Baris ${index + 1}: ${digits.join('')}`
+            ).join(' | ');
+
+            // Show summary section
+            document.getElementById('summary-analysis').classList.remove('hidden');
+            document.getElementById('summary-info').textContent = `Analisis berdasarkan filter progresif: ${mainNumbersDisplay}`;
+
+            // Analyze 4D numbers
+            if (filtered4D && filtered4D.length > 0) {
+                const summary4D = summarizeNumbers(filtered4D, 4);
+                document.getElementById('summary-4d-section').classList.remove('hidden');
+                document.getElementById('summary-4d-content').innerHTML = formatSummary(summary4D, '4D');
+            } else {
+                document.getElementById('summary-4d-section').classList.add('hidden');
+            }
+
+            // Analyze 3D numbers
+            if (filtered3D && filtered3D.length > 0) {
+                const summary3D = summarizeNumbers(filtered3D, 3);
+                document.getElementById('summary-3d-section').classList.remove('hidden');
+                document.getElementById('summary-3d-content').innerHTML = formatSummary(summary3D, '3D');
+            } else {
+                document.getElementById('summary-3d-section').classList.add('hidden');
+            }
+
+            // Analyze 2D numbers
+            if (filtered2D && filtered2D.length > 0) {
+                const summary2D = summarizeNumbers(filtered2D, 2);
+                document.getElementById('summary-2d-section').classList.remove('hidden');
+                document.getElementById('summary-2d-content').innerHTML = formatSummary(summary2D, '2D');
+            } else {
+                document.getElementById('summary-2d-section').classList.add('hidden');
+            }
+
+            // Digit frequency analysis
+            const allNumbers = [...(filtered4D || []), ...(filtered3D || []), ...(filtered2D || [])];
+            if (allNumbers.length > 0) {
+                const digitFreq = analyzeDigitFrequency(allNumbers);
+                document.getElementById('digit-frequency-section').classList.remove('hidden');
+                document.getElementById('digit-frequency-content').innerHTML = formatDigitFrequency(digitFreq);
+            } else {
+                document.getElementById('digit-frequency-section').classList.add('hidden');
+            }
+        }
+
+        // Summarize numbers by finding patterns and frequencies
+        function summarizeNumbers(numbers, digitCount) {
+            const summary = {
+                total: numbers.length,
+                patterns: {},
+                digitFreq: {},
+                mostCommon: [],
+                recommendations: []
+            };
+
+            // Count digit frequency by position
+            for (let pos = 0; pos < digitCount; pos++) {
+                summary.digitFreq[pos] = {};
+                for (let digit = 0; digit <= 9; digit++) {
+                    summary.digitFreq[pos][digit] = 0;
+                }
+            }
+
+            // Analyze each number
+            numbers.forEach(num => {
+                // Count digits by position
+                for (let pos = 0; pos < digitCount; pos++) {
+                    const digit = parseInt(num[pos]);
+                    summary.digitFreq[pos][digit]++;
+                }
+
+                // Count patterns (for 2D: kepala-ekor patterns)
+                if (digitCount === 2) {
+                    const kepala = num[0];
+                    const ekor = num[1];
+                    const pattern = `${kepala}x`;
+                    summary.patterns[pattern] = (summary.patterns[pattern] || 0) + 1;
+                }
+            });
+
+            // Find most common numbers (top 10)
+            const sortedNumbers = numbers.sort((a, b) => {
+                // Sort by frequency if we had frequency data, for now just sort numerically
+                return parseInt(a) - parseInt(b);
+            });
+            summary.mostCommon = sortedNumbers.slice(0, Math.min(10, sortedNumbers.length));
+
+            // Generate recommendations based on most frequent digits
+            for (let pos = 0; pos < digitCount; pos++) {
+                const posFreq = summary.digitFreq[pos];
+                const sortedDigits = Object.entries(posFreq)
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 3)
+                    .map(([digit, freq]) => ({ digit, freq, percentage: ((freq / summary.total) * 100).toFixed(1) }));
+                
+                summary.recommendations[pos] = sortedDigits;
+            }
+
+            return summary;
+        }
+
+        // Format summary for display
+        function formatSummary(summary, type) {
+            let html = `<div class="mb-3"><strong>Total Angka:</strong> ${summary.total}</div>`;
+            
+            // Most common numbers
+            html += `<div class="mb-3">
+                <strong>10 Angka Teratas:</strong><br>
+                <span class="font-mono text-blue-600">${summary.mostCommon.join(', ')}</span>
+            </div>`;
+
+            // Position analysis
+            html += `<div class="mb-3"><strong>Analisis Per Posisi:</strong><br>`;
+            
+            const positionNames = {
+                2: ['Kepala', 'Ekor'],
+                3: ['KOP', 'Kepala', 'Ekor'],
+                4: ['AS', 'KOP', 'Kepala', 'Ekor']
+            };
+
+            summary.recommendations.forEach((rec, pos) => {
+                const posName = positionNames[parseInt(type[0])][pos];
+                html += `<div class="text-sm mb-1">
+                    <span class="font-medium">${posName}:</span> `;
+                
+                rec.forEach((item, idx) => {
+                    const color = idx === 0 ? 'text-red-600 font-bold' : idx === 1 ? 'text-orange-600' : 'text-gray-600';
+                    html += `<span class="${color}">${item.digit} (${item.percentage}%)</span>`;
+                    if (idx < rec.length - 1) html += ', ';
+                });
+                html += `</div>`;
+            });
+            
+            html += `</div>`;
+
+            return html;
+        }
+
+        // Analyze digit frequency across all numbers
+        function analyzeDigitFrequency(allNumbers) {
+            const digitCount = {};
+            for (let i = 0; i <= 9; i++) {
+                digitCount[i] = 0;
+            }
+
+            allNumbers.forEach(num => {
+                for (let i = 0; i < num.length; i++) {
+                    const digit = parseInt(num[i]);
+                    digitCount[digit]++;
+                }
+            });
+
+            // Sort by frequency
+            const sortedDigits = Object.entries(digitCount)
+                .sort(([,a], [,b]) => b - a)
+                .map(([digit, count]) => ({
+                    digit: parseInt(digit),
+                    count,
+                    percentage: ((count / allNumbers.join('').length) * 100).toFixed(1)
+                }));
+
+            return sortedDigits;
+        }
+
+        // Format digit frequency for display
+        function formatDigitFrequency(digitFreq) {
+            let html = `<div class="grid grid-cols-5 gap-2 text-center">`;
+            
+            digitFreq.forEach((item, idx) => {
+                const colorClass = idx < 3 ? 'bg-red-100 text-red-800 font-bold' : 
+                                 idx < 6 ? 'bg-orange-100 text-orange-800' : 
+                                 'bg-gray-100 text-gray-600';
+                
+                html += `<div class="p-2 rounded ${colorClass}">
+                    <div class="text-lg font-bold">${item.digit}</div>
+                    <div class="text-xs">${item.count}x (${item.percentage}%)</div>
+                </div>`;
+            });
+            
+            html += `</div>`;
+            html += `<div class="mt-2 text-xs text-gray-600">
+                <span class="text-red-600">■</span> Digit Terkuat &nbsp;
+                <span class="text-orange-600">■</span> Digit Kuat &nbsp;
+                <span class="text-gray-600">■</span> Digit Lemah
+            </div>`;
+            
+            return html;
+        }
+
+        // Generate prediction
+        function generatePrediction() {
+            const generationMode = document.querySelector('input[name="generation-mode"]:checked').value;
+            let allPredictions = {
+                fourD: [],
+                threeD: [],
+                twoD: []
+            };
+
+            if (generationMode === 'shio') {
+                // SHIO Mode - Generate complete sets
+                allPredictions = generateCompleteNumberSets();
+                
+                // Display SHIO results
+                const shioNumbers = Object.keys(shioData);
+                const selectedShio = shioNumbers[Math.floor(Math.random() * shioNumbers.length)];
+                const baseNumbers = shioData[selectedShio];
+                
+                document.getElementById('selected-shio').textContent = `JUMLAH ${selectedShio}`;
+                
+                // Display base numbers
+                const baseContainer = document.getElementById('base-numbers');
+                baseContainer.innerHTML = '';
+                baseNumbers.forEach(num => {
+                    const div = document.createElement('div');
+                    div.className = 'number-item';
+                    div.textContent = num;
+                    baseContainer.appendChild(div);
+                });
+
+                // Show SHIO results, hide tarung results
+                document.getElementById('shio-results').classList.remove('hidden');
+                document.getElementById('tarung-results').classList.add('hidden');
+                
+            } else {
+                // Tarung Mode
+                const asInput = document.getElementById('as-input').value;
+                const kopInput = document.getElementById('kop-input').value;
+                const kepalaInput = document.getElementById('kepala-input').value;
+                const ekorInput = document.getElementById('ekor-input').value;
+
+                const asDigits = parseInputDigits(asInput);
+                const kopDigits = parseInputDigits(kopInput);
+                const kepalaDigits = parseInputDigits(kepalaInput);
+                const ekorDigits = parseInputDigits(ekorInput);
+
+                // Validate inputs - at least KEPALA and EKOR needed for 2D
+                if (kepalaDigits.length === 0 || ekorDigits.length === 0) {
+                    // Show inline error message
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+                    errorDiv.textContent = 'Minimal KEPALA dan EKOR harus diisi untuk generate prediksi!';
+                    
+                    const tarungSection = document.getElementById('tarung-section');
+                    const existingError = tarungSection.querySelector('.bg-red-100');
+                    if (existingError) existingError.remove();
+                    
+                    tarungSection.appendChild(errorDiv);
+                    
+                    setTimeout(() => {
+                        if (errorDiv.parentNode) errorDiv.remove();
+                    }, 3000);
+                    
+                    return;
+                }
+
+                // Generate all combinations based on available inputs
+                allPredictions = generateAllTarungCombinations(asDigits, kopDigits, kepalaDigits, ekorDigits);
+
+                // Display tarung inputs
+                document.getElementById('display-as').textContent = asDigits.join('') || '-';
+                document.getElementById('display-kop').textContent = kopDigits.join('') || '-';
+                document.getElementById('display-kepala').textContent = kepalaDigits.join('');
+                document.getElementById('display-ekor').textContent = ekorDigits.join('');
+
+                // Show tarung results, hide SHIO results
+                document.getElementById('tarung-results').classList.remove('hidden');
+                document.getElementById('shio-results').classList.add('hidden');
+            }
+            
+            // Display 4D predictions
+            const prediction4D = document.getElementById('prediction-4d');
+            const count4D = document.getElementById('count-4d');
+            if (allPredictions.fourD.length > 0) {
+                prediction4D.textContent = allPredictions.fourD.join('*');
+                count4D.textContent = `Total: ${allPredictions.fourD.length} angka 4D`;
+            } else {
+                prediction4D.textContent = 'Tidak ada kombinasi 4D (perlu AS, KOP, KEPALA, EKOR)';
+                count4D.textContent = 'Total: 0 angka';
+            }
+            
+            // Display 3D predictions
+            const prediction3D = document.getElementById('prediction-3d');
+            const count3D = document.getElementById('count-3d');
+            if (allPredictions.threeD.length > 0) {
+                prediction3D.textContent = allPredictions.threeD.join('*');
+                count3D.textContent = `Total: ${allPredictions.threeD.length} angka 3D`;
+            } else {
+                prediction3D.textContent = 'Tidak ada kombinasi 3D (perlu KOP, KEPALA, EKOR)';
+                count3D.textContent = 'Total: 0 angka';
+            }
+            
+            // Display 2D predictions
+            const prediction2D = document.getElementById('prediction-2d');
+            const count2D = document.getElementById('count-2d');
+            if (allPredictions.twoD.length > 0) {
+                prediction2D.textContent = allPredictions.twoD.join('*');
+                count2D.textContent = `Total: ${allPredictions.twoD.length} angka 2D`;
+            } else {
+                prediction2D.textContent = 'Tidak ada kombinasi 2D';
+                count2D.textContent = 'Total: 0 angka';
+            }
+            
+            // Apply filter if main numbers are provided
+            const mainNumbers = document.getElementById('main-numbers').value;
+            const filterType = document.querySelector('input[name="filter-type"]:checked').value;
+            
+            if (mainNumbers && mainNumbers.trim() !== '') {
+                const mainNumberSets = parseMainNumbers(mainNumbers);
+                const mainNumbersDisplay = mainNumberSets.map((digits, index) => 
+                    `Baris ${index + 1}: ${digits.join('')}`
+                ).join(' | ');
+                
+                let filterTypeText = '';
+                
+                if (filterType === 'kepala') {
+                    filterTypeText = 'kepala';
+                } else if (filterType === 'ekor') {
+                    filterTypeText = 'ekor';
+                } else {
+                    filterTypeText = 'semua posisi';
+                }
+                
+                let hasFilteredResults = false;
+                
+                // Filter 4D numbers
+                if (allPredictions.fourD.length > 0) {
+                    const filtered4D = filter4DNumbers(allPredictions.fourD, mainNumbers, filterType);
+                    
+                    if (filtered4D.length > 0) {
+                        hasFilteredResults = true;
+                        document.getElementById('filtered-4d-section').classList.remove('hidden');
+                        document.getElementById('filter-4d-info').textContent = `Filter 4D Progresif: ${mainNumbersDisplay} pada ${filterTypeText}`;
+                        document.getElementById('filtered-4d-numbers').textContent = filtered4D.join('*');
+                        document.getElementById('filtered-4d-count').textContent = `Total: ${filtered4D.length} angka`;
+                    } else {
+                        document.getElementById('filtered-4d-section').classList.add('hidden');
+                    }
+                } else {
+                    document.getElementById('filtered-4d-section').classList.add('hidden');
+                }
+                
+                // Filter 3D numbers
+                if (allPredictions.threeD.length > 0) {
+                    const filtered3D = filter3DNumbers(allPredictions.threeD, mainNumbers, filterType);
+                    
+                    if (filtered3D.length > 0) {
+                        hasFilteredResults = true;
+                        document.getElementById('filtered-3d-section').classList.remove('hidden');
+                        document.getElementById('filter-3d-info').textContent = `Filter 3D Progresif: ${mainNumbersDisplay} pada ${filterTypeText}`;
+                        document.getElementById('filtered-3d-numbers').textContent = filtered3D.join('*');
+                        document.getElementById('filtered-3d-count').textContent = `Total: ${filtered3D.length} angka`;
+                    } else {
+                        document.getElementById('filtered-3d-section').classList.add('hidden');
+                    }
+                } else {
+                    document.getElementById('filtered-3d-section').classList.add('hidden');
+                }
+                
+                // Filter 2D numbers
+                if (allPredictions.twoD.length > 0) {
+                    const filtered2D = filterNumbers(allPredictions.twoD, mainNumbers, filterType);
+                    
+                    if (filtered2D.length > 0) {
+                        hasFilteredResults = true;
+                        document.getElementById('filtered-2d-section').classList.remove('hidden');
+                        document.getElementById('filter-2d-info').textContent = `Filter 2D Progresif: ${mainNumbersDisplay} pada ${filterTypeText}`;
+                        document.getElementById('filtered-2d-numbers').textContent = filtered2D.join('*');
+                        document.getElementById('filtered-2d-count').textContent = `Total: ${filtered2D.length} angka`;
+                    } else {
+                        document.getElementById('filtered-2d-section').classList.add('hidden');
+                    }
+                } else {
+                    document.getElementById('filtered-2d-section').classList.add('hidden');
+                }
+                
+                // Show/hide filtered results section
+                if (hasFilteredResults) {
+                    document.getElementById('filtered-result').classList.remove('hidden');
+                    
+                    // Generate summary analysis for filtered results
+                    const filtered4D = allPredictions.fourD.length > 0 ? filter4DNumbers(allPredictions.fourD, mainNumbers, filterType) : [];
+                    const filtered3D = allPredictions.threeD.length > 0 ? filter3DNumbers(allPredictions.threeD, mainNumbers, filterType) : [];
+                    const filtered2D = allPredictions.twoD.length > 0 ? filterNumbers(allPredictions.twoD, mainNumbers, filterType) : [];
+                    
+                    analyzeSummary(filtered4D, filtered3D, filtered2D, mainNumbers);
+                } else {
+                    document.getElementById('filtered-result').classList.add('hidden');
+                    document.getElementById('summary-analysis').classList.add('hidden');
+                }
+            } else {
+                // Hide all filtered results if no main numbers
+                document.getElementById('filtered-result').classList.add('hidden');
+                document.getElementById('filtered-4d-section').classList.add('hidden');
+                document.getElementById('filtered-3d-section').classList.add('hidden');
+                document.getElementById('filtered-2d-section').classList.add('hidden');
+                document.getElementById('summary-analysis').classList.add('hidden');
+            }
+            
+            // Show result section
+            document.getElementById('prediction-result').classList.remove('hidden');
+        }
+
+        // Toggle tarung section visibility
+        function toggleTarungSection() {
+            const generationMode = document.querySelector('input[name="generation-mode"]:checked').value;
+            const tarungSection = document.getElementById('tarung-section');
+            
+            if (generationMode === 'tarung') {
+                tarungSection.classList.remove('hidden');
+            } else {
+                tarungSection.classList.add('hidden');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('generate-btn').addEventListener('click', generatePrediction);
+        document.getElementById('copy-4d-btn').addEventListener('click', () => copyToClipboard('prediction-4d', 'copy-4d-btn'));
+        document.getElementById('copy-3d-btn').addEventListener('click', () => copyToClipboard('prediction-3d', 'copy-3d-btn'));
+        document.getElementById('copy-2d-btn').addEventListener('click', () => copyToClipboard('prediction-2d', 'copy-2d-btn'));
+        document.getElementById('copy-filtered-4d-btn').addEventListener('click', copyFiltered4DNumbers);
+        document.getElementById('copy-filtered-3d-btn').addEventListener('click', copyFiltered3DNumbers);
+        document.getElementById('copy-filtered-2d-btn').addEventListener('click', copyFilteredNumbers);
+        
+        // 4D highlight event listeners
+        document.getElementById('highlight-4d-btn').addEventListener('click', highlight4DNumbers);
+        document.getElementById('clear-4d-btn').addEventListener('click', clear4DHighlight);
+        
+        // Auto-highlight on Enter key
+        document.getElementById('check-4d-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                highlight4DNumbers();
+            }
+        });
+        
+        // Mode toggle listeners
+        document.querySelectorAll('input[name="generation-mode"]').forEach(radio => {
+            radio.addEventListener('change', toggleTarungSection);
+        });
+        
+        // Auto-filter when main numbers change
+        document.getElementById('main-numbers').addEventListener('input', function() {
+            // Only auto-filter if prediction is already shown
+            if (!document.getElementById('prediction-result').classList.contains('hidden')) {
+                generatePrediction();
+            }
+        });
+        
+        // Auto-filter when filter type changes
+        document.querySelectorAll('input[name="filter-type"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Only auto-filter if prediction is already shown
+                if (!document.getElementById('prediction-result').classList.contains('hidden')) {
+                    generatePrediction();
+                }
+            });
+        });
+
+        // Element SDK implementation
+        async function render(config) {
+            document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+            document.getElementById('prediction-label').textContent = config.prediction_label || defaultConfig.prediction_label;
+            document.getElementById('generate-btn').textContent = config.generate_button_text || defaultConfig.generate_button_text;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["app_title", config.app_title || defaultConfig.app_title],
+                ["prediction_label", config.prediction_label || defaultConfig.prediction_label],
+                ["generate_button_text", config.generate_button_text || defaultConfig.generate_button_text]
+            ]);
+        }
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                render,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'99092b31033e4dbc',t:'MTc2MDgwMjQwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
