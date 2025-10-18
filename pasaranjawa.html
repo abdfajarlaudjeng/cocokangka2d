@@ -1,0 +1,1930 @@
+<!doctype html>
+<html lang="id">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Rumus Togel</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .formula-card {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px 0;
+            color: white;
+            font-weight: 600;
+        }
+        .result-card {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 8px 0;
+            color: white;
+            font-weight: 600;
+        }
+        .calculate-btn {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            transition: all 0.3s ease;
+        }
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.4);
+        }
+        .number-display {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            font-weight: bold;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 4px;
+        }
+        .formula-explanation {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            font-size: 0.9em;
+        }
+        .step-by-step {
+            background: rgba(255,255,255,0.15);
+            border-radius: 6px;
+            padding: 8px;
+            margin: 4px 0;
+            font-size: 0.85em;
+        }
+        .realtime-clock {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+        .jawa-day {
+            background: linear-gradient(45deg, #f093fb, #f5576c);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin: 4px;
+        }
+        .angka-mati {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin: 4px;
+            display: inline-block;
+        }
+        .angka-hidup {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            margin: 4px;
+            display: inline-block;
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="min-h-full gradient-bg">
+  <main class="container mx-auto px-4 py-8">
+   <div class="max-w-6xl mx-auto"><!-- Header -->
+    <header class="text-center mb-8">
+     <h1 id="app-title" class="text-4xl font-bold text-white mb-2">🎯 Kalkulator Rumus Togel Advanced</h1>
+     <p class="text-white/80 text-lg">Mistik Lama • Mistik Baru • Index • Teysen • M5 • M9 • M0</p>
+    </header><!-- Input Section -->
+    <section class="bg-white rounded-xl p-6 card-shadow mb-8">
+     <h2 id="calculator-label" class="text-2xl font-bold text-gray-800 mb-4">🧮 Hitung Prediksi Togel</h2>
+     <div class="grid md:grid-cols-2 gap-6 mb-6"><!-- Input Angka -->
+      <div class="bg-blue-50 p-4 rounded-lg">
+       <h3 class="text-lg font-semibold text-blue-700 mb-3">Input Angka</h3>
+       <div class="space-y-4">
+        <div><label for="input-2d" class="block text-sm font-medium text-blue-700 mb-2">Angka 2D</label> <input type="text" id="input-2d" placeholder="Contoh: 25, 67, 89" maxlength="2" class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-xl font-mono">
+        </div>
+        <div><label for="input-3d" class="block text-sm font-medium text-blue-700 mb-2">Angka 3D (Opsional)</label> <input type="text" id="input-3d" placeholder="Contoh: 125, 367" maxlength="3" class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-xl font-mono">
+        </div>
+        <div><label for="input-4d" class="block text-sm font-medium text-blue-700 mb-2">Angka 4D (Opsional)</label> <input type="text" id="input-4d" placeholder="Contoh: 1234, 5678" maxlength="4" class="w-full px-3 py-2 border border-blue-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-xl font-mono">
+        </div>
+       </div>
+      </div><!-- Pilihan Rumus -->
+      <div class="bg-green-50 p-4 rounded-lg">
+       <h3 class="text-lg font-semibold text-green-700 mb-3">Pilih Rumus</h3>
+       <div class="space-y-2"><label class="flex items-center"> <input type="checkbox" id="use-mistik-lama" class="mr-2" checked> <span>Mistik Lama</span> </label> <label class="flex items-center"> <input type="checkbox" id="use-mistik-baru" class="mr-2" checked> <span>Mistik Baru</span> </label> <label class="flex items-center"> <input type="checkbox" id="use-index" class="mr-2" checked> <span>Index</span> </label> <label class="flex items-center"> <input type="checkbox" id="use-teysen" class="mr-2" checked> <span>Teysen</span> </label> <label class="flex items-center"> <input type="checkbox" id="use-m5" class="mr-2" checked> <span>M5 (Modulo 5)</span> </label> <label class="flex items-center"> <input type="checkbox" id="use-m9" class="mr-2" checked> <span>M9 (Modulo 9)</span> </label> <label class="flex items-center"> <input type="checkbox" id="use-m0" class="mr-2" checked> <span>M0 (Modulo 10)</span> </label>
+       </div>
+      </div>
+     </div>
+     <div class="text-center"><button id="calculate-btn" class="calculate-btn text-white px-8 py-3 rounded-lg font-bold text-lg"> 🧮 Hitung Semua Rumus </button>
+     </div>
+    </section><!-- Penjelasan Rumus -->
+    <section class="bg-white/10 backdrop-blur-sm rounded-xl p-6 mb-8 card-shadow">
+     <h2 class="text-2xl font-bold text-white mb-4">📚 Penjelasan Rumus Togel</h2>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4"><!-- Mistik Lama -->
+      <div class="formula-card">
+       <h3 class="text-lg font-bold mb-2">🔮 Mistik Lama</h3>
+       <div class="formula-explanation">
+        <p class="mb-2 text-sm"><strong>Konsep:</strong> Pasangan mistik tradisi lama</p>
+        <div class="grid grid-cols-5 gap-1 text-xs mb-2">
+         <div>
+          0↔1
+         </div>
+         <div>
+          2↔5
+         </div>
+         <div>
+          3↔8
+         </div>
+         <div>
+          4↔7
+         </div>
+         <div>
+          6↔9
+         </div>
+        </div>
+       </div>
+      </div><!-- Mistik Baru -->
+      <div class="formula-card">
+       <h3 class="text-lg font-bold mb-2">✨ Mistik Baru</h3>
+       <div class="formula-explanation">
+        <p class="mb-2 text-sm"><strong>Konsep:</strong> Versi modern mistik</p>
+        <div class="grid grid-cols-5 gap-1 text-xs mb-2">
+         <div>
+          0↔8
+         </div>
+         <div>
+          1↔7
+         </div>
+         <div>
+          2↔6
+         </div>
+         <div>
+          3↔9
+         </div>
+         <div>
+          4↔5
+         </div>
+        </div>
+       </div>
+      </div><!-- Index -->
+      <div class="formula-card">
+       <h3 class="text-lg font-bold mb-2">📊 Index</h3>
+       <div class="formula-explanation">
+        <p class="mb-2 text-sm"><strong>Konsep:</strong> Posisi dalam tabel index</p>
+        <div class="grid grid-cols-5 gap-1 text-xs mb-2">
+         <div>
+          0↔5
+         </div>
+         <div>
+          1↔6
+         </div>
+         <div>
+          2↔7
+         </div>
+         <div>
+          3↔8
+         </div>
+         <div>
+          4↔9
+         </div>
+        </div>
+       </div>
+      </div><!-- Teysen -->
+      <div class="formula-card">
+       <h3 class="text-lg font-bold mb-2">🎲 Teysen</h3>
+       <div class="formula-explanation">
+        <p class="mb-2 text-sm"><strong>Konsep:</strong> Sistem rotasi digit</p>
+        <div class="grid grid-cols-5 gap-1 text-xs mb-2">
+         <div>
+          0↔7
+         </div>
+         <div>
+          1↔4
+         </div>
+         <div>
+          2↔9
+         </div>
+         <div>
+          3↔6
+         </div>
+         <div>
+          5↔8
+         </div>
+        </div>
+       </div>
+      </div><!-- M5 -->
+      <div class="formula-card">
+       <h3 class="text-lg font-bold mb-2">🔢 M5 (Modulo 5)</h3>
+       <div class="formula-explanation">
+        <p class="mb-2 text-sm"><strong>Konsep:</strong> Sisa bagi dengan 5</p>
+        <p class="text-xs"><strong>Rumus:</strong> (angka + 5) mod 10</p>
+        <p class="text-xs">Contoh: 23 → (2+5)%10=7, (3+5)%10=8 → 78</p>
+       </div>
+      </div><!-- M9 -->
+      <div class="formula-card">
+       <h3 class="text-lg font-bold mb-2">🎯 M9 (Modulo 9)</h3>
+       <div class="formula-explanation">
+        <p class="mb-2 text-sm"><strong>Konsep:</strong> Sisa bagi dengan 9</p>
+        <p class="text-xs"><strong>Rumus:</strong> (angka + 9) mod 10</p>
+        <p class="text-xs">Contoh: 23 → (2+9)%10=1, (3+9)%10=2 → 12</p>
+       </div>
+      </div><!-- M0 -->
+      <div class="formula-card">
+       <h3 class="text-lg font-bold mb-2">⚡ M0 (Modulo 10)</h3>
+       <div class="formula-explanation">
+        <p class="mb-2 text-sm"><strong>Konsep:</strong> Komplemen ke 10</p>
+        <p class="text-xs"><strong>Rumus:</strong> (10 - angka) mod 10</p>
+        <p class="text-xs">Contoh: 23 → (10-2)%10=8, (10-3)%10=7 → 87</p>
+       </div>
+      </div>
+     </div>
+    </section><!-- Results Section -->
+    <div id="results-section" class="hidden"><!-- Mistik Lama Results -->
+     <section id="mistik-lama-results" class="bg-white rounded-xl p-6 card-shadow mb-6 hidden">
+      <h2 class="text-2xl font-bold text-purple-800 mb-4">🔮 Hasil Mistik Lama</h2>
+      <div id="mistik-lama-content"></div>
+     </section><!-- Mistik Baru Results -->
+     <section id="mistik-baru-results" class="bg-white rounded-xl p-6 card-shadow mb-6 hidden">
+      <h2 class="text-2xl font-bold text-blue-800 mb-4">✨ Hasil Mistik Baru</h2>
+      <div id="mistik-baru-content"></div>
+     </section><!-- Index Results -->
+     <section id="index-results" class="bg-white rounded-xl p-6 card-shadow mb-6 hidden">
+      <h2 class="text-2xl font-bold text-green-800 mb-4">📊 Hasil Index</h2>
+      <div id="index-content"></div>
+     </section><!-- Teysen Results -->
+     <section id="teysen-results" class="bg-white rounded-xl p-6 card-shadow mb-6 hidden">
+      <h2 class="text-2xl font-bold text-orange-800 mb-4">🎲 Hasil Teysen</h2>
+      <div id="teysen-content"></div>
+     </section><!-- M5 Results -->
+     <section id="m5-results" class="bg-white rounded-xl p-6 card-shadow mb-6 hidden">
+      <h2 class="text-2xl font-bold text-indigo-800 mb-4">🔢 Hasil M5 (Modulo 5)</h2>
+      <div id="m5-content"></div>
+     </section><!-- M9 Results -->
+     <section id="m9-results" class="bg-white rounded-xl p-6 card-shadow mb-6 hidden">
+      <h2 class="text-2xl font-bold text-pink-800 mb-4">🎯 Hasil M9 (Modulo 9)</h2>
+      <div id="m9-content"></div>
+     </section><!-- M0 Results -->
+     <section id="m0-results" class="bg-white rounded-xl p-6 card-shadow mb-6 hidden">
+      <h2 class="text-2xl font-bold text-red-800 mb-4">⚡ Hasil M0 (Modulo 10)</h2>
+      <div id="m0-content"></div>
+     </section><!-- Analisa Kekuatan Angka -->
+     <section class="bg-gradient-to-r from-purple-100 to-pink-100 border border-purple-200 rounded-xl p-6 card-shadow mb-6">
+      <h2 class="text-2xl font-bold text-purple-800 mb-4">📊 Analisa Kekuatan Angka</h2>
+      <div id="strength-analysis"></div>
+     </section><!-- BBFS Kuat -->
+     <section class="bg-gradient-to-r from-emerald-100 to-teal-100 border border-emerald-200 rounded-xl p-6 card-shadow mb-6">
+      <h2 class="text-2xl font-bold text-emerald-800 mb-4">🎯 BBFS Kuat (Bolak-Balik Full Set)</h2>
+      <div id="bbfs-analysis"></div>
+     </section><!-- Analisa Pasaran Jawa -->
+     <section class="bg-gradient-to-r from-amber-100 to-orange-100 border border-amber-200 rounded-xl p-6 card-shadow mb-6">
+      <h2 class="text-2xl font-bold text-amber-800 mb-4">🏛️ Analisa Pasaran Jawa &amp; Angka Mati Hari Ini</h2>
+      <div id="jawa-analysis"></div>
+     </section><!-- Summary -->
+     <section class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 card-shadow">
+      <h2 class="text-2xl font-bold text-yellow-800 mb-4">📋 Ringkasan Hasil</h2>
+      <div id="summary-content"></div>
+     </section>
+    </div><!-- Footer -->
+    <footer class="text-center text-white/70 mt-8">
+     <p>🎯 Kalkulator Rumus Togel • Gunakan dengan bijak dan bertanggung jawab</p>
+    </footer>
+   </div>
+  </main>
+  <script>
+        // Default configuration
+        const defaultConfig = {
+            app_title: "🎯 Kalkulator Rumus Togel Advanced",
+            calculator_label: "🧮 Hitung Prediksi Togel",
+            calculate_button: "🧮 Hitung Semua Rumus"
+        };
+
+        // Tabel konversi untuk setiap rumus
+        const mistikLama = {
+            '0': '1', '1': '0', '2': '5', '3': '8', '4': '7',
+            '5': '2', '6': '9', '7': '4', '8': '3', '9': '6'
+        };
+
+        const mistikBaru = {
+            '0': '8', '1': '7', '2': '6', '3': '9', '4': '5',
+            '5': '4', '6': '2', '7': '1', '8': '0', '9': '3'
+        };
+
+        const indexTable = {
+            '0': '5', '1': '6', '2': '7', '3': '8', '4': '9',
+            '5': '0', '6': '1', '7': '2', '8': '3', '9': '4'
+        };
+
+        const teysenTable = {
+            '0': '7', '1': '4', '2': '9', '3': '6', '4': '1',
+            '5': '8', '6': '3', '7': '0', '8': '5', '9': '2'
+        };
+
+        // Fungsi untuk M5 (Modulo 5)
+        function calculateM5(digit) {
+            return ((parseInt(digit) + 5) % 10).toString();
+        }
+
+        // Fungsi untuk M9 (Modulo 9)
+        function calculateM9(digit) {
+            return ((parseInt(digit) + 9) % 10).toString();
+        }
+
+        // Fungsi untuk M0 (Modulo 10)
+        function calculateM0(digit) {
+            const result = (10 - parseInt(digit)) % 10;
+            return result.toString();
+        }
+
+        // Fungsi untuk mengkonversi angka menggunakan tabel
+        function convertNumber(number, table) {
+            return number.split('').map(digit => table[digit] || digit).join('');
+        }
+
+        // Fungsi untuk mengkonversi angka menggunakan M5
+        function convertNumberM5(number) {
+            return number.split('').map(digit => calculateM5(digit)).join('');
+        }
+
+        // Fungsi untuk mengkonversi angka menggunakan M9
+        function convertNumberM9(number) {
+            return number.split('').map(digit => calculateM9(digit)).join('');
+        }
+
+        // Fungsi untuk mengkonversi angka menggunakan M0
+        function convertNumberM0(number) {
+            return number.split('').map(digit => calculateM0(digit)).join('');
+        }
+
+        // Fungsi untuk menghitung semua variasi dari angka
+        function calculateAllVariations(originalNumber, table, tableName) {
+            const results = [];
+            const converted = convertNumber(originalNumber, table);
+            
+            // Untuk 2D, buat semua kombinasi
+            if (originalNumber.length === 2) {
+                const d1_orig = originalNumber[0];
+                const d2_orig = originalNumber[1];
+                const d1_conv = table[d1_orig];
+                const d2_conv = table[d2_orig];
+                
+                results.push({
+                    type: 'Original',
+                    number: originalNumber,
+                    calculation: `${d1_orig}${d2_orig} (asli)`
+                });
+                
+                results.push({
+                    type: 'Full Convert',
+                    number: converted,
+                    calculation: `${d1_orig}→${d1_conv}, ${d2_orig}→${d2_conv} = ${converted}`
+                });
+                
+                results.push({
+                    type: 'Mix 1',
+                    number: d1_orig + d2_conv,
+                    calculation: `${d1_orig}(asli) + ${d2_orig}→${d2_conv} = ${d1_orig}${d2_conv}`
+                });
+                
+                results.push({
+                    type: 'Mix 2',
+                    number: d1_conv + d2_orig,
+                    calculation: `${d1_orig}→${d1_conv} + ${d2_orig}(asli) = ${d1_conv}${d2_orig}`
+                });
+            } else {
+                // Untuk 3D dan 4D, hanya konversi penuh
+                results.push({
+                    type: 'Original',
+                    number: originalNumber,
+                    calculation: `${originalNumber} (asli)`
+                });
+                
+                const steps = originalNumber.split('').map((digit, index) => 
+                    `${digit}→${table[digit]}`
+                ).join(', ');
+                
+                results.push({
+                    type: 'Full Convert',
+                    number: converted,
+                    calculation: `${steps} = ${converted}`
+                });
+            }
+            
+            return results;
+        }
+
+        // Fungsi untuk menghitung variasi M5, M9, M0
+        function calculateModuloVariations(originalNumber, convertFunction, formulaName) {
+            const results = [];
+            const converted = convertFunction(originalNumber);
+            
+            // Untuk 2D, buat semua kombinasi
+            if (originalNumber.length === 2) {
+                const d1_orig = originalNumber[0];
+                const d2_orig = originalNumber[1];
+                const d1_conv = convertFunction(d1_orig);
+                const d2_conv = convertFunction(d2_orig);
+                
+                results.push({
+                    type: 'Original',
+                    number: originalNumber,
+                    calculation: `${d1_orig}${d2_orig} (asli)`
+                });
+                
+                results.push({
+                    type: 'Full Convert',
+                    number: converted,
+                    calculation: `${formulaName}: ${d1_orig}→${d1_conv}, ${d2_orig}→${d2_conv} = ${converted}`
+                });
+                
+                results.push({
+                    type: 'Mix 1',
+                    number: d1_orig + d2_conv,
+                    calculation: `${d1_orig}(asli) + ${d2_orig}→${d2_conv} = ${d1_orig}${d2_conv}`
+                });
+                
+                results.push({
+                    type: 'Mix 2',
+                    number: d1_conv + d2_orig,
+                    calculation: `${d1_orig}→${d1_conv} + ${d2_orig}(asli) = ${d1_conv}${d2_orig}`
+                });
+            } else {
+                // Untuk 3D dan 4D, hanya konversi penuh
+                results.push({
+                    type: 'Original',
+                    number: originalNumber,
+                    calculation: `${originalNumber} (asli)`
+                });
+                
+                const steps = originalNumber.split('').map((digit, index) => 
+                    `${digit}→${convertFunction(digit)}`
+                ).join(', ');
+                
+                results.push({
+                    type: 'Full Convert',
+                    number: converted,
+                    calculation: `${formulaName}: ${steps} = ${converted}`
+                });
+            }
+            
+            return results;
+        }
+
+        // Fungsi untuk menampilkan hasil
+        function displayResults(results, containerId, color) {
+            const container = document.getElementById(containerId);
+            let html = '';
+            
+            results.forEach(result => {
+                html += `
+                    <div class="bg-${color}-50 border border-${color}-200 rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-${color}-800 mb-2">${result.formula}</h4>
+                        <div class="space-y-2">
+                `;
+                
+                result.variations.forEach(variation => {
+                    html += `
+                        <div class="flex justify-between items-center bg-white p-3 rounded border">
+                            <span class="font-medium text-gray-700">${variation.type}:</span>
+                            <div class="text-right">
+                                <div class="number-display text-${color}-800">${variation.number}</div>
+                                <div class="text-xs text-gray-500 mt-1">${variation.calculation}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // Fungsi untuk menghitung semua rumus
+        function calculateAllFormulas() {
+            const input2D = document.getElementById('input-2d').value.replace(/\D/g, '');
+            const input3D = document.getElementById('input-3d').value.replace(/\D/g, '');
+            const input4D = document.getElementById('input-4d').value.replace(/\D/g, '');
+            
+            if (!input2D && !input3D && !input4D) {
+                // Show inline error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4';
+                errorDiv.textContent = 'Masukkan minimal satu angka untuk dihitung!';
+                
+                const calculatorSection = document.querySelector('.bg-white.rounded-xl');
+                const existingError = calculatorSection.querySelector('.bg-red-100');
+                if (existingError) existingError.remove();
+                
+                calculatorSection.appendChild(errorDiv);
+                
+                setTimeout(() => {
+                    if (errorDiv.parentNode) errorDiv.remove();
+                }, 3000);
+                
+                return;
+            }
+
+            const inputs = [];
+            if (input2D && input2D.length === 2) inputs.push({ number: input2D, type: '2D' });
+            if (input3D && input3D.length === 3) inputs.push({ number: input3D, type: '3D' });
+            if (input4D && input4D.length === 4) inputs.push({ number: input4D, type: '4D' });
+
+            const allResults = {
+                mistikLama: [],
+                mistikBaru: [],
+                index: [],
+                teysen: [],
+                m5: [],
+                m9: [],
+                m0: []
+            };
+
+            // Hitung untuk setiap input
+            inputs.forEach(input => {
+                if (document.getElementById('use-mistik-lama').checked) {
+                    allResults.mistikLama.push({
+                        formula: `Mistik Lama ${input.type}: ${input.number}`,
+                        variations: calculateAllVariations(input.number, mistikLama, 'Mistik Lama')
+                    });
+                }
+
+                if (document.getElementById('use-mistik-baru').checked) {
+                    allResults.mistikBaru.push({
+                        formula: `Mistik Baru ${input.type}: ${input.number}`,
+                        variations: calculateAllVariations(input.number, mistikBaru, 'Mistik Baru')
+                    });
+                }
+
+                if (document.getElementById('use-index').checked) {
+                    allResults.index.push({
+                        formula: `Index ${input.type}: ${input.number}`,
+                        variations: calculateAllVariations(input.number, indexTable, 'Index')
+                    });
+                }
+
+                if (document.getElementById('use-teysen').checked) {
+                    allResults.teysen.push({
+                        formula: `Teysen ${input.type}: ${input.number}`,
+                        variations: calculateAllVariations(input.number, teysenTable, 'Teysen')
+                    });
+                }
+
+                if (document.getElementById('use-m5').checked) {
+                    allResults.m5.push({
+                        formula: `M5 ${input.type}: ${input.number}`,
+                        variations: calculateModuloVariations(input.number, convertNumberM5, 'M5')
+                    });
+                }
+
+                if (document.getElementById('use-m9').checked) {
+                    allResults.m9.push({
+                        formula: `M9 ${input.type}: ${input.number}`,
+                        variations: calculateModuloVariations(input.number, convertNumberM9, 'M9')
+                    });
+                }
+
+                if (document.getElementById('use-m0').checked) {
+                    allResults.m0.push({
+                        formula: `M0 ${input.type}: ${input.number}`,
+                        variations: calculateModuloVariations(input.number, convertNumberM0, 'M0')
+                    });
+                }
+            });
+
+            // Tampilkan hasil
+            if (allResults.mistikLama.length > 0) {
+                displayResults(allResults.mistikLama, 'mistik-lama-content', 'purple');
+                document.getElementById('mistik-lama-results').classList.remove('hidden');
+            } else {
+                document.getElementById('mistik-lama-results').classList.add('hidden');
+            }
+
+            if (allResults.mistikBaru.length > 0) {
+                displayResults(allResults.mistikBaru, 'mistik-baru-content', 'blue');
+                document.getElementById('mistik-baru-results').classList.remove('hidden');
+            } else {
+                document.getElementById('mistik-baru-results').classList.add('hidden');
+            }
+
+            if (allResults.index.length > 0) {
+                displayResults(allResults.index, 'index-content', 'green');
+                document.getElementById('index-results').classList.remove('hidden');
+            } else {
+                document.getElementById('index-results').classList.add('hidden');
+            }
+
+            if (allResults.teysen.length > 0) {
+                displayResults(allResults.teysen, 'teysen-content', 'orange');
+                document.getElementById('teysen-results').classList.remove('hidden');
+            } else {
+                document.getElementById('teysen-results').classList.add('hidden');
+            }
+
+            if (allResults.m5.length > 0) {
+                displayResults(allResults.m5, 'm5-content', 'indigo');
+                document.getElementById('m5-results').classList.remove('hidden');
+            } else {
+                document.getElementById('m5-results').classList.add('hidden');
+            }
+
+            if (allResults.m9.length > 0) {
+                displayResults(allResults.m9, 'm9-content', 'pink');
+                document.getElementById('m9-results').classList.remove('hidden');
+            } else {
+                document.getElementById('m9-results').classList.add('hidden');
+            }
+
+            if (allResults.m0.length > 0) {
+                displayResults(allResults.m0, 'm0-content', 'red');
+                document.getElementById('m0-results').classList.remove('hidden');
+            } else {
+                document.getElementById('m0-results').classList.add('hidden');
+            }
+
+            // Buat analisa kekuatan angka
+            const strengthAnalysis = analyzeNumberStrength(allResults);
+            displayStrengthAnalysis(strengthAnalysis);
+
+            // Buat analisa BBFS
+            const bbfsAnalysis = analyzeBBFS(allResults, strengthAnalysis);
+            displayBBFSAnalysis(bbfsAnalysis);
+
+            // Buat analisa Jawa
+            const jawaAnalysis = analyzeJawaMarket(allResults);
+            displayJawaAnalysis(jawaAnalysis);
+
+            // Buat ringkasan
+            createSummary(allResults, inputs);
+
+            // Tampilkan section hasil
+            document.getElementById('results-section').classList.remove('hidden');
+        }
+
+        // Fungsi untuk menganalisa kekuatan angka
+        function analyzeNumberStrength(allResults) {
+            const numberCount = {};
+            const totalNumbers = [];
+            
+            // Hitung kemunculan setiap angka
+            Object.values(allResults).forEach(results => {
+                results.forEach(result => {
+                    result.variations.forEach(variation => {
+                        if (variation.type !== 'Original') {
+                            const number = variation.number;
+                            totalNumbers.push(number);
+                            numberCount[number] = (numberCount[number] || 0) + 1;
+                        }
+                    });
+                });
+            });
+
+            // Hitung persentase
+            const totalCount = totalNumbers.length;
+            const numberPercentages = {};
+            
+            Object.keys(numberCount).forEach(number => {
+                const count = numberCount[number];
+                const percentage = ((count / totalCount) * 100).toFixed(1);
+                numberPercentages[number] = {
+                    count: count,
+                    percentage: parseFloat(percentage)
+                };
+            });
+
+            // Sortir berdasarkan persentase
+            const sortedNumbers = Object.keys(numberPercentages).sort((a, b) => 
+                numberPercentages[b].percentage - numberPercentages[a].percentage
+            );
+
+            // Kategorikan angka
+            const strongNumbers = [];
+            const mediumNumbers = [];
+            const weakNumbers = [];
+
+            sortedNumbers.forEach(number => {
+                const percentage = numberPercentages[number].percentage;
+                if (percentage >= 15) {
+                    strongNumbers.push({number, ...numberPercentages[number]});
+                } else if (percentage >= 8) {
+                    mediumNumbers.push({number, ...numberPercentages[number]});
+                } else {
+                    weakNumbers.push({number, ...numberPercentages[number]});
+                }
+            });
+
+            return {
+                strongNumbers,
+                mediumNumbers,
+                weakNumbers,
+                totalAnalyzed: totalCount,
+                uniqueNumbers: Object.keys(numberCount).length
+            };
+        }
+
+        // Fungsi untuk menampilkan analisa kekuatan
+        function displayStrengthAnalysis(analysis) {
+            const container = document.getElementById('strength-analysis');
+            
+            let html = `
+                <div class="grid md:grid-cols-3 gap-4 mb-6">
+                    <div class="bg-white p-4 rounded-lg border text-center">
+                        <div class="text-2xl font-bold text-purple-600">${analysis.totalAnalyzed}</div>
+                        <div class="text-sm text-gray-600">Total Angka Dianalisa</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border text-center">
+                        <div class="text-2xl font-bold text-blue-600">${analysis.uniqueNumbers}</div>
+                        <div class="text-sm text-gray-600">Angka Unik</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border text-center">
+                        <div class="text-2xl font-bold text-green-600">${analysis.strongNumbers.length}</div>
+                        <div class="text-sm text-gray-600">Angka Kuat</div>
+                    </div>
+                </div>
+            `;
+
+            // Angka Kuat
+            if (analysis.strongNumbers.length > 0) {
+                html += `
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                        <h3 class="text-lg font-bold text-green-800 mb-3">🔥 Angka Kuat (≥15%)</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                `;
+                
+                analysis.strongNumbers.forEach(item => {
+                    html += `
+                        <div class="bg-green-100 border border-green-300 rounded p-3 text-center">
+                            <div class="text-xl font-bold text-green-800">${item.number}</div>
+                            <div class="text-sm text-green-600">${item.percentage}%</div>
+                            <div class="text-xs text-green-500">${item.count}x muncul</div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                        <div class="mt-3 text-sm text-green-700">
+                            <strong>Rekomendasi:</strong> Angka-angka ini memiliki tingkat kemunculan tertinggi dari semua rumus. Prioritas utama untuk prediksi.
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Angka Sedang
+            if (analysis.mediumNumbers.length > 0) {
+                html += `
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
+                        <h3 class="text-lg font-bold text-yellow-800 mb-3">⚡ Angka Sedang (8-14%)</h3>
+                        <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+                `;
+                
+                analysis.mediumNumbers.forEach(item => {
+                    html += `
+                        <div class="bg-yellow-100 border border-yellow-300 rounded p-2 text-center">
+                            <div class="text-lg font-bold text-yellow-800">${item.number}</div>
+                            <div class="text-xs text-yellow-600">${item.percentage}%</div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                        <div class="mt-3 text-sm text-yellow-700">
+                            <strong>Rekomendasi:</strong> Angka cadangan yang bisa dikombinasikan dengan angka kuat.
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Angka Lemah
+            if (analysis.weakNumbers.length > 0) {
+                html += `
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h3 class="text-lg font-bold text-red-800 mb-3">❄️ Angka Lemah (<8%)</h3>
+                        <div class="grid grid-cols-4 md:grid-cols-8 gap-1">
+                `;
+                
+                analysis.weakNumbers.forEach(item => {
+                    html += `
+                        <div class="bg-red-100 border border-red-300 rounded p-1 text-center">
+                            <div class="text-sm font-bold text-red-800">${item.number}</div>
+                            <div class="text-xs text-red-600">${item.percentage}%</div>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                        <div class="mt-3 text-sm text-red-700">
+                            <strong>Catatan:</strong> Angka dengan kemunculan rendah. Gunakan hanya sebagai pelengkap.
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Fungsi untuk menganalisa BBFS (Bolak-Balik Full Set)
+        function analyzeBBFS(allResults, strengthAnalysis) {
+            // Ambil digit-digit kuat dari analisa sebelumnya
+            const strongDigits = new Set();
+            const mediumDigits = new Set();
+            
+            // Ekstrak digit dari angka kuat dan sedang
+            strengthAnalysis.strongNumbers.forEach(item => {
+                item.number.split('').forEach(digit => strongDigits.add(digit));
+            });
+            
+            strengthAnalysis.mediumNumbers.forEach(item => {
+                item.number.split('').forEach(digit => mediumDigits.add(digit));
+            });
+
+            // Hitung frekuensi kemunculan setiap digit
+            const digitFrequency = {};
+            Object.values(allResults).forEach(results => {
+                results.forEach(result => {
+                    result.variations.forEach(variation => {
+                        if (variation.type !== 'Original') {
+                            variation.number.split('').forEach(digit => {
+                                digitFrequency[digit] = (digitFrequency[digit] || 0) + 1;
+                            });
+                        }
+                    });
+                });
+            });
+
+            // Sortir digit berdasarkan frekuensi
+            const sortedDigits = Object.keys(digitFrequency).sort((a, b) => 
+                digitFrequency[b] - digitFrequency[a]
+            );
+
+            // Buat BBFS berdasarkan digit terkuat
+            const bbfsOptions = [];
+            
+            // BBFS 4 digit (dari 4 digit terkuat)
+            if (sortedDigits.length >= 4) {
+                const top4Digits = sortedDigits.slice(0, 4);
+                bbfsOptions.push({
+                    type: 'BBFS 4D',
+                    digits: top4Digits,
+                    combinations: generateBBFSCombinations(top4Digits, 4),
+                    strength: 'Sangat Kuat',
+                    description: 'Kombinasi 4 digit terkuat dari semua rumus'
+                });
+            }
+
+            // BBFS 5 digit (dari 5 digit terkuat)
+            if (sortedDigits.length >= 5) {
+                const top5Digits = sortedDigits.slice(0, 5);
+                bbfsOptions.push({
+                    type: 'BBFS 5D',
+                    digits: top5Digits,
+                    combinations: generateBBFSCombinations(top5Digits, 4),
+                    strength: 'Kuat',
+                    description: 'Kombinasi 5 digit terkuat untuk variasi lebih banyak'
+                });
+            }
+
+            // BBFS 6 digit (dari 6 digit terkuat)
+            if (sortedDigits.length >= 6) {
+                const top6Digits = sortedDigits.slice(0, 6);
+                bbfsOptions.push({
+                    type: 'BBFS 6D',
+                    digits: top6Digits,
+                    combinations: generateBBFSCombinations(top6Digits, 4),
+                    strength: 'Sedang',
+                    description: 'Kombinasi 6 digit untuk coverage maksimal'
+                });
+            }
+
+            // BBFS khusus dari angka kuat saja
+            if (strongDigits.size >= 3) {
+                const strongDigitsArray = Array.from(strongDigits).sort((a, b) => 
+                    digitFrequency[b] - digitFrequency[a]
+                );
+                bbfsOptions.push({
+                    type: 'BBFS Premium',
+                    digits: strongDigitsArray,
+                    combinations: generateBBFSCombinations(strongDigitsArray, 4),
+                    strength: 'Premium',
+                    description: 'Hanya dari digit yang muncul di angka kuat (≥15%)'
+                });
+            }
+
+            return {
+                bbfsOptions,
+                digitFrequency,
+                strongDigits: Array.from(strongDigits),
+                mediumDigits: Array.from(mediumDigits),
+                totalDigitsAnalyzed: sortedDigits.length
+            };
+        }
+
+        // Fungsi untuk generate kombinasi BBFS
+        function generateBBFSCombinations(digits, length) {
+            const combinations = new Set();
+            
+            // Generate semua permutasi 4 digit dari digits yang tersedia
+            function generatePermutations(arr, len) {
+                if (len === 1) return arr.map(a => [a]);
+                
+                const result = [];
+                arr.forEach((item, index) => {
+                    const rest = arr.slice(0, index).concat(arr.slice(index + 1));
+                    const perms = generatePermutations(rest, len - 1);
+                    perms.forEach(perm => {
+                        result.push([item].concat(perm));
+                    });
+                });
+                return result;
+            }
+
+            // Generate kombinasi 4 digit
+            const permutations = generatePermutations(digits, Math.min(length, digits.length));
+            permutations.forEach(perm => {
+                if (perm.length === 4) {
+                    combinations.add(perm.join(''));
+                }
+            });
+
+            // Jika digits lebih dari 4, buat kombinasi dengan memilih 4 dari yang tersedia
+            if (digits.length > 4) {
+                for (let i = 0; i < digits.length; i++) {
+                    for (let j = i + 1; j < digits.length; j++) {
+                        for (let k = j + 1; k < digits.length; k++) {
+                            for (let l = k + 1; l < digits.length; l++) {
+                                const combo = [digits[i], digits[j], digits[k], digits[l]];
+                                const perms = generatePermutations(combo, 4);
+                                perms.forEach(perm => {
+                                    combinations.add(perm.join(''));
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Batasi hasil maksimal 50 kombinasi untuk performa
+            return Array.from(combinations).slice(0, 50).sort();
+        }
+
+        // Fungsi untuk menampilkan analisa BBFS
+        function displayBBFSAnalysis(bbfsAnalysis) {
+            const container = document.getElementById('bbfs-analysis');
+            
+            let html = `
+                <div class="bg-white p-4 rounded-lg border mb-4">
+                    <h3 class="font-bold text-emerald-800 mb-3">📈 Statistik Digit</h3>
+                    <div class="grid grid-cols-5 md:grid-cols-10 gap-2 mb-4">
+            `;
+
+            // Tampilkan frekuensi setiap digit
+            const sortedDigitFreq = Object.entries(bbfsAnalysis.digitFrequency)
+                .sort(([,a], [,b]) => b - a);
+
+            sortedDigitFreq.forEach(([digit, freq]) => {
+                const isStrong = bbfsAnalysis.strongDigits.includes(digit);
+                const isMedium = bbfsAnalysis.mediumDigits.includes(digit);
+                
+                let bgColor = 'bg-gray-100 text-gray-700';
+                if (isStrong) bgColor = 'bg-green-200 text-green-800 font-bold';
+                else if (isMedium) bgColor = 'bg-yellow-200 text-yellow-800';
+
+                html += `
+                    <div class="${bgColor} rounded p-2 text-center">
+                        <div class="text-lg font-bold">${digit}</div>
+                        <div class="text-xs">${freq}x</div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                    <div class="text-sm text-emerald-700">
+                        <span class="inline-block bg-green-200 text-green-800 px-2 py-1 rounded mr-2">Hijau: Digit Kuat</span>
+                        <span class="inline-block bg-yellow-200 text-yellow-800 px-2 py-1 rounded mr-2">Kuning: Digit Sedang</span>
+                        <span class="inline-block bg-gray-200 text-gray-700 px-2 py-1 rounded">Abu: Digit Lemah</span>
+                    </div>
+                </div>
+            `;
+
+            // Tampilkan setiap opsi BBFS
+            bbfsAnalysis.bbfsOptions.forEach((bbfs, index) => {
+                const strengthColors = {
+                    'Premium': 'emerald',
+                    'Sangat Kuat': 'green',
+                    'Kuat': 'blue',
+                    'Sedang': 'yellow'
+                };
+                const color = strengthColors[bbfs.strength] || 'gray';
+
+                html += `
+                    <div class="bg-${color}-50 border border-${color}-200 rounded-lg p-4 mb-4">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-lg font-bold text-${color}-800">${bbfs.type}</h3>
+                            <span class="bg-${color}-200 text-${color}-800 px-3 py-1 rounded-full text-sm font-bold">${bbfs.strength}</span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <p class="text-${color}-700 text-sm mb-2">${bbfs.description}</p>
+                            <div class="flex items-center gap-2">
+                                <span class="text-${color}-800 font-medium">Digit BBFS:</span>
+                                <div class="flex gap-1">
+                `;
+
+                bbfs.digits.forEach(digit => {
+                    html += `<span class="bg-${color}-200 text-${color}-800 px-2 py-1 rounded font-mono font-bold">${digit}</span>`;
+                });
+
+                html += `
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h4 class="font-bold text-${color}-800 mb-2">🎯 Kombinasi 4D (${bbfs.combinations.length} angka):</h4>
+                            <div class="grid grid-cols-4 md:grid-cols-8 gap-1 max-h-40 overflow-y-auto bg-white p-2 rounded border">
+                `;
+
+                bbfs.combinations.forEach(combo => {
+                    html += `<span class="bg-${color}-100 text-${color}-800 px-2 py-1 rounded text-center font-mono text-sm">${combo}</span>`;
+                });
+
+                html += `
+                            </div>
+                        </div>
+
+                        <div class="bg-${color}-100 p-3 rounded">
+                            <h4 class="font-bold text-${color}-800 mb-2">💡 Cara Penggunaan:</h4>
+                            <ul class="text-${color}-700 text-sm space-y-1">
+                                <li>• Gunakan semua kombinasi untuk investasi penuh</li>
+                                <li>• Pilih 10-20 kombinasi favorit untuk bet selektif</li>
+                                <li>• Kombinasikan dengan feeling dan analisa lain</li>
+                                <li>• ${bbfs.type === 'BBFS Premium' ? 'Prioritas tertinggi - dari digit terkuat' : 'Sesuaikan dengan budget dan strategi'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Rekomendasi strategi
+            html += `
+                <div class="bg-gradient-to-r from-emerald-200 to-teal-200 p-4 rounded-lg">
+                    <h3 class="font-bold text-emerald-800 mb-3">🎯 Rekomendasi Strategi BBFS</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white/70 p-3 rounded">
+                            <h4 class="font-bold text-emerald-700 mb-2">🥇 Strategi Konservatif</h4>
+                            <ul class="text-emerald-700 text-sm space-y-1">
+                                <li>• Fokus pada BBFS Premium atau 4D</li>
+                                <li>• Pilih 15-25 kombinasi terbaik</li>
+                                <li>• Kombinasi dengan angka kuat (≥15%)</li>
+                                <li>• Risk rendah, potensi menang tinggi</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white/70 p-3 rounded">
+                            <h4 class="font-bold text-emerald-700 mb-2">🚀 Strategi Agresif</h4>
+                            <ul class="text-emerald-700 text-sm space-y-1">
+                                <li>• Gunakan BBFS 5D atau 6D</li>
+                                <li>• Investasi pada semua kombinasi</li>
+                                <li>• Coverage maksimal untuk jackpot</li>
+                                <li>• Risk tinggi, reward maksimal</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Fungsi untuk membuat ringkasan
+        function createSummary(allResults, inputs) {
+            const summaryContainer = document.getElementById('summary-content');
+            let html = '';
+
+            // Ringkasan input
+            html += `
+                <div class="bg-white p-4 rounded-lg border mb-4">
+                    <h3 class="font-bold text-gray-800 mb-2">📥 Input yang Dihitung:</h3>
+                    <div class="flex flex-wrap gap-2">
+            `;
+            
+            inputs.forEach(input => {
+                html += `<span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full font-mono">${input.type}: ${input.number}</span>`;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+
+            // Ringkasan rumus yang digunakan
+            const usedFormulas = [];
+            if (allResults.mistikLama.length > 0) usedFormulas.push('Mistik Lama');
+            if (allResults.mistikBaru.length > 0) usedFormulas.push('Mistik Baru');
+            if (allResults.index.length > 0) usedFormulas.push('Index');
+            if (allResults.teysen.length > 0) usedFormulas.push('Teysen');
+            if (allResults.m5.length > 0) usedFormulas.push('M5');
+            if (allResults.m9.length > 0) usedFormulas.push('M9');
+            if (allResults.m0.length > 0) usedFormulas.push('M0');
+
+            html += `
+                <div class="bg-white p-4 rounded-lg border mb-4">
+                    <h3 class="font-bold text-gray-800 mb-2">🧮 Rumus yang Digunakan:</h3>
+                    <div class="flex flex-wrap gap-2">
+            `;
+            
+            usedFormulas.forEach(formula => {
+                const colors = {
+                    'Mistik Lama': 'purple',
+                    'Mistik Baru': 'blue',
+                    'Index': 'green',
+                    'Teysen': 'orange',
+                    'M5': 'indigo',
+                    'M9': 'pink',
+                    'M0': 'red'
+                };
+                const color = colors[formula];
+                html += `<span class="bg-${color}-100 text-${color}-800 px-3 py-1 rounded-full">${formula}</span>`;
+            });
+            
+            html += `
+                    </div>
+                </div>
+            `;
+
+            // Kumpulkan semua angka hasil
+            const allNumbers = new Set();
+            Object.values(allResults).forEach(results => {
+                results.forEach(result => {
+                    result.variations.forEach(variation => {
+                        if (variation.type !== 'Original') {
+                            allNumbers.add(variation.number);
+                        }
+                    });
+                });
+            });
+
+            html += `
+                <div class="bg-white p-4 rounded-lg border">
+                    <h3 class="font-bold text-gray-800 mb-2">🎯 Semua Angka Hasil (${allNumbers.size} angka):</h3>
+                    <div class="flex flex-wrap gap-2">
+            `;
+            
+            Array.from(allNumbers).sort().forEach(number => {
+                html += `<span class="number-display text-gray-800 bg-gray-100">${number}</span>`;
+            });
+            
+            html += `
+                    </div>
+                    <div class="mt-3 text-sm text-gray-600">
+                        <p><strong>Cara Penggunaan:</strong></p>
+                        <ul class="list-disc list-inside mt-1 space-y-1">
+                            <li>Gunakan angka-angka di atas sebagai referensi prediksi</li>
+                            <li>Kombinasikan dengan analisa lain untuk hasil terbaik</li>
+                            <li>Perhatikan pola yang sering muncul dari berbagai rumus</li>
+                            <li>Gunakan dengan bijak dan bertanggung jawab</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+
+            summaryContainer.innerHTML = html;
+        }
+
+        // Data Pasaran Jawa dan Angka Mati
+        const jawaCalendar = {
+            days: ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
+            jawaDays: ['Redite', 'Soma', 'Anggara', 'Budha', 'Respati', 'Sukra', 'Tumpek'],
+            wuku: [
+                'Sinta', 'Landep', 'Ukir', 'Kulantir', 'Tolu', 'Gumbreg', 'Wariga', 'Warigadian',
+                'Julungwangi', 'Sungsang', 'Dungulan', 'Kuningan', 'Langkir', 'Medangsia', 'Pujut',
+                'Pahang', 'Krulut', 'Merakih', 'Tambir', 'Medangkungan', 'Matal', 'Uye', 'Menail',
+                'Prangbakat', 'Bala', 'Ugu', 'Wayang', 'Klawu', 'Dukut', 'Watugunung'
+            ],
+            angkaMatiHarian: {
+                0: [0, 7], // Minggu/Redite
+                1: [1, 8], // Senin/Soma  
+                2: [2, 9], // Selasa/Anggara
+                3: [3, 6], // Rabu/Budha
+                4: [4, 5], // Kamis/Respati
+                5: [5, 4], // Jumat/Sukra
+                6: [6, 3]  // Sabtu/Tumpek
+            },
+            angkaHidupHarian: {
+                0: [1, 2, 3, 4, 5, 6, 8, 9], // Minggu
+                1: [0, 2, 3, 4, 5, 6, 7, 9], // Senin
+                2: [0, 1, 3, 4, 5, 6, 7, 8], // Selasa
+                3: [0, 1, 2, 4, 5, 7, 8, 9], // Rabu
+                4: [0, 1, 2, 3, 6, 7, 8, 9], // Kamis
+                5: [0, 1, 2, 3, 6, 7, 8, 9], // Jumat
+                6: [0, 1, 2, 4, 5, 7, 8, 9]  // Sabtu
+            },
+            neptuHari: {
+                0: 5, // Minggu
+                1: 4, // Senin
+                2: 3, // Selasa
+                3: 7, // Rabu
+                4: 8, // Kamis
+                5: 6, // Jumat
+                6: 9  // Sabtu
+            },
+            // Angka Jarak Lemah berdasarkan hari
+            jarakLemahHarian: {
+                0: [0, 1, 7, 8], // Minggu - jarak lemah
+                1: [1, 2, 8, 9], // Senin
+                2: [2, 3, 9, 0], // Selasa  
+                3: [3, 4, 0, 1], // Rabu
+                4: [4, 5, 1, 2], // Kamis
+                5: [5, 6, 2, 3], // Jumat
+                6: [6, 7, 3, 4]  // Sabtu
+            },
+            // Angka Jarak Lemah berdasarkan tanggal
+            jarakLemahTanggal: {
+                1: [1, 6], 2: [2, 7], 3: [3, 8], 4: [4, 9], 5: [5, 0],
+                6: [6, 1], 7: [7, 2], 8: [8, 3], 9: [9, 4], 10: [0, 5],
+                11: [1, 6], 12: [2, 7], 13: [3, 8], 14: [4, 9], 15: [5, 0],
+                16: [6, 1], 17: [7, 2], 18: [8, 3], 19: [9, 4], 20: [0, 5],
+                21: [1, 6], 22: [2, 7], 23: [3, 8], 24: [4, 9], 25: [5, 0],
+                26: [6, 1], 27: [7, 2], 28: [8, 3], 29: [9, 4], 30: [0, 5], 31: [1, 6]
+            },
+            // Ekor Lemah berdasarkan hari Jawa
+            ekorLemahHarian: {
+                0: [0, 5, 7], // Minggu/Redite
+                1: [1, 6, 8], // Senin/Soma
+                2: [2, 7, 9], // Selasa/Anggara
+                3: [3, 8, 0], // Rabu/Budha
+                4: [4, 9, 1], // Kamis/Respati
+                5: [5, 0, 2], // Jumat/Sukra
+                6: [6, 1, 3]  // Sabtu/Tumpek
+            },
+            // Kepala Lemah berdasarkan hari Jawa
+            kepalaLemahHarian: {
+                0: [7, 2, 5], // Minggu/Redite
+                1: [8, 3, 6], // Senin/Soma
+                2: [9, 4, 7], // Selasa/Anggara
+                3: [0, 5, 8], // Rabu/Budha
+                4: [1, 6, 9], // Kamis/Respati
+                5: [2, 7, 0], // Jumat/Sukra
+                6: [3, 8, 1]  // Sabtu/Tumpek
+            },
+            // AS Lemah (ribuan) berdasarkan hari Jawa
+            asLemahHarian: {
+                0: [0, 7, 4], // Minggu/Redite
+                1: [1, 8, 5], // Senin/Soma
+                2: [2, 9, 6], // Selasa/Anggara
+                3: [3, 0, 7], // Rabu/Budha
+                4: [4, 1, 8], // Kamis/Respati
+                5: [5, 2, 9], // Jumat/Sukra
+                6: [6, 3, 0]  // Sabtu/Tumpek
+            },
+            // KOP Lemah (ratusan) berdasarkan hari Jawa
+            kopLemahHarian: {
+                0: [5, 0, 2], // Minggu/Redite
+                1: [6, 1, 3], // Senin/Soma
+                2: [7, 2, 4], // Selasa/Anggara
+                3: [8, 3, 5], // Rabu/Budha
+                4: [9, 4, 6], // Kamis/Respati
+                5: [0, 5, 7], // Jumat/Sukra
+                6: [1, 6, 8]  // Sabtu/Tumpek
+            }
+        };
+
+        // Fungsi untuk mendapatkan informasi waktu realtime
+        function getCurrentTimeInfo() {
+            const now = new Date();
+            const dayOfWeek = now.getDay();
+            const dateOfMonth = now.getDate();
+            const wukuIndex = Math.floor((now.getTime() / (1000 * 60 * 60 * 24)) % 30);
+            
+            return {
+                date: now,
+                dayOfWeek: dayOfWeek,
+                dateOfMonth: dateOfMonth,
+                dayName: jawaCalendar.days[dayOfWeek],
+                jawaDayName: jawaCalendar.jawaDays[dayOfWeek],
+                wuku: jawaCalendar.wuku[wukuIndex],
+                neptu: jawaCalendar.neptuHari[dayOfWeek],
+                angkaMati: jawaCalendar.angkaMatiHarian[dayOfWeek],
+                angkaHidup: jawaCalendar.angkaHidupHarian[dayOfWeek],
+                jarakLemahHari: jawaCalendar.jarakLemahHarian[dayOfWeek],
+                jarakLemahTanggal: jawaCalendar.jarakLemahTanggal[dateOfMonth],
+                ekorLemah: jawaCalendar.ekorLemahHarian[dayOfWeek],
+                kepalaLemah: jawaCalendar.kepalaLemahHarian[dayOfWeek],
+                asLemah: jawaCalendar.asLemahHarian[dayOfWeek],
+                kopLemah: jawaCalendar.kopLemahHarian[dayOfWeek],
+                timestamp: now.toLocaleString('id-ID', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                })
+            };
+        }
+
+        // Fungsi untuk menganalisa berdasarkan pasaran Jawa
+        function analyzeJawaMarket(allResults) {
+            const timeInfo = getCurrentTimeInfo();
+            const allNumbers = new Set();
+            
+            // Kumpulkan semua angka hasil
+            Object.values(allResults).forEach(results => {
+                results.forEach(result => {
+                    result.variations.forEach(variation => {
+                        if (variation.type !== 'Original') {
+                            allNumbers.add(variation.number);
+                        }
+                    });
+                });
+            });
+
+            // Filter angka berdasarkan angka mati hari ini
+            const filteredNumbers = Array.from(allNumbers).filter(number => {
+                const digits = number.split('').map(d => parseInt(d));
+                return !digits.some(digit => timeInfo.angkaMati.includes(digit));
+            });
+
+            // Filter berdasarkan jarak lemah hari
+            const filteredJarakHari = Array.from(allNumbers).filter(number => {
+                if (number.length >= 2) {
+                    const lastTwoDigits = number.slice(-2).split('').map(d => parseInt(d));
+                    const jarak = Math.abs(lastTwoDigits[1] - lastTwoDigits[0]);
+                    return !timeInfo.jarakLemahHari.includes(jarak);
+                }
+                return true;
+            });
+
+            // Filter berdasarkan jarak lemah tanggal
+            const filteredJarakTanggal = Array.from(allNumbers).filter(number => {
+                if (number.length >= 2) {
+                    const lastTwoDigits = number.slice(-2).split('').map(d => parseInt(d));
+                    const jarak = Math.abs(lastTwoDigits[1] - lastTwoDigits[0]);
+                    return !timeInfo.jarakLemahTanggal.includes(jarak);
+                }
+                return true;
+            });
+
+            // Filter berdasarkan ekor lemah
+            const filteredEkor = Array.from(allNumbers).filter(number => {
+                const ekor = parseInt(number.slice(-1));
+                return !timeInfo.ekorLemah.includes(ekor);
+            });
+
+            // Filter berdasarkan kepala lemah (untuk 2D)
+            const filteredKepala = Array.from(allNumbers).filter(number => {
+                if (number.length >= 2) {
+                    const kepala = parseInt(number.slice(-2, -1));
+                    return !timeInfo.kepalaLemah.includes(kepala);
+                }
+                return true;
+            });
+
+            // Filter berdasarkan AS lemah (untuk 4D)
+            const filteredAS = Array.from(allNumbers).filter(number => {
+                if (number.length === 4) {
+                    const as = parseInt(number[0]);
+                    return !timeInfo.asLemah.includes(as);
+                }
+                return true;
+            });
+
+            // Filter berdasarkan KOP lemah (untuk 4D)
+            const filteredKOP = Array.from(allNumbers).filter(number => {
+                if (number.length >= 3) {
+                    const kop = parseInt(number.length === 4 ? number[1] : number[0]);
+                    return !timeInfo.kopLemah.includes(kop);
+                }
+                return true;
+            });
+
+            // Filter gabungan (semua filter)
+            const superFiltered = Array.from(allNumbers).filter(number => {
+                // Cek angka mati
+                const digits = number.split('').map(d => parseInt(d));
+                if (digits.some(digit => timeInfo.angkaMati.includes(digit))) return false;
+
+                // Cek jarak lemah hari
+                if (number.length >= 2) {
+                    const lastTwoDigits = number.slice(-2).split('').map(d => parseInt(d));
+                    const jarak = Math.abs(lastTwoDigits[1] - lastTwoDigits[0]);
+                    if (timeInfo.jarakLemahHari.includes(jarak)) return false;
+                }
+
+                // Cek ekor lemah
+                const ekor = parseInt(number.slice(-1));
+                if (timeInfo.ekorLemah.includes(ekor)) return false;
+
+                // Cek kepala lemah (untuk 2D+)
+                if (number.length >= 2) {
+                    const kepala = parseInt(number.slice(-2, -1));
+                    if (timeInfo.kepalaLemah.includes(kepala)) return false;
+                }
+
+                return true;
+            });
+
+            // Analisa berdasarkan neptu
+            const neptuNumbers = Array.from(allNumbers).filter(number => {
+                const sum = number.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+                return sum % 10 === timeInfo.neptu;
+            });
+
+            // Rekomendasi berdasarkan hari Jawa
+            const jawaRecommendations = generateJawaRecommendations(timeInfo, Array.from(allNumbers));
+
+            return {
+                timeInfo,
+                allNumbers: Array.from(allNumbers),
+                filteredNumbers,
+                filteredJarakHari,
+                filteredJarakTanggal,
+                filteredEkor,
+                filteredKepala,
+                filteredAS,
+                filteredKOP,
+                superFiltered,
+                neptuNumbers,
+                jawaRecommendations,
+                totalOriginal: allNumbers.size,
+                totalFiltered: filteredNumbers.length,
+                totalSuperFiltered: superFiltered.length,
+                totalNeptu: neptuNumbers.length
+            };
+        }
+
+        // Fungsi untuk generate rekomendasi berdasarkan hari Jawa
+        function generateJawaRecommendations(timeInfo, allNumbers) {
+            const recommendations = [];
+            
+            // Rekomendasi berdasarkan neptu hari
+            const neptuBased = allNumbers.filter(number => {
+                const sum = number.split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+                return (sum + timeInfo.neptu) % 10 === 0;
+            });
+
+            if (neptuBased.length > 0) {
+                recommendations.push({
+                    type: 'Neptu Harmonis',
+                    description: `Angka yang harmonis dengan neptu hari ${timeInfo.jawaDayName} (${timeInfo.neptu})`,
+                    numbers: neptuBased.slice(0, 10),
+                    strength: 'Tinggi'
+                });
+            }
+
+            // Rekomendasi berdasarkan angka hidup
+            const angkaHidupBased = allNumbers.filter(number => {
+                const digits = number.split('').map(d => parseInt(d));
+                return digits.every(digit => timeInfo.angkaHidup.includes(digit));
+            });
+
+            if (angkaHidupBased.length > 0) {
+                recommendations.push({
+                    type: 'Angka Hidup Murni',
+                    description: `Angka yang terdiri dari digit hidup hari ${timeInfo.dayName}`,
+                    numbers: angkaHidupBased.slice(0, 15),
+                    strength: 'Sangat Tinggi'
+                });
+            }
+
+            // Rekomendasi campuran (sebagian angka hidup)
+            const mixedNumbers = allNumbers.filter(number => {
+                const digits = number.split('').map(d => parseInt(d));
+                const hidupCount = digits.filter(digit => timeInfo.angkaHidup.includes(digit)).length;
+                return hidupCount >= Math.ceil(digits.length * 0.7); // 70% digit hidup
+            });
+
+            if (mixedNumbers.length > 0) {
+                recommendations.push({
+                    type: 'Campuran Kuat',
+                    description: 'Angka dengan mayoritas digit hidup (≥70%)',
+                    numbers: mixedNumbers.slice(0, 20),
+                    strength: 'Sedang'
+                });
+            }
+
+            return recommendations;
+        }
+
+        // Fungsi untuk menampilkan analisa Jawa
+        function displayJawaAnalysis(jawaAnalysis) {
+            const container = document.getElementById('jawa-analysis');
+            const timeInfo = jawaAnalysis.timeInfo;
+            
+            let html = `
+                <!-- Waktu Realtime -->
+                <div class="realtime-clock" id="realtime-clock">
+                    🕐 ${timeInfo.timestamp}
+                </div>
+
+                <!-- Info Hari Jawa -->
+                <div class="bg-white p-4 rounded-lg border mb-4">
+                    <h3 class="font-bold text-amber-800 mb-3">📅 Informasi Hari Jawa Lengkap</h3>
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Hari:</span>
+                                <span class="jawa-day">${timeInfo.dayName}</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Hari Jawa:</span>
+                                <span class="jawa-day">${timeInfo.jawaDayName}</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Tanggal:</span>
+                                <span class="bg-amber-200 text-amber-800 px-2 py-1 rounded font-bold">${timeInfo.dateOfMonth}</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Wuku:</span>
+                                <span class="jawa-day">${timeInfo.wuku}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Neptu Hari:</span>
+                                <span class="bg-amber-200 text-amber-800 px-3 py-1 rounded-full font-bold">${timeInfo.neptu}</span>
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Angka Mati:</span>
+                                ${timeInfo.angkaMati.map(num => `<span class="angka-mati">${num}</span>`).join('')}
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Jarak Lemah Hari:</span>
+                                ${timeInfo.jarakLemahHari.map(num => `<span class="angka-mati">${num}</span>`).join('')}
+                            </div>
+                            <div>
+                                <span class="text-amber-700 font-medium">Jarak Lemah Tgl:</span>
+                                ${timeInfo.jarakLemahTanggal.map(num => `<span class="angka-mati">${num}</span>`).join('')}
+                            </div>
+                        </div>
+                        <div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Ekor Lemah:</span>
+                                ${timeInfo.ekorLemah.map(num => `<span class="angka-mati">${num}</span>`).join('')}
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">Kepala Lemah:</span>
+                                ${timeInfo.kepalaLemah.map(num => `<span class="angka-mati">${num}</span>`).join('')}
+                            </div>
+                            <div class="mb-2">
+                                <span class="text-amber-700 font-medium">AS Lemah:</span>
+                                ${timeInfo.asLemah.map(num => `<span class="angka-mati">${num}</span>`).join('')}
+                            </div>
+                            <div>
+                                <span class="text-amber-700 font-medium">KOP Lemah:</span>
+                                ${timeInfo.kopLemah.map(num => `<span class="angka-mati">${num}</span>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistik Filter -->
+                <div class="grid md:grid-cols-4 gap-3 mb-4">
+                    <div class="bg-white p-3 rounded-lg border text-center">
+                        <div class="text-xl font-bold text-amber-600">${jawaAnalysis.totalOriginal}</div>
+                        <div class="text-xs text-gray-600">Total Angka Awal</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border text-center">
+                        <div class="text-xl font-bold text-green-600">${jawaAnalysis.totalFiltered}</div>
+                        <div class="text-xs text-gray-600">Filter Angka Mati</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border text-center">
+                        <div class="text-xl font-bold text-blue-600">${jawaAnalysis.totalSuperFiltered}</div>
+                        <div class="text-xs text-gray-600">Super Filter</div>
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border text-center">
+                        <div class="text-xl font-bold text-purple-600">${jawaAnalysis.totalNeptu}</div>
+                        <div class="text-xs text-gray-600">Sesuai Neptu</div>
+                    </div>
+                </div>
+
+                <!-- Filter Jarak Lemah -->
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+                        <h4 class="font-bold text-red-800 mb-3">🚫 Filter Jarak Lemah Hari ${timeInfo.dayName}</h4>
+                        <div class="mb-2">
+                            <span class="text-red-700 text-sm">Jarak lemah: ${timeInfo.jarakLemahHari.join(', ')}</span>
+                        </div>
+                        <div class="grid grid-cols-4 md:grid-cols-6 gap-1 max-h-32 overflow-y-auto">
+            `;
+
+            jawaAnalysis.filteredJarakHari.slice(0, 24).forEach(number => {
+                html += `<span class="bg-red-100 text-red-800 px-2 py-1 rounded text-center font-mono text-sm">${number}</span>`;
+            });
+
+            html += `
+                        </div>
+                        <div class="text-xs text-red-600 mt-2">Lolos: ${jawaAnalysis.filteredJarakHari.length} angka</div>
+                    </div>
+
+                    <div class="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                        <h4 class="font-bold text-orange-800 mb-3">📅 Filter Jarak Lemah Tanggal ${timeInfo.dateOfMonth}</h4>
+                        <div class="mb-2">
+                            <span class="text-orange-700 text-sm">Jarak lemah: ${timeInfo.jarakLemahTanggal.join(', ')}</span>
+                        </div>
+                        <div class="grid grid-cols-4 md:grid-cols-6 gap-1 max-h-32 overflow-y-auto">
+            `;
+
+            jawaAnalysis.filteredJarakTanggal.slice(0, 24).forEach(number => {
+                html += `<span class="bg-orange-100 text-orange-800 px-2 py-1 rounded text-center font-mono text-sm">${number}</span>`;
+            });
+
+            html += `
+                        </div>
+                        <div class="text-xs text-orange-600 mt-2">Lolos: ${jawaAnalysis.filteredJarakTanggal.length} angka</div>
+                    </div>
+                </div>
+
+                <!-- Filter Posisi Lemah -->
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-pink-50 border border-pink-200 rounded-lg p-4">
+                        <h4 class="font-bold text-pink-800 mb-3">🎯 Filter Ekor & Kepala Lemah</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-pink-700 text-sm font-medium">Ekor Lemah: ${timeInfo.ekorLemah.join(', ')}</span>
+                                <div class="grid grid-cols-6 gap-1 mt-1">
+            `;
+
+            jawaAnalysis.filteredEkor.slice(0, 18).forEach(number => {
+                html += `<span class="bg-pink-100 text-pink-800 px-1 py-1 rounded text-center font-mono text-xs">${number}</span>`;
+            });
+
+            html += `
+                                </div>
+                                <div class="text-xs text-pink-600 mt-1">Lolos: ${jawaAnalysis.filteredEkor.length} angka</div>
+                            </div>
+                            <div>
+                                <span class="text-pink-700 text-sm font-medium">Kepala Lemah: ${timeInfo.kepalaLemah.join(', ')}</span>
+                                <div class="grid grid-cols-6 gap-1 mt-1">
+            `;
+
+            jawaAnalysis.filteredKepala.slice(0, 18).forEach(number => {
+                html += `<span class="bg-pink-100 text-pink-800 px-1 py-1 rounded text-center font-mono text-xs">${number}</span>`;
+            });
+
+            html += `
+                                </div>
+                                <div class="text-xs text-pink-600 mt-1">Lolos: ${jawaAnalysis.filteredKepala.length} angka</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-indigo-50 border border-indigo-200 rounded-lg p-4">
+                        <h4 class="font-bold text-indigo-800 mb-3">🏆 Filter AS & KOP Lemah (4D)</h4>
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-indigo-700 text-sm font-medium">AS Lemah: ${timeInfo.asLemah.join(', ')}</span>
+                                <div class="grid grid-cols-6 gap-1 mt-1">
+            `;
+
+            jawaAnalysis.filteredAS.slice(0, 18).forEach(number => {
+                html += `<span class="bg-indigo-100 text-indigo-800 px-1 py-1 rounded text-center font-mono text-xs">${number}</span>`;
+            });
+
+            html += `
+                                </div>
+                                <div class="text-xs text-indigo-600 mt-1">Lolos: ${jawaAnalysis.filteredAS.length} angka</div>
+                            </div>
+                            <div>
+                                <span class="text-indigo-700 text-sm font-medium">KOP Lemah: ${timeInfo.kopLemah.join(', ')}</span>
+                                <div class="grid grid-cols-6 gap-1 mt-1">
+            `;
+
+            jawaAnalysis.filteredKOP.slice(0, 18).forEach(number => {
+                html += `<span class="bg-indigo-100 text-indigo-800 px-1 py-1 rounded text-center font-mono text-xs">${number}</span>`;
+            });
+
+            html += `
+                                </div>
+                                <div class="text-xs text-indigo-600 mt-1">Lolos: ${jawaAnalysis.filteredKOP.length} angka</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Super Filter - Angka yang lolos semua filter
+            if (jawaAnalysis.superFiltered.length > 0) {
+                html += `
+                    <div class="bg-gradient-to-r from-emerald-50 to-green-50 border-2 border-emerald-300 rounded-lg p-4 mb-4">
+                        <h4 class="font-bold text-emerald-800 mb-3">🏆 SUPER FILTER - Angka Premium Hari Ini</h4>
+                        <div class="bg-white/70 p-3 rounded mb-3">
+                            <p class="text-emerald-700 text-sm mb-2">
+                                <strong>Kriteria Lolos:</strong> Bebas angka mati, jarak aman, ekor & kepala kuat
+                            </p>
+                            <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
+                `;
+
+                jawaAnalysis.superFiltered.slice(0, 32).forEach(number => {
+                    html += `<span class="bg-emerald-200 text-emerald-900 px-2 py-1 rounded text-center font-mono font-bold border border-emerald-400">${number}</span>`;
+                });
+
+                html += `
+                            </div>
+                        </div>
+                        <div class="bg-emerald-100 p-3 rounded">
+                            <h5 class="font-bold text-emerald-800 mb-2">💎 Rekomendasi Prioritas Tertinggi</h5>
+                            <ul class="text-emerald-700 text-sm space-y-1">
+                                <li>• Total ${jawaAnalysis.superFiltered.length} angka lolos semua filter Jawa</li>
+                                <li>• Bebas dari angka mati: ${timeInfo.angkaMati.join(', ')}</li>
+                                <li>• Jarak aman dari lemah hari: ${timeInfo.jarakLemahHari.join(', ')}</li>
+                                <li>• Ekor kuat (bukan: ${timeInfo.ekorLemah.join(', ')})</li>
+                                <li>• Kepala kuat (bukan: ${timeInfo.kepalaLemah.join(', ')})</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Tampilkan rekomendasi Jawa
+            if (jawaAnalysis.jawaRecommendations.length > 0) {
+                html += `<div class="space-y-4 mb-4">`;
+                
+                jawaAnalysis.jawaRecommendations.forEach(rec => {
+                    const strengthColors = {
+                        'Sangat Tinggi': 'emerald',
+                        'Tinggi': 'blue',
+                        'Sedang': 'yellow'
+                    };
+                    const color = strengthColors[rec.strength] || 'gray';
+
+                    html += `
+                        <div class="bg-${color}-50 border border-${color}-200 rounded-lg p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="font-bold text-${color}-800">${rec.type}</h4>
+                                <span class="bg-${color}-200 text-${color}-800 px-3 py-1 rounded-full text-sm font-bold">${rec.strength}</span>
+                            </div>
+                            <p class="text-${color}-700 text-sm mb-3">${rec.description}</p>
+                            <div class="grid grid-cols-4 md:grid-cols-8 gap-2">
+                    `;
+
+                    rec.numbers.forEach(number => {
+                        html += `<span class="bg-${color}-100 text-${color}-800 px-2 py-1 rounded text-center font-mono font-bold">${number}</span>`;
+                    });
+
+                    html += `
+                            </div>
+                        </div>
+                    `;
+                });
+
+                html += `</div>`;
+            }
+
+            // Panduan penggunaan lengkap
+            html += `
+                <div class="bg-gradient-to-r from-amber-200 to-orange-200 p-4 rounded-lg mt-4">
+                    <h4 class="font-bold text-amber-800 mb-3">📚 Panduan Lengkap Pasaran Jawa</h4>
+                    <div class="grid md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white/70 p-3 rounded">
+                            <h5 class="font-bold text-amber-700 mb-2">🎯 Strategi Hari Ini</h5>
+                            <ul class="text-amber-700 space-y-1">
+                                <li>• <strong>Prioritas 1:</strong> Super Filter (${jawaAnalysis.totalSuperFiltered} angka)</li>
+                                <li>• <strong>Hindari:</strong> Angka mati ${timeInfo.angkaMati.join(', ')}</li>
+                                <li>• <strong>Jarak Lemah:</strong> ${timeInfo.jarakLemahHari.join(', ')} (hari), ${timeInfo.jarakLemahTanggal.join(', ')} (tgl)</li>
+                                <li>• <strong>Ekor Lemah:</strong> ${timeInfo.ekorLemah.join(', ')}</li>
+                                <li>• <strong>Kepala Lemah:</strong> ${timeInfo.kepalaLemah.join(', ')}</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white/70 p-3 rounded">
+                            <h5 class="font-bold text-amber-700 mb-2">🏆 Sistem Filter Bertingkat</h5>
+                            <ul class="text-amber-700 space-y-1">
+                                <li>• <strong>Level 1:</strong> Filter angka mati</li>
+                                <li>• <strong>Level 2:</strong> Filter jarak lemah</li>
+                                <li>• <strong>Level 3:</strong> Filter ekor lemah</li>
+                                <li>• <strong>Level 4:</strong> Filter kepala lemah</li>
+                                <li>• <strong>Super:</strong> Lolos semua filter</li>
+                            </ul>
+                        </div>
+                        <div class="bg-white/70 p-3 rounded">
+                            <h5 class="font-bold text-amber-700 mb-2">⏰ Update Realtime</h5>
+                            <ul class="text-amber-700 space-y-1">
+                                <li>• Waktu update setiap detik</li>
+                                <li>• Filter berubah setiap hari</li>
+                                <li>• Neptu mengikuti hari Jawa</li>
+                                <li>• Jarak lemah per tanggal</li>
+                                <li>• AS/KOP untuk 4D otomatis</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/70 p-3 rounded mt-3">
+                        <h5 class="font-bold text-amber-700 mb-2">💡 Tips Penggunaan Optimal</h5>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <h6 class="font-medium text-amber-700 mb-1">🥇 Strategi Konservatif:</h6>
+                                <ul class="text-amber-600 text-xs space-y-1">
+                                    <li>• Fokus pada Super Filter saja</li>
+                                    <li>• Pilih 10-15 angka terbaik</li>
+                                    <li>• Kombinasi dengan BBFS Premium</li>
+                                    <li>• Risk rendah, akurasi tinggi</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h6 class="font-medium text-amber-700 mb-1">🚀 Strategi Agresif:</h6>
+                                <ul class="text-amber-600 text-xs space-y-1">
+                                    <li>• Gunakan semua filter bertingkat</li>
+                                    <li>• Investasi pada 30-50 angka</li>
+                                    <li>• Kombinasi dengan Neptu Harmonis</li>
+                                    <li>• Coverage maksimal, reward besar</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Fungsi untuk update waktu realtime
+        function updateRealtimeClock() {
+            const clockElement = document.getElementById('realtime-clock');
+            if (clockElement) {
+                const timeInfo = getCurrentTimeInfo();
+                clockElement.innerHTML = `🕐 ${timeInfo.timestamp}`;
+            }
+        }
+
+        // Event listeners
+        document.getElementById('calculate-btn').addEventListener('click', calculateAllFormulas);
+
+        // Start realtime clock update
+        setInterval(updateRealtimeClock, 1000);
+
+        // Auto-calculate when Enter is pressed in input fields
+        ['input-2d', 'input-3d', 'input-4d'].forEach(id => {
+            document.getElementById(id).addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    calculateAllFormulas();
+                }
+            });
+        });
+
+        // Limit input to numbers only
+        ['input-2d', 'input-3d', 'input-4d'].forEach(id => {
+            document.getElementById(id).addEventListener('input', function(e) {
+                e.target.value = e.target.value.replace(/\D/g, '');
+            });
+        });
+
+        // Element SDK implementation
+        async function render(config) {
+            document.getElementById('app-title').textContent = config.app_title || defaultConfig.app_title;
+            document.getElementById('calculator-label').textContent = config.calculator_label || defaultConfig.calculator_label;
+            document.getElementById('calculate-btn').textContent = config.calculate_button || defaultConfig.calculate_button;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["app_title", config.app_title || defaultConfig.app_title],
+                ["calculator_label", config.calculator_label || defaultConfig.calculator_label],
+                ["calculate_button", config.calculate_button || defaultConfig.calculate_button]
+            ]);
+        }
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                render,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9909ef84e4244dbc',t:'MTc2MDgxMDQzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
